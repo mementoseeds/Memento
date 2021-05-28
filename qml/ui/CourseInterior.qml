@@ -28,7 +28,6 @@ Kirigami.ScrollablePage {
     property string category: ""
     property string icon: ""
     property int seeds: 0
-    property int levels: 0
     property int planted: 0
     property int water: 0
     property int difficult: 0
@@ -53,40 +52,58 @@ Kirigami.ScrollablePage {
 
     Kirigami.CardsGridView {
 
-        header: ColumnLayout {
+        header: RowLayout {
             width: parent.width
 
-            Kirigami.Heading {
-                text: courseTitle
-                level: 1
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
+            Image {
+                source: Qt.resolvedUrl("file:/" + icon)
+                Layout.maximumHeight: Kirigami.Units.iconSizes.enormous
+                Layout.preferredWidth: height
             }
 
-            Kirigami.Heading {
-                text: "By " + author
-                level: 2
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-            }
+            ColumnLayout {
 
-            Kirigami.Heading {
-                text: category
-                level: 3
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-            }
+                Kirigami.Heading {
+                    text: courseTitle
+                    level: 1
+                    Layout.fillWidth: true
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    horizontalAlignment: Text.AlignHCenter
+                }
 
-            Kirigami.Heading {
-                text: description
-                level: 2
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
+                Kirigami.Heading {
+                    text: "Created by " + author
+                    level: 2
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Kirigami.Heading {
+                    text: category
+                    level: 3
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Kirigami.Heading {
+                    text: description
+                    level: 2
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Kirigami.Heading {
+                    //Check length of list model
+                    text: "Levels (count later)"
+                    level: 3
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
+                }
             }
         }
 

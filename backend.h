@@ -43,7 +43,7 @@ public:
     Q_INVOKABLE void getCourseList();
 
 signals:
-    void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int seeds, int levels, int planted, int water, int difficult, int ignored, bool completed);
+    void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int seeds, int planted, int water, int difficult, int ignored, bool completed);
 
 private:
 

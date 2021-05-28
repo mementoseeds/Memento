@@ -51,7 +51,6 @@ Kirigami.ScrollablePage {
                 "category": category,
                 "icon": icon,
                 "seeds": seeds,
-                "levels": levels,
                 "planted": planted,
                 "water": water,
                 "difficult": difficult,
@@ -64,7 +63,7 @@ Kirigami.ScrollablePage {
 
     Connections {
         target: globalBackend
-        function onAddCourse(directory, title, author, description, category, icon, seeds, levels, planted, water, difficult, ignored, completed)
+        function onAddCourse(directory, title, author, description, category, icon, seeds, planted, water, difficult, ignored, completed)
         {
             courseListModel.append({
                 "directory": directory,
@@ -74,7 +73,6 @@ Kirigami.ScrollablePage {
                 "category": category,
                 "icon": icon,
                 "seeds": seeds,
-                "levels": levels,
                 "planted": planted,
                 "water": water,
                 "difficult": difficult,

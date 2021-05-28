@@ -43,7 +43,6 @@ void Backend::getCourseList()
             courseInfo["category"].toString(),
             directory + "/" + courseInfo["icon"].toString(),
             courseInfo["seeds"].toInt(),
-            courseInfo["levels"].toInt(),
             courseInfo["planted"].toInt(),
             courseInfo["water"].toInt(),
             courseInfo["difficult"].toInt(),
