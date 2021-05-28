@@ -48,7 +48,7 @@ Item {
             ProgressBar {
                 id: courseProgressBar
                 from: 0
-                to: seeds
+                to: items
                 value: planted
                 indeterminate:  false
                 Layout.alignment: Qt.AlignHCenter
@@ -65,7 +65,7 @@ Item {
             id: courseHeadingsColumnLayout
 
             Kirigami.Heading {
-                text: planted + " / " + seeds + " seeds planted"
+                text: planted + " / " + items + " total items"
                 level: 2
                 Layout.alignment: Qt.AlignHCenter
             }

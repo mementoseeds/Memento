@@ -27,7 +27,7 @@ Kirigami.ScrollablePage {
     property string description: ""
     property string category: ""
     property string icon: ""
-    property int seeds: 0
+    property int items: 0
     property int planted: 0
     property int water: 0
     property int difficult: 0
@@ -107,12 +107,16 @@ Kirigami.ScrollablePage {
             }
         }
 
-        model: 10
+        model: ListModel {
+            id: courseLevelsListModel
+
+            ListElement {title: "title"}
+        }
 
         delegate: Kirigami.Card {
             id: card
             banner {
-                title: "title"
+                title: title
                 //source: "file:/" + icon
             }
             contentItem: Label {
