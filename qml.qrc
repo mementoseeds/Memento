@@ -3,5 +3,6 @@
         <file alias="main.qml">qml/ui/main.qml</file>
         <file alias="CourseList.qml">qml/ui/CourseList.qml</file>
         <file alias="CourseExterior.qml">qml/components/CourseExterior.qml</file>
+        <file alias="CourseInterior.qml">qml/ui/CourseInterior.qml</file>
     </qresource>
 </RCC>

@@ -23,6 +23,9 @@ Kirigami.ApplicationWindow {
     id: root
     title: "Memento"
 
+    property alias rootColor: root.color
+    property alias rootPageStack: root.pageStack
+
     Backend {
         id: globalBackend
     }
