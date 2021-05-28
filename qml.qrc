@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="main.qml">qml/ui/main.qml</file>
+        <file alias="CourseList.qml">qml/ui/CourseList.qml</file>
+        <file alias="CourseExterior.qml">qml/components/CourseExterior.qml</file>
+    </qresource>
+</RCC>
