@@ -43,7 +43,20 @@ Kirigami.ScrollablePage {
         delegate: Kirigami.AbstractCard {
             //NOTE: never put a Layout as contentItem as it will cause binding loops
             showClickFeedback: true
-            onClicked: root.pageStack.push("qrc:/CourseInterior.qml")
+            onClicked: root.pageStack.push("qrc:/CourseInterior.qml", {
+                "directory": directory,
+                "courseTitle": title,
+                "author": author,
+                "description": description,
+                "category": category,
+                "icon": icon,
+                "seeds": seeds,
+                "levels": levels,
+                "planted": planted,
+                "water": water,
+                "difficult": difficult,
+                "ignored": ignored
+                    })
 
             contentItem: CourseExterior{}
         }

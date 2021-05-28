@@ -37,6 +37,7 @@ Item {
         }
 
         ColumnLayout {
+            spacing: 0
 
             Kirigami.Heading {
                 text: title
@@ -45,10 +46,17 @@ Item {
             }
 
             ProgressBar {
+                id: courseProgressBar
                 from: 0
                 to: seeds
                 value: planted
                 indeterminate:  false
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            Kirigami.Heading {
+                text: courseProgressBar.value / courseProgressBar.to * 100 + "%"
+                level: 4
                 Layout.alignment: Qt.AlignHCenter
             }
         }
