@@ -26,6 +26,13 @@ Kirigami.ApplicationWindow {
     property alias rootColor: root.color
     property alias rootPageStack: root.pageStack
 
+    Item {
+        id: signalsSource
+        visible: false
+        signal courseOpened()
+        signal courseClosed()
+    }
+
     Backend {
         id: globalBackend
     }

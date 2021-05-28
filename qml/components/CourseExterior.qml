@@ -54,6 +54,7 @@ Item {
         }
 
         ColumnLayout {
+            id: courseHeadingsColumnLayout
 
             Kirigami.Heading {
                 text: planted + " / " + seeds + " seeds planted"
@@ -69,6 +70,7 @@ Item {
         }
 
         RowLayout {
+            id: courseButtonsRowLayout
             spacing: 10
 
             Button {
@@ -79,6 +81,21 @@ Item {
             Button {
                 text: "Water"
             }
+        }
+    }
+
+    Connections {
+        target: signalsSource
+        function onCourseOpened()
+        {
+            courseHeadingsColumnLayout.visible = false
+            courseButtonsRowLayout.visible = false
+        }
+
+        function onCourseClosed()
+        {
+            courseHeadingsColumnLayout.visible = true
+            courseButtonsRowLayout.visible = true
         }
     }
 }

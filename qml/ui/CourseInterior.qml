@@ -4,6 +4,10 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Kirigami.ScrollablePage {
+
+    Component.onCompleted: signalsSource.courseOpened()
+    Component.onDestruction: signalsSource.courseClosed()
+
     actions {
         left: Kirigami.Action {
             text: "Go back"
