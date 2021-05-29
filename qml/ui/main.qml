@@ -37,6 +37,8 @@ Kirigami.ApplicationWindow {
         id: globalBackend
     }
 
+    //Component.onCompleted: globalBackend.debugFun()
+
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Memento"
         titleIcon: "applications-graphics"

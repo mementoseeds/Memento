@@ -28,6 +28,7 @@
 //For reading Jsons
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QJsonObject>
 
 class Backend : public QObject
 {

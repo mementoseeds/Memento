@@ -111,18 +111,31 @@ Kirigami.ScrollablePage {
             id: courseLevelsListModel
 
             ListElement {title: "title"}
+            ListElement {title: "title"}
         }
 
         delegate: Kirigami.Card {
             id: card
+            showClickFeedback: true
+
             banner {
-                title: title
-                //source: "file:/" + icon
+                title: index + 1
+                source: "file:/" + icon
             }
             contentItem: Label {
                 wrapMode: Text.WordWrap
-                text: "title"
+                text: "Level 1 - 4"
             }
+//            actions: [
+//                Kirigami.Action {
+//                    text: "Action 1"
+//                    //iconName: model.actions.get(0).icon
+//                },
+//                Kirigami.Action {
+//                    text: "Action 2"
+//                    //iconName: model.actions.get(1).icon
+//                }
+//            ]
         }
     }
 }
