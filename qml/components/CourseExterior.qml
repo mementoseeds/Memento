@@ -30,7 +30,7 @@ Item {
         anchors.right: parent.right
 
         Image {
-            source: Qt.resolvedUrl("file:/" + icon)
+            source: "file:/" + icon
             Layout.fillHeight: true
             Layout.maximumHeight: Kirigami.Units.iconSizes.huge
             Layout.preferredWidth: height

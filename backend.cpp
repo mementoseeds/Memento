@@ -51,3 +51,37 @@ void Backend::getCourseList()
                     );
     }
 }
+
+void Backend::getCourseLevels(QString directory)
+{
+    QDirIterator iterator(directory + "/levels", QDir::Files);
+    while (iterator.hasNext())
+    {
+        QString levelPath = iterator.next();
+        QFile infoFile(levelPath);
+        infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
+
+        if (levelPath.endsWith(".json", Qt::CaseInsensitive))
+        {
+            QString info = infoFile.readAll();
+            QJsonDocument levelInfo = QJsonDocument::fromJson(info.toUtf8());
+
+            emit addCourseLevel(
+                levelPath,
+                levelInfo["title"].toString(),
+                true,
+                levelInfo["seeds"].toArray().count(),
+                levelInfo["completed"].toBool()
+                        );
+        }
+        else if (levelPath.endsWith(".md", Qt::CaseInsensitive))
+        {
+            QString info = infoFile.readLine();
+            QString levelTitle = QRegularExpression("\\(.*\\)$").match(info).captured().replace(QRegularExpression("^\\(|\\)$"), "");
+
+            emit addCourseLevel(levelPath, levelTitle, false, 0, false);
+        }
+
+        infoFile.close();
+    }
+}

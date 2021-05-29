@@ -26,9 +26,12 @@
 #include <QDirIterator>
 
 //For reading Jsons
-#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+
+//For finding titles in media levels
+#include <QRegularExpression>
 
 class Backend : public QObject
 {
@@ -42,9 +45,11 @@ public:
     Q_INVOKABLE void debugFun();
 
     Q_INVOKABLE void getCourseList();
+    Q_INVOKABLE void getCourseLevels(QString directory);
 
 signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
+    void addCourseLevel(QString levelPath, QString levelTitle, bool isLearning, int itemAmount, bool levelCompleted);
 
 private:
 

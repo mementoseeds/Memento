@@ -34,8 +34,12 @@ Kirigami.ScrollablePage {
     property int ignored: 0
     property bool completed: false
 
-    Component.onCompleted: signalsSource.courseOpened()
     Component.onDestruction: signalsSource.courseClosed()
+    Component.onCompleted:
+    {
+        signalsSource.courseOpened()
+        globalBackend.getCourseLevels(directory)
+    }
 
     actions {
         main: Kirigami.Action {
@@ -96,9 +100,8 @@ Kirigami.ScrollablePage {
                 }
 
                 Kirigami.Heading {
-                    //Check length of list model
-                    text: "Levels (count later)"
-                    level: 3
+                    text: "Levels (" + courseLevelsListModel.count + ")"
+                    level: 2
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -107,35 +110,38 @@ Kirigami.ScrollablePage {
             }
         }
 
-        model: ListModel {
-            id: courseLevelsListModel
-
-            ListElement {title: "title"}
-            ListElement {title: "title"}
-        }
+        model: ListModel {id: courseLevelsListModel}
 
         delegate: Kirigami.Card {
-            id: card
             showClickFeedback: true
+            onClicked: showPassiveNotification(levelPath)
 
             banner {
-                title: index + 1
+                title: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
                 source: "file:/" + icon
+                titleAlignment: Qt.AlignHCenter | Qt.AlignBottom
             }
-            contentItem: Label {
-                wrapMode: Text.WordWrap
-                text: "Level 1 - 4"
+
+            contentItem: Kirigami.Heading {
+                text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
+                level: 3
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Qt.AlignHCenter
             }
-//            actions: [
-//                Kirigami.Action {
-//                    text: "Action 1"
-//                    //iconName: model.actions.get(0).icon
-//                },
-//                Kirigami.Action {
-//                    text: "Action 2"
-//                    //iconName: model.actions.get(1).icon
-//                }
-//            ]
+        }
+    }
+
+    Connections {
+        target: globalBackend
+        function onAddCourseLevel(levelPath, levelTitle, isLearning, itemAmount, levelCompleted)
+        {
+            courseLevelsListModel.append({
+                "levelPath": levelPath,
+                "levelTitle": levelTitle,
+                "isLearning": isLearning,
+                "itemAmount": itemAmount,
+                "levelCompleted": levelCompleted
+                                         })
         }
     }
 }
