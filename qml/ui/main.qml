@@ -27,7 +27,7 @@ Kirigami.ApplicationWindow {
     property alias rootPageStack: root.pageStack
 
     Item {
-        id: signalsSource
+        id: signalSource
         visible: false
         signal courseOpened()
         signal courseClosed()

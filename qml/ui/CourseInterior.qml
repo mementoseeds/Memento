@@ -34,10 +34,10 @@ Kirigami.ScrollablePage {
     property int ignored: 0
     property bool completed: false
 
-    Component.onDestruction: signalsSource.courseClosed()
+    Component.onDestruction: signalSource.courseClosed()
     Component.onCompleted:
     {
-        signalsSource.courseOpened()
+        signalSource.courseOpened()
         globalBackend.getCourseLevels(directory)
     }
 
@@ -56,57 +56,66 @@ Kirigami.ScrollablePage {
 
     Kirigami.CardsGridView {
 
-        header: RowLayout {
+        header: ColumnLayout {
             width: parent.width
+
+            Kirigami.Heading {
+                id: courseTitleHeading
+                text: courseTitle
+                font.bold: true
+                level: 1
+                Layout.fillWidth: true
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Kirigami.Heading {
+                text: "Created by " + author
+                level: 2
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Kirigami.Heading {
+                text: category
+                level: 3
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+            }
 
             Image {
                 source: Qt.resolvedUrl("file:/" + icon)
-                Layout.maximumHeight: Kirigami.Units.iconSizes.enormous
-                Layout.preferredWidth: height
+                sourceSize.height: 200
+                sourceSize.width: 200
+                Layout.alignment: Qt.AlignHCenter
             }
 
-            ColumnLayout {
+            Kirigami.Heading {
+                text: description
+                level: 2
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                Layout.bottomMargin: Kirigami.Units.largeSpacing
+            }
 
-                Kirigami.Heading {
-                    text: courseTitle
-                    level: 1
-                    Layout.fillWidth: true
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    horizontalAlignment: Text.AlignHCenter
-                }
+            Rectangle {
+                color: "gray"
+                height: 2
+                Layout.fillWidth: true
+                radius: 50
+            }
 
-                Kirigami.Heading {
-                    text: "Created by " + author
-                    level: 2
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Kirigami.Heading {
-                    text: category
-                    level: 3
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Kirigami.Heading {
-                    text: description
-                    level: 2
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                }
-
-                Kirigami.Heading {
-                    text: "Levels (" + courseLevelsListModel.count + ")"
-                    level: 2
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    Layout.fillWidth: true
-                    horizontalAlignment: Text.AlignHCenter
-                    Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
-                }
+            Kirigami.Heading {
+                text: "Levels (" + courseLevelsListModel.count + ")"
+                font.bold: true
+                level: 2
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.fillWidth: true
+                horizontalAlignment: Text.AlignHCenter
+                Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
             }
         }
 

@@ -39,6 +39,7 @@ Item {
             Kirigami.Heading {
                 id: levelNumberIndicator
                 text: index + 1
+                font.bold: true
                 level: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -54,7 +55,7 @@ Item {
         }
 
         Kirigami.Heading {
-            text: levelCompleted ? "🗸" : "Ready to learn"
+            text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
             font.bold: levelCompleted
             level: levelCompleted ? 1 : 5
             Layout.alignment: Qt.AlignHCenter

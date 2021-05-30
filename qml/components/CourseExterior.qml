@@ -93,7 +93,7 @@ Item {
     }
 
     Connections {
-        target: signalsSource
+        target: signalSource
         function onCourseOpened()
         {
             courseHeadingsColumnLayout.visible = false
