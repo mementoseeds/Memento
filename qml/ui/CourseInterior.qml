@@ -112,22 +112,12 @@ Kirigami.ScrollablePage {
 
         model: ListModel {id: courseLevelsListModel}
 
-        delegate: Kirigami.Card {
+        delegate: Kirigami.AbstractCard {
             showClickFeedback: true
+
             onClicked: showPassiveNotification(levelPath)
 
-            banner {
-                title: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
-                source: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
-                titleAlignment: Qt.AlignHCenter | Qt.AlignBottom
-            }
-
-            contentItem: Kirigami.Heading {
-                text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
-                level: 3
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Qt.AlignHCenter
-            }
+            contentItem: CourseLevelExterior{}
         }
     }
 

@@ -1,0 +1,25 @@
+<svg width="64.905px" height="64.905px" viewBox="-1.45 0 64.905 64.905" xmlns="http://www.w3.org/2000/svg">
+  <g id="Group_57" data-name="Group 57" transform="translate(-318 -36.428)">
+    <path id="Path_56" data-name="Path 56" d="M349,51,325.124,44.75A4.8,4.8,0,0,0,319,49.369v39.34a4.8,4.8,0,0,0,3.484,4.619l26.516,7,26.516-7A4.8,4.8,0,0,0,379,88.709V49.369a4.8,4.8,0,0,0-6.124-4.619Z" fill="#99ecff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <path id="Path_57" data-name="Path 57" d="M349,44.286l-26-6.858V88l26,6.858L375,88V37.428Z" fill="#e8f7f9" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <g id="Group_55" data-name="Group 55">
+      <line id="Line_64" data-name="Line 64" x1="10.333" y2="2.953" transform="translate(355 53.857)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Line_65" data-name="Line 65" x1="10.333" y2="2.953" transform="translate(355 62.047)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Line_66" data-name="Line 66" x1="10.333" y2="2.953" transform="translate(355 71.047)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+    <g id="Group_56" data-name="Group 56">
+      <line id="Line_67" data-name="Line 67" x2="10.333" y2="2.953" transform="translate(332 53.857)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Line_68" data-name="Line 68" x2="10.333" y2="2.953" transform="translate(332 62.047)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      <line id="Line_69" data-name="Line 69" x2="10.333" y2="2.953" transform="translate(332 71.047)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    </g>
+    <line id="Line_70" data-name="Line 70" y2="5" transform="translate(349 95)" fill="#fff" stroke="#333" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+    <line id="Line_71" data-name="Line 71" y2="4" transform="translate(349 45)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_72" data-name="Line 72" y2="4" transform="translate(349 51)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_73" data-name="Line 73" y2="4" transform="translate(349 57)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_74" data-name="Line 74" y2="4" transform="translate(349 63)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_75" data-name="Line 75" y2="4" transform="translate(349 69)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_76" data-name="Line 76" y2="4" transform="translate(349 75)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_77" data-name="Line 77" y2="4" transform="translate(349 81)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+    <line id="Line_78" data-name="Line 78" y2="4" transform="translate(349 87)" fill="#fff" stroke="#333" stroke-miterlimit="10" stroke-width="2"/>
+  </g>
+</svg>
