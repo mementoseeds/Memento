@@ -118,7 +118,7 @@ Kirigami.ScrollablePage {
 
             banner {
                 title: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
-                source: "assets/icons/" + (levelCompleted ? "sunflower-plant.svg" : "seedling.svg")
+                source: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
                 titleAlignment: Qt.AlignHCenter | Qt.AlignBottom
             }
 

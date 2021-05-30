@@ -4,7 +4,7 @@
         <file alias="CourseList.qml">qml/ui/CourseList.qml</file>
         <file alias="CourseExterior.qml">qml/components/CourseExterior.qml</file>
         <file alias="CourseInterior.qml">qml/ui/CourseInterior.qml</file>
-        <file>assets/icons/seedling.svg</file>
-        <file>assets/icons/sunflower-plant.svg</file>
+        <file>assets/icons/flower.svg</file>
+        <file>assets/icons/seeds.svg</file>
     </qresource>
 </RCC>
