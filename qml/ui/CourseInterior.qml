@@ -127,7 +127,7 @@ Kirigami.ScrollablePage {
             onClicked:
             {
                 if (levelPath.endsWith(".json"))
-                    rootPageStack.push("qrc:/LearningLevelView.qml", {"levelPath": levelPath})
+                    rootPageStack.push("qrc:/LearningLevelView.qml", {"levelPath": levelPath, "levelNumber": (index + 1), "levelTitle": levelTitle, "itemAmount": itemAmount, "levelCompleted": levelCompleted})
                 else if (levelPath.endsWith(".md"))
                     rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
             }
@@ -158,6 +158,7 @@ Kirigami.ScrollablePage {
             {
                 //rootPageStack.pop()
                 var newLevelPath = courseLevelsListModel.get(currentIndex - 1).levelPath
+                console.debug(newLevelPath)
 //                if (newLevelPath.endsWith(".json"))
 //                    rootPageStack.push("qrc:/LearningLevelView.qml", {"levelPath": levelPath})
 //                else if (newLevelPath.endsWith(".md"))

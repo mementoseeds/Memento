@@ -11,5 +11,7 @@
         <file alias="Options.qml">qml/ui/Options.qml</file>
         <file alias="MediaLevel.qml">qml/ui/MediaLevel.qml</file>
         <file alias="LearningLevelView.qml">qml/ui/LearningLevelView.qml</file>
+        <file alias="LevelEntry.qml">qml/components/LevelEntry.qml</file>
+        <file alias="LevelHeader.qml">qml/components/LevelHeader.qml</file>
     </qresource>
 </RCC>

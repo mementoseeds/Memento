@@ -20,7 +20,12 @@ import org.kde.kirigami 2.4 as Kirigami
 import Memento.Backend 1.0
 
 Kirigami.ApplicationWindow {
+
+    property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
+
     id: root
+    width: !platformIsMobile ? 1500 : undefined
+    height: !platformIsMobile ? 1000 : undefined
     title: "Memento"
 
     property var userSettings: globalBackend.getUserSettings()

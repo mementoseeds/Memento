@@ -22,16 +22,42 @@ import QtQuick.Controls 2.15
 Kirigami.ScrollablePage {
 
     property string levelPath: ""
+    property int levelNumber: 0
+    property string levelTitle: ""
+    property int itemAmount: 0
+    property bool levelCompleted: false
 
     actions {
-        main: Kirigami.Action {
+        left: Kirigami.Action {
             text: "Close"
             iconName: "dialog-close"
             onTriggered: rootPageStack.pop()
         }
+        main: Kirigami.Action {
+            text: "Previous"
+            iconName: "arrow-left"
+            onTriggered: signalSource.openPreviousLevel(levelNumber - 1)
+        }
+        right: Kirigami.Action {
+            text: "Next"
+            iconName: "arrow-right"
+            onTriggered: signalSource.openNextLevel(levelNumber - 1)
+        }
     }
 
-    Kirigami.Heading {
-        text: levelPath
+    Kirigami.CardsListView {
+        headerPositioning: ListView.InlineHeader
+        header: LevelHeader {
+            levelHeaderTitle: levelTitle
+            levelHeaderNumber: levelNumber
+            levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
+        }
+
+        model: 100
+
+        delegate: Kirigami.AbstractCard {
+
+            contentItem: LevelEntry{}
+        }
     }
 }
