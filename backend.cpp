@@ -25,11 +25,15 @@ void Backend::debugFun()
 
 void Backend::getCourseList()
 {
-    QDirIterator iterator(coursesDir, QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator iterator(userSettings["coursesLocation"].toUrl().toLocalFile(), QDir::Dirs | QDir::NoDotAndDotDot);
     while (iterator.hasNext())
     {
         QString directory = iterator.next();
         QFile infoFile(directory + "/info.json");
+
+        if (!infoFile.exists())
+            continue;
+
         infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
         QString info = infoFile.readAll();
         infoFile.close();
@@ -50,6 +54,8 @@ void Backend::getCourseList()
             courseInfo["completed"].toBool()
                     );
     }
+
+    emit finishedAddingCourses();
 }
 
 void Backend::getCourseLevels(QString directory)
@@ -84,4 +90,17 @@ void Backend::getCourseLevels(QString directory)
 
         infoFile.close();
     }
+}
+
+void Backend::setUserSettings(QVariantMap userSettings)
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    settings.setValue("coursesLocation", userSettings["coursesLocation"]);
+}
+
+QVariantMap Backend::getUserSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    userSettings.insert("coursesLocation", settings.value("coursesLocation").toUrl());
+    return userSettings;
 }

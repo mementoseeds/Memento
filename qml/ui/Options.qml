@@ -45,13 +45,23 @@ Kirigami.ScrollablePage {
                     level: 3
                 }
 
-                TextField {
-                    id: coursesLocationTextField
-                }
-
                 Button {
                     text: "Browse"
                     onClicked: fileDialog.open()
+                }
+
+                TextField {
+                    id: coursesLocationTextField
+                    text: userSettings["coursesLocation"]
+                }
+
+                Button {
+                    text: "Apply"
+                    onClicked:
+                    {
+                        userSettings["coursesLocation"] = coursesLocationTextField.text
+                        globalBackend.setUserSettings(userSettings)
+                    }
                 }
             }
         }
@@ -64,6 +74,6 @@ Kirigami.ScrollablePage {
         selectExisting: true
         selectFolder: true
         selectMultiple: false
-        onAccepted: console.debug(Qt.resolvedUrl(fileUrl))
+        onAccepted: coursesLocationTextField.text = fileUrl
     }
 }

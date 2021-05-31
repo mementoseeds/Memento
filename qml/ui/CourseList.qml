@@ -35,6 +35,15 @@ Kirigami.ScrollablePage {
 
     Component.onCompleted: refreshAll()
 
+    Kirigami.Heading {
+        id: courseListEmptyHeading
+        text: "Your course list is empty. Download some courses or set your courses directory from the settings"
+        level: 1
+        anchors.fill: parent
+        horizontalAlignment: Qt.AlignHCenter
+        visible: false
+    }
+
     Kirigami.CardsListView {
         id: courseList
 
@@ -80,6 +89,12 @@ Kirigami.ScrollablePage {
                 "ignored": ignored,
                 "completed": completed
                                    })
+        }
+
+        function onFinishedAddingCourses()
+        {
+            if (courseListModel.count === 0)
+                courseListEmptyHeading.visible = true
         }
     }
 }

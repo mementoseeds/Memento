@@ -33,6 +33,12 @@
 //For finding titles in media levels
 #include <QRegularExpression>
 
+//For storing user settings
+#include <QVariantMap>
+
+//For saving user settings
+#include <QSettings>
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -47,14 +53,17 @@ public:
     Q_INVOKABLE void getCourseList();
     Q_INVOKABLE void getCourseLevels(QString directory);
 
+    Q_INVOKABLE void setUserSettings(QVariantMap userSettings);
+    Q_INVOKABLE QVariantMap getUserSettings();
+
 signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
+    void finishedAddingCourses();
     void addCourseLevel(QString levelPath, QString levelTitle, bool isLearning, int itemAmount, bool levelCompleted);
 
 private:
 
-    //Const values
-    const QString coursesDir = "/tmp/test/courses/";
+    QVariantMap userSettings;
 };
 
 #endif // BACKEND_H
