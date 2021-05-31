@@ -58,7 +58,7 @@ public:
     Q_INVOKABLE void setUserSettings(QVariantMap userSettings);
     Q_INVOKABLE QVariantMap getUserSettings();
 
-    Q_INVOKABLE QString readMediaLevel(QString directory);
+    Q_INVOKABLE QString readMediaLevel(QString levelPath);
 
 signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);

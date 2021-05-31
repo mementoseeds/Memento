@@ -10,5 +10,6 @@
         <file>assets/icons/media.svg</file>
         <file alias="Options.qml">qml/ui/Options.qml</file>
         <file alias="MediaLevel.qml">qml/ui/MediaLevel.qml</file>
+        <file alias="LearningLevelView.qml">qml/ui/LearningLevelView.qml</file>
     </qresource>
 </RCC>

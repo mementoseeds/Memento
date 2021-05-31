@@ -110,9 +110,9 @@ QVariantMap Backend::getUserSettings()
     return userSettings;
 }
 
-QString Backend::readMediaLevel(QString directory)
+QString Backend::readMediaLevel(QString levelPath)
 {
-    QFile mediaFile(directory);
+    QFile mediaFile(levelPath);
     mediaFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString content = mediaFile.readAll();
     mediaFile.close();
