@@ -44,24 +44,9 @@ Kirigami.ApplicationWindow {
         titleIcon: "applications-graphics"
         actions: [
             Kirigami.Action {
-                text: "View"
-                iconName: "view-list-icons"
-                Kirigami.Action {
-                    text: "View Action 1"
-                    onTriggered: showPassiveNotification("View Action 1 clicked")
-                }
-                Kirigami.Action {
-                    text: "View Action 2"
-                    onTriggered: showPassiveNotification("View Action 2 clicked")
-                }
-            },
-            Kirigami.Action {
-                text: "Action 1"
-                onTriggered: showPassiveNotification("Action 1 clicked")
-            },
-            Kirigami.Action {
-                text: "Action 2"
-                onTriggered: showPassiveNotification("Action 2 clicked")
+                text: "Options"
+                iconName: "games-config-options"
+                onTriggered: root.pageStack.push("qrc:/Options.qml")
             }
         ]
     }

@@ -8,5 +8,6 @@
         <file>assets/icons/seeds.svg</file>
         <file alias="CourseLevelExterior.qml">qml/components/CourseLevelExterior.qml</file>
         <file>assets/icons/media.svg</file>
+        <file alias="Options.qml">qml/ui/Options.qml</file>
     </qresource>
 </RCC>

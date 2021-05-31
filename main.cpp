@@ -31,6 +31,9 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
+    QCoreApplication::setApplicationName(QLatin1String("Memento"));
+    QCoreApplication::setOrganizationName(QLatin1String("Memento Seeds"));
+
     #ifdef Q_OS_ANDROID
     KirigamiPlugin::getInstance().registerTypes(&engine);
     #endif
