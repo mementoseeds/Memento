@@ -48,6 +48,7 @@ Kirigami.ApplicationWindow {
 
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Memento"
+        isMenu: true
         titleIcon: "applications-graphics"
         actions: [
             Kirigami.Action {

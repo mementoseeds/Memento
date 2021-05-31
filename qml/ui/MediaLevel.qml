@@ -49,6 +49,7 @@ Kirigami.ScrollablePage {
             levelHeaderTitle: levelTitle
             levelHeaderNumber: levelNumber
             levelHeaderIcon: "assets/icons/media.svg"
+            headerIsLearning: false
         }
 
         Kirigami.Heading {
@@ -57,6 +58,7 @@ Kirigami.ScrollablePage {
             level: 3
             textFormat: Text.MarkdownText
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            Layout.fillWidth: true
             onLinkActivated: Qt.openUrlExternally(link)
         }
     }

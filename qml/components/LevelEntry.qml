@@ -25,9 +25,6 @@ Item {
 
     RowLayout {
         id: levelEntryDelegate
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
 
         Kirigami.Heading {
             text: "entry"

@@ -47,10 +47,53 @@ Kirigami.ScrollablePage {
 
     Kirigami.CardsListView {
         headerPositioning: ListView.InlineHeader
-        header: LevelHeader {
-            levelHeaderTitle: levelTitle
-            levelHeaderNumber: levelNumber
-            levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
+        header: ColumnLayout {
+            width: parent.width
+
+            LevelHeader {
+                levelHeaderTitle: levelTitle
+                levelHeaderNumber: levelNumber
+                levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
+                levelHeaderItemAmount: itemAmount
+            }
+
+            RowLayout {
+
+                ComboBox {
+                    model: ["Preview", "Reset"]
+                    onActivated: console.debug(index)
+                }
+
+                Label {
+                    text: ""
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    text: levelCompleted ? "Water" : "Plant"
+                    Layout.topMargin: 20
+                    Layout.bottomMargin: 20
+                }
+            }
+
+            RowLayout {
+
+                Kirigami.Heading {
+                    text: itemAmount + " Items"
+                    level: 2
+                }
+
+                Label {
+                    text: ""
+                    Layout.fillWidth: true
+                }
+
+                Kirigami.Heading {
+                    text: "N Ignored"
+                    level: 2
+                    Layout.bottomMargin: 20
+                }
+            }
         }
 
         model: 100

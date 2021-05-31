@@ -17,13 +17,15 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.4 as Kirigami
+import QtQuick.Controls 2.15
 
 RowLayout {
-    Layout.bottomMargin: 50
-
     property string levelHeaderTitle: ""
     property int levelHeaderNumber: 0
     property string levelHeaderIcon: ""
+    property int levelHeaderItemAmount: 0
+    property int levelHeaderCompletedItemAmount: 0
+    property bool headerIsLearning: true
 
     ColumnLayout {
 
@@ -49,16 +51,25 @@ RowLayout {
             font.bold: true
             level: 1
             font.pointSize: 30
-            textFormat: Text.MarkdownText
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            Layout.fillWidth: true
             Layout.leftMargin: 10
         }
 
-        Rectangle {
-            color: "gray"
-            height: 2
+        ProgressBar {
+            id: levelProgressBar
+            from: 0
+            to: headerIsLearning ? levelHeaderItemAmount : 100
+            value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
+            indeterminate:  false
             Layout.fillWidth: true
-            radius: 50
+        }
+
+        Kirigami.Heading {
+            visible: headerIsLearning
+            text: levelProgressBar.value / levelProgressBar.to * 100 + "%"
+            level: 4
+            Layout.alignment: Qt.AlignHCenter
         }
     }
 }

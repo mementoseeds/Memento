@@ -25,9 +25,7 @@ Item {
 
     ColumnLayout {
         id: courseExteriorDelegate
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: parent.width
 
         Rectangle {
             width: levelNumberIndicator.contentWidth + 10
