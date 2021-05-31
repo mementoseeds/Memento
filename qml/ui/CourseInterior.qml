@@ -43,8 +43,8 @@ Kirigami.ScrollablePage {
 
     actions {
         main: Kirigami.Action {
-            text: "Go back"
-            iconName: "go-previous"
+            text: "Close"
+            iconName: "dialog-close"
             onTriggered: rootPageStack.pop()
         }
         right: Kirigami.Action {
