@@ -45,6 +45,7 @@ Kirigami.ScrollablePage {
         main: Kirigami.Action {
             text: "Close"
             iconName: "dialog-close"
+            shortcut: "Escape"
             onTriggered: rootPageStack.pop()
         }
         right: Kirigami.Action {
