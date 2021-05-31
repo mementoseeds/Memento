@@ -26,10 +26,20 @@ Kirigami.ScrollablePage {
     property alias levelContent: levelContentText.text
 
     actions {
-        main: Kirigami.Action {
+        left: Kirigami.Action {
             text: "Close"
             iconName: "dialog-close"
             onTriggered: rootPageStack.pop()
+        }
+        main: Kirigami.Action {
+            text: "Previous"
+            iconName: "arrow-left"
+            onTriggered: signalSource.openPreviousLevel(levelNumber - 1)
+        }
+        right: Kirigami.Action {
+            text: "Next"
+            iconName: "arrow-right"
+            onTriggered: signalSource.openNextLevel(levelNumber - 1)
         }
     }
 

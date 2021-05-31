@@ -31,9 +31,7 @@ Kirigami.ScrollablePage {
         }
     }
 
-    Component.onCompleted: console.debug(levelPath)
-
     Kirigami.Heading {
-        text: "Hello there"
+        text: levelPath
     }
 }

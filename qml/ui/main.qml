@@ -33,13 +33,13 @@ Kirigami.ApplicationWindow {
         visible: false
         signal courseOpened()
         signal courseClosed()
+        signal openPreviousLevel(int currentIndex)
+        signal openNextLevel(int currentIndex)
     }
 
     Backend {
         id: globalBackend
     }
-
-    //Component.onCompleted: globalBackend.debugFun()
 
     globalDrawer: Kirigami.GlobalDrawer {
         title: "Memento"

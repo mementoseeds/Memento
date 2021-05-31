@@ -149,4 +149,20 @@ Kirigami.ScrollablePage {
                                          })
         }
     }
+
+    Connections {
+        target: signalSource
+        function onOpenPreviousLevel(currentIndex)
+        {
+            if (currentIndex !== 0)
+            {
+                //rootPageStack.pop()
+                var newLevelPath = courseLevelsListModel.get(currentIndex - 1).levelPath
+//                if (newLevelPath.endsWith(".json"))
+//                    rootPageStack.push("qrc:/LearningLevelView.qml", {"levelPath": levelPath})
+//                else if (newLevelPath.endsWith(".md"))
+//                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
+            }
+        }
+    }
 }
