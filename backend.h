@@ -50,6 +50,8 @@ public:
 
     Q_INVOKABLE void debugFun();
 
+    Q_INVOKABLE QString getLocalFile(QUrl url);
+
     Q_INVOKABLE void getCourseList();
     Q_INVOKABLE void getCourseLevels(QString directory);
 

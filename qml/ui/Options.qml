@@ -35,33 +35,32 @@ Kirigami.ScrollablePage {
 
     ColumnLayout {
 
-        Kirigami.FormLayout {
+        RowLayout {
+            Layout.leftMargin: 20
             Layout.fillWidth: true
 
-            RowLayout {
+            Kirigami.Heading {
+                text: "Courses location"
+                level: 3
+            }
 
-                Kirigami.Heading {
-                    text: "Courses location"
-                    level: 3
-                }
+            Button {
+                text: "Browse"
+                onClicked: fileDialog.open()
+            }
 
-                Button {
-                    text: "Browse"
-                    onClicked: fileDialog.open()
-                }
+            TextField {
+                id: coursesLocationTextField
+                text: userSettings["coursesLocation"]
+                Layout.fillWidth: true
+            }
 
-                TextField {
-                    id: coursesLocationTextField
-                    text: userSettings["coursesLocation"]
-                }
-
-                Button {
-                    text: "Apply"
-                    onClicked:
-                    {
-                        userSettings["coursesLocation"] = coursesLocationTextField.text
-                        globalBackend.setUserSettings(userSettings)
-                    }
+            Button {
+                text: "Apply"
+                onClicked:
+                {
+                    userSettings["coursesLocation"] = coursesLocationTextField.text
+                    globalBackend.setUserSettings(userSettings)
                 }
             }
         }
@@ -74,6 +73,6 @@ Kirigami.ScrollablePage {
         selectExisting: true
         selectFolder: true
         selectMultiple: false
-        onAccepted: coursesLocationTextField.text = fileUrl
+        onAccepted: coursesLocationTextField.text = globalBackend.getLocalFile(fileUrl)
     }
 }

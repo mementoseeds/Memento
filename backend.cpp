@@ -23,9 +23,14 @@ void Backend::debugFun()
     qDebug() << "Hello there";
 }
 
+QString Backend::getLocalFile(QUrl url)
+{
+    return url.toLocalFile();
+}
+
 void Backend::getCourseList()
 {
-    QDirIterator iterator(userSettings["coursesLocation"].toUrl().toLocalFile(), QDir::Dirs | QDir::NoDotAndDotDot);
+    QDirIterator iterator(userSettings["coursesLocation"].toString(), QDir::Dirs | QDir::NoDotAndDotDot);
     while (iterator.hasNext())
     {
         QString directory = iterator.next();
@@ -101,6 +106,6 @@ void Backend::setUserSettings(QVariantMap userSettings)
 QVariantMap Backend::getUserSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
-    userSettings.insert("coursesLocation", settings.value("coursesLocation").toUrl());
+    userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     return userSettings;
 }

@@ -40,6 +40,7 @@ Kirigami.ScrollablePage {
         text: "Your course list is empty. Download some courses or set your courses directory from the settings"
         level: 1
         anchors.fill: parent
+        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         horizontalAlignment: Qt.AlignHCenter
         visible: false
     }
