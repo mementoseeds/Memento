@@ -72,7 +72,7 @@ void Backend::getCourseLevels(QString directory)
         QFile infoFile(levelPath);
         infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
 
-        if (levelPath.endsWith(".json", Qt::CaseInsensitive))
+        if (levelPath.endsWith(".json"))
         {
             QString info = infoFile.readAll();
             QJsonDocument levelInfo = QJsonDocument::fromJson(info.toUtf8());
@@ -85,7 +85,7 @@ void Backend::getCourseLevels(QString directory)
                 levelInfo["completed"].toBool()
                         );
         }
-        else if (levelPath.endsWith(".md", Qt::CaseInsensitive))
+        else if (levelPath.endsWith(".md"))
         {
             QString info = infoFile.readLine();
             QString levelTitle = QRegularExpression("\\(.*\\)$").match(info).captured().replace(QRegularExpression("^\\(|\\)$"), "");
