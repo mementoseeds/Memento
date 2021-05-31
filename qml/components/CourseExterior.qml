@@ -102,8 +102,11 @@ Item {
 
         function onCourseClosed()
         {
-            courseHeadingsColumnLayout.visible = true
-            courseButtonsRowLayout.visible = true
+            if (rootPageStack.depth === 1)
+            {
+                courseHeadingsColumnLayout.visible = true
+                courseButtonsRowLayout.visible = true
+            }
         }
     }
 }
