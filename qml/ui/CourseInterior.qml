@@ -127,9 +127,9 @@ Kirigami.ScrollablePage {
             onClicked:
             {
                 if (levelPath.endsWith(".json"))
-                    console.debug("JSON")
+                    rootPageStack.push("qrc:/LearningLevelView.qml", {"levelPath": levelPath})
                 else if (levelPath.endsWith(".md"))
-                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelContent": globalBackend.readMediaLevel(levelPath)})
+                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
             }
 
             contentItem: CourseLevelExterior{}

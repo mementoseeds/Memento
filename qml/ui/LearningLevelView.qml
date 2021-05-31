@@ -21,6 +21,8 @@ import QtQuick.Controls 2.15
 
 Kirigami.ScrollablePage {
 
+    property string levelPath: ""
+
     actions {
         main: Kirigami.Action {
             text: "Close"
@@ -28,6 +30,8 @@ Kirigami.ScrollablePage {
             onTriggered: rootPageStack.pop()
         }
     }
+
+    Component.onCompleted: console.debug(levelPath)
 
     Kirigami.Heading {
         text: "Hello there"
