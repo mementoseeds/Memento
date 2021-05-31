@@ -109,3 +109,12 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     return userSettings;
 }
+
+QString Backend::readMediaLevel(QString directory)
+{
+    QFile mediaFile(directory);
+    mediaFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString content = mediaFile.readAll();
+    mediaFile.close();
+    return content;
+}

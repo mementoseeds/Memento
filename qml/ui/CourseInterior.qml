@@ -124,7 +124,13 @@ Kirigami.ScrollablePage {
         delegate: Kirigami.AbstractCard {
             showClickFeedback: true
 
-            onClicked: showPassiveNotification(levelPath)
+            onClicked:
+            {
+                if (levelPath.endsWith(".json"))
+                    console.debug("JSON")
+                else if (levelPath.endsWith(".md"))
+                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelContent": globalBackend.readMediaLevel(levelPath)})
+            }
 
             contentItem: CourseLevelExterior{}
         }
