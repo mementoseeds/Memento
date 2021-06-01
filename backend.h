@@ -60,10 +60,13 @@ public:
 
     Q_INVOKABLE QString readMediaLevel(QString levelPath);
 
+    Q_INVOKABLE void getLevelItems(QString courseDirectory, QString levelPath);
+
 signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void finishedAddingCourses();
     void addCourseLevel(QString levelPath, QString levelTitle, bool isLearning, int itemAmount, bool levelCompleted);
+    void addLevelItem(QString id, QString test, QString prompt, bool planted, QString nextWatering, bool ignored, bool difficult);
 
 private:
 

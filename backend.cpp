@@ -118,3 +118,43 @@ QString Backend::readMediaLevel(QString levelPath)
     mediaFile.close();
     return content;
 }
+
+void Backend::getLevelItems(QString courseDirectory, QString levelPath)
+{
+    //Open the level
+    QFile levelFile(levelPath);
+    levelFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString levelContent = levelFile.readAll();
+    levelFile.close();
+    QJsonDocument levelInfo = QJsonDocument::fromJson(levelContent.toUtf8());
+    QJsonArray levelSeeds = levelInfo["seeds"].toArray();
+
+    //Open the seedbox
+    QFile seedboxFile(courseDirectory + "/seedbox.json");
+    seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString seedboxContent = seedboxFile.readAll();
+    seedboxFile.close();
+    QJsonDocument seedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
+
+    //Get testing direction
+    QString testColumn = levelInfo["test"].toString();
+    QString promptColumn = levelInfo["prompt"].toString();
+
+    foreach (QJsonValue seed, levelSeeds)
+    {
+        QString id = seed["id"].toString();
+        //QString attributes = seedbox[id]["attributes"].toString();
+        QString test = seedbox[id][testColumn]["primary"].toString();
+        QString prompt = seedbox[id][promptColumn]["primary"].toString();
+
+        emit addLevelItem(
+            id,
+            test,
+            prompt,
+            seed["planted"].toBool(),
+            seed["nextWatering"].toString(),
+            seed["ignored"].toBool(),
+            seed["difficult"].toBool()
+                    );
+    }
+}

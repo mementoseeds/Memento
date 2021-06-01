@@ -21,11 +21,14 @@ import QtQuick.Controls 2.15
 
 Kirigami.ScrollablePage {
 
+    property string courseDirectory: ""
     property string levelPath: ""
     property int levelNumber: 0
     property string levelTitle: ""
     property int itemAmount: 0
     property bool levelCompleted: false
+
+    Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
 
     actions {
         left: Kirigami.Action {
@@ -72,7 +75,6 @@ Kirigami.ScrollablePage {
                 Button {
                     text: levelCompleted ? "Water" : "Plant"
                     Layout.topMargin: 20
-                    Layout.bottomMargin: 20
                 }
             }
 
@@ -96,11 +98,26 @@ Kirigami.ScrollablePage {
             }
         }
 
-        model: 100
+        model: ListModel {id: levelEntryListModel}
 
         delegate: Kirigami.AbstractCard {
 
             contentItem: LevelEntry{}
+        }
+    }
+
+    Connections {
+        target: globalBackend
+        function onAddLevelItem(id, test, prompt, planted, nextWatering, ignored, difficult)
+        {
+            levelEntryListModel.append({
+                "id": id,
+                "test": test,
+                "prompt": prompt,
+                "planted": planted,
+                "nextWatering": nextWatering,
+                "ignored": ignored
+                                       })
         }
     }
 }

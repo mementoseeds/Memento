@@ -23,11 +23,31 @@ Item {
     implicitWidth: levelEntryDelegate.implicitWidth
     implicitHeight: levelEntryDelegate.implicitHeight
 
-    RowLayout {
+    GridLayout {
         id: levelEntryDelegate
+        width: parent.width
 
         Kirigami.Heading {
-            text: "entry"
+            width: parent.width / 3
+            text: test
+            level: 1
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+        }
+
+        Kirigami.Heading {
+            width: parent.width / 3
+            text: prompt
+            level: 1
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            Layout.alignment: Qt.AlignCenter
+        }
+
+        Kirigami.Heading {
+            width: parent.width / 3
+            text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
+            level: 3
+            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
         }
     }
 }
