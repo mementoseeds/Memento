@@ -52,7 +52,7 @@ RowLayout {
             level: 1
             font.pointSize: 30
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.alignment: Qt.AlignHCenter
+            Layout.fillWidth: true
             Layout.leftMargin: 10
         }
 
