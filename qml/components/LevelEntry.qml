@@ -20,35 +20,44 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Item {
-    implicitWidth: levelEntryDelegate.implicitWidth
-    implicitHeight: levelEntryDelegate.implicitHeight
+    implicitWidth: levelEntryDelegate.childrenRect.width
+    implicitHeight: levelEntryDelegate.childrenRect.height
 
-    RowLayout {
+    Rectangle {
         id: levelEntryDelegate
-        width: parent.width
-        spacing: 0
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        color: "transparent"
 
         Kirigami.Heading {
+            id: levelFirstColumn
+            anchors.left: parent.left
+            width: parent.width / 3
             text: test
             level: 2
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.maximumWidth: parent.width / 3
-            Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+            horizontalAlignment: Text.AlignLeft
         }
 
         Kirigami.Heading {
+            id: levelSecondColumn
+            anchors.left: levelFirstColumn.right
+            anchors.right: levelThirdColumn.left
+            width: parent.width / 3
             text: prompt
             level: 2
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.maximumWidth: parent.width / 3
-            Layout.alignment: Qt.AlignCenter
+            horizontalAlignment: Text.AlignLeft
         }
 
         Kirigami.Heading {
+            id: levelThirdColumn
+            anchors.right: parent.right
+            width: parent.width / 3
             text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
-            level: 3
-            Layout.maximumWidth: parent.width / 3
-            Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
+            level: 4
+            horizontalAlignment: Text.AlignRight
         }
     }
 }
