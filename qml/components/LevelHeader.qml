@@ -50,7 +50,7 @@ RowLayout {
             text: levelHeaderTitle
             font.bold: true
             level: 1
-            font.pointSize: 30
+            //font.pointSize: 30
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             Layout.fillWidth: true
             Layout.leftMargin: 10

@@ -67,6 +67,7 @@ signals:
     void finishedAddingCourses();
     void addCourseLevel(QString levelPath, QString levelTitle, bool isLearning, int itemAmount, bool levelCompleted);
     void addLevelItem(QString id, QString test, QString prompt, bool planted, QString nextWatering, bool ignored, bool difficult);
+    void finishedAddingLevel();
 
 private:
 

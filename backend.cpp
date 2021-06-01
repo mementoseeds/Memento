@@ -157,4 +157,6 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
             seed["difficult"].toBool()
                     );
     }
+
+    emit finishedAddingLevel();
 }

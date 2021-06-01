@@ -74,11 +74,11 @@ Kirigami.ScrollablePage {
 
                 Button {
                     text: levelCompleted ? "Water" : "Plant"
-                    Layout.topMargin: 20
                 }
             }
 
             RowLayout {
+                Layout.bottomMargin: 20
 
                 Kirigami.Heading {
                     text: itemAmount + " Items"
@@ -91,9 +91,23 @@ Kirigami.ScrollablePage {
                 }
 
                 Kirigami.Heading {
+                    id: ignoredAmountHeading
                     text: "N Ignored"
                     level: 2
-                    Layout.bottomMargin: 20
+
+                    Connections {
+                        target: globalBackend
+                        function onFinishedAddingLevel()
+                        {
+                            var amountIgnored = 0
+                            for (var i = 0; i < levelEntryListModel.count; i++)
+                            {
+                                if (levelEntryListModel.get(i).ignored)
+                                    amountIgnored++
+                            }
+                            ignoredAmountHeading.text = amountIgnored + " Ignored"
+                        }
+                    }
                 }
             }
         }
