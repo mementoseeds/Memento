@@ -30,10 +30,10 @@ QString Backend::getLocalFile(QUrl url)
 
 void Backend::getCourseList()
 {
-    QDirIterator iterator(userSettings["coursesLocation"].toString(), QDir::Dirs | QDir::NoDotAndDotDot);
-    while (iterator.hasNext())
+    QDir coursesDir(userSettings["coursesLocation"].toString());
+    foreach (QString dir, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        QString directory = iterator.next();
+        QString directory = coursesDir.absolutePath() + "/" + dir;
         QFile infoFile(directory + "/info.json");
 
         if (!infoFile.exists())
@@ -65,10 +65,10 @@ void Backend::getCourseList()
 
 void Backend::getCourseLevels(QString directory)
 {
-    QDirIterator iterator(directory + "/levels", QDir::Files);
-    while (iterator.hasNext())
+    QDir levelsDir(directory + "/levels");
+    foreach (QString lvl, levelsDir.entryList(QDir::Files))
     {
-        QString levelPath = iterator.next();
+        QString levelPath = levelsDir.absolutePath() + "/" + lvl;
         QFile infoFile(levelPath);
         infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
 

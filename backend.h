@@ -23,7 +23,7 @@
 #include <QDebug>
 
 //For reading courses dir
-#include <QDirIterator>
+#include <QDir>
 
 //For reading Jsons
 #include <QJsonDocument>
