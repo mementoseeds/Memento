@@ -242,3 +242,10 @@ class MemriseCourse():
 
                 json.dump(levelInfo, levelFile, indent = 4, ensure_ascii = False)
                 levelFile.close()
+
+    def autoScrape(self, minLevel, maxLevel, verbose = True, extraVerbose = False):
+        self.scrapeLevels(minLevel, maxLevel)
+        self.writeCourseInfo(verbose = verbose)
+        self.buildSeedbox(verbose = verbose)
+        self.writeSeedbox()
+        self.createLevels(verbose = verbose, extraVerbose = extraVerbose)

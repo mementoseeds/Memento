@@ -28,6 +28,7 @@ minLevel = 0
 maxLevel = 9999999
 
 def showHelp():
+    print("This is a script to scrape Memrise courses and convert them to Mememto-compatible ones. It first gathers general information from the course's home page. Afterwards it visits each level to get its title and the items in it. Finally it will call the Memrise API to extract extra information about an item, such as its attributes or audio.")
     print("You must specify only the course url. E.g. --> python scrape_memrise.py https://app.memrise.com/course/63061/capital-cities-2/")
     print("Extra options:")
     print("\t-f --from --> Set the level from which to start downloading")
@@ -58,8 +59,4 @@ if len(args) == 0:
 
 for a in args:
     course = MemriseCourse(a)
-    course.scrapeLevels(minLevel, maxLevel)
-    course.writeCourseInfo()
-    course.buildSeedbox()
-    course.writeSeedbox()
-    course.createLevels()
+    course.autoScrape(minLevel, maxLevel)
