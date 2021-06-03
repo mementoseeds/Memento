@@ -36,8 +36,6 @@ Kirigami.ApplicationWindow {
     Item {
         id: signalSource
         visible: false
-        signal courseOpened()
-        signal courseClosed()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
     }

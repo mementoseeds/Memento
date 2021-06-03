@@ -20,6 +20,8 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 RowLayout {
+    width: parent.width
+
     property string levelHeaderTitle: ""
     property int levelHeaderNumber: 0
     property string levelHeaderIcon: ""
@@ -28,6 +30,7 @@ RowLayout {
     property bool headerIsLearning: true
 
     ColumnLayout {
+        Layout.preferredWidth: parent.width
 
         Kirigami.Heading {
             text: "Level " + levelHeaderNumber
@@ -45,15 +48,16 @@ RowLayout {
     }
 
     ColumnLayout {
+        Layout.preferredWidth: parent.width
 
         Kirigami.Heading {
             text: levelHeaderTitle
             font.bold: true
             level: 1
-            //font.pointSize: 30
+            horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.fillWidth: true
-            Layout.leftMargin: 10
+            Layout.preferredWidth: parent.width
+            Layout.alignment: Qt.AlignCenter
         }
 
         ProgressBar {
@@ -62,7 +66,8 @@ RowLayout {
             to: headerIsLearning ? levelHeaderItemAmount : 100
             value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
             indeterminate:  false
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width
+            Layout.alignment: Qt.AlignCenter
         }
 
         Kirigami.Heading {

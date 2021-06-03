@@ -25,7 +25,9 @@ Item {
 
     ColumnLayout {
         id: courseExteriorDelegate
-        width: parent.width
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         Rectangle {
             width: levelNumberIndicator.contentWidth + 10
@@ -56,15 +58,20 @@ Item {
             text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
             font.bold: levelCompleted
             level: levelCompleted ? 1 : 5
-            Layout.alignment: Qt.AlignHCenter
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            Layout.preferredWidth: parent.width
+            Layout.alignment: Qt.AlignCenter
         }
 
         Kirigami.Heading {
             text: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
             font.bold: true
             level: 2
+            horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.alignment: Qt.AlignHCenter
+            Layout.preferredWidth: parent.width
+            Layout.alignment: Qt.AlignCenter
         }
 
         Rectangle {

@@ -44,6 +44,7 @@ Kirigami.ScrollablePage {
     }
 
     ColumnLayout {
+        width: parent.width
 
         LevelHeader {
             levelHeaderTitle: levelTitle
@@ -58,7 +59,7 @@ Kirigami.ScrollablePage {
             level: 3
             textFormat: Text.MarkdownText
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width
             onLinkActivated: Qt.openUrlExternally(link)
         }
     }

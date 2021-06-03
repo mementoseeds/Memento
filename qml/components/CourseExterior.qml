@@ -25,22 +25,38 @@ Item {
 
     RowLayout {
         id: courseExteriorDelegate
-        width: parent.width
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         Image {
+            id: courseImage
             source: "file:/" + icon
             Layout.fillHeight: true
-            Layout.maximumHeight: Kirigami.Units.iconSizes.huge
+            Layout.maximumHeight: Kirigami.Units.iconSizes.huge * 1.5
             Layout.preferredWidth: height
         }
 
         ColumnLayout {
+            Layout.preferredWidth: parent.width - courseImage.width
             spacing: 0
 
             Kirigami.Heading {
                 text: title
                 level: 1
-                Layout.alignment: Qt.AlignHCenter
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Kirigami.Heading {
+                text: planted + " / " + items + " | " + water + " water " + difficult + " difficult"
+                level: 2
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
             }
 
             ProgressBar {
@@ -49,62 +65,29 @@ Item {
                 to: items
                 value: planted
                 indeterminate:  false
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignCenter
+                Layout.preferredWidth: parent.width / 1.1
             }
 
             Kirigami.Heading {
                 text: courseProgressBar.value / courseProgressBar.to * 100 + "%"
                 level: 4
-                Layout.alignment: Qt.AlignHCenter
+                Layout.alignment: Qt.AlignCenter
             }
         }
 
-        ColumnLayout {
-            id: courseHeadingsColumnLayout
+//        RowLayout {
+//            id: courseButtonsRowLayout
+//            spacing: 0
 
-            Kirigami.Heading {
-                text: planted + " / " + items + " total items"
-                level: 2
-                Layout.alignment: Qt.AlignHCenter
-            }
+//            Button {
+//                text: "Plant"
+//                visible: !completed
+//            }
 
-            Kirigami.Heading {
-                text: water + " water " + difficult + " difficult"
-                level: 3
-                Layout.alignment: Qt.AlignHCenter
-            }
-        }
-
-        RowLayout {
-            id: courseButtonsRowLayout
-            spacing: 10
-
-            Button {
-                text: "Plant"
-                visible: !completed
-            }
-
-            Button {
-                text: "Water"
-            }
-        }
-    }
-
-    Connections {
-        target: signalSource
-        function onCourseOpened()
-        {
-            courseHeadingsColumnLayout.visible = false
-            courseButtonsRowLayout.visible = false
-        }
-
-        function onCourseClosed()
-        {
-            if (rootPageStack.depth === 1)
-            {
-                courseHeadingsColumnLayout.visible = true
-                courseButtonsRowLayout.visible = true
-            }
-        }
+//            Button {
+//                text: "Water"
+//            }
+//        }
     }
 }

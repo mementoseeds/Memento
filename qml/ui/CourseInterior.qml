@@ -34,12 +34,7 @@ Kirigami.ScrollablePage {
     property int ignored: 0
     property bool completed: false
 
-    Component.onDestruction: signalSource.courseClosed()
-    Component.onCompleted:
-    {
-        signalSource.courseOpened()
-        globalBackend.getCourseLevels(directory)
-    }
+    Component.onCompleted: globalBackend.getCourseLevels(directory)
 
     actions {
         main: Kirigami.Action {

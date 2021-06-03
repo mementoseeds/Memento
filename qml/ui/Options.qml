@@ -22,9 +22,6 @@ import QtQuick.Dialogs 1.3
 
 Kirigami.ScrollablePage {
 
-    Component.onCompleted: signalSource.courseOpened()
-    Component.onDestruction: signalSource.courseClosed()
-
     actions {
         main: Kirigami.Action {
             text: "Close"
