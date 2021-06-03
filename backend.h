@@ -27,6 +27,7 @@
 
 //For reading Jsons
 #include <QJsonDocument>
+#include <QJsonObject>
 #include <QJsonArray>
 
 //For finding titles in media levels

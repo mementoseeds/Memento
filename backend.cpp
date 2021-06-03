@@ -81,7 +81,7 @@ void Backend::getCourseLevels(QString directory)
                 levelPath,
                 levelInfo["title"].toString(),
                 true,
-                levelInfo["seeds"].toArray().count(),
+                levelInfo["seeds"].toObject().count(),
                 levelInfo["completed"].toBool()
                         );
         }
@@ -128,7 +128,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     levelFile.close();
     QJsonDocument levelInfo = QJsonDocument::fromJson(levelContent.toUtf8());
     levelContent.clear();
-    QJsonArray levelSeeds = levelInfo["seeds"].toArray();
+    QJsonObject levelSeeds = levelInfo["seeds"].toObject();
 
     //Open the seedbox
     QFile seedboxFile(courseDirectory + "/seedbox.json");
@@ -142,9 +142,10 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     QString testColumn = levelInfo["test"].toString();
     QString promptColumn = levelInfo["prompt"].toString();
 
-    foreach (QJsonValue seed, levelSeeds)
+    foreach (QString id, levelSeeds.keys())
     {
-        QString id = seed["id"].toString();
+        QJsonObject seed = levelSeeds[id].toObject();
+
         QString test = seedbox[id][testColumn]["primary"].toString();
         QString prompt = seedbox[id][promptColumn]["primary"].toString();
 

@@ -26,6 +26,8 @@ from MemriseCourse import MemriseCourse
 
 minLevel = 0
 maxLevel = 9999999
+destination = os.getcwd()
+skipAudio = False
 
 def showHelp():
     print("This is a script to scrape Memrise courses and convert them to Mememto-compatible ones. It first gathers general information from the course's home page. Afterwards it visits each level to get its title and the items in it. Finally it will call the Memrise API to extract extra information about an item, such as its attributes or audio.")
@@ -39,7 +41,7 @@ def showHelp():
     print("\tScrape capitals only between levels 2 and 4 --> python scrape_memrise.py -f 2 -t 4 https://app.memrise.com/course/63061/capital-cities-2/")
 
 try:
-    opts, args = getopt(sys.argv[1:], "f:t:", ["from=", "to="])
+    opts, args = getopt(sys.argv[1:], "f:t:d:n", ["from=", "to=", "destination=", "no-audio"])
     for o, a in opts:
 
         if (o in ("-f", "--from")):
@@ -47,6 +49,12 @@ try:
         
         if (o in ("-t", "--to")):
             maxLevel = int(a)
+
+        if (o in ("-d", "--destination")):
+            destination = a
+
+        if (o in ("-n", "--no-audio")):
+            skipAudio = True
 
 except GetoptError as e:
     print(e)
@@ -59,4 +67,5 @@ if len(args) == 0:
 
 for a in args:
     course = MemriseCourse(a)
-    course.autoScrape(minLevel, maxLevel)
+    course.autoScrape(destination, minLevel, maxLevel, skipAudio)
+    print()
