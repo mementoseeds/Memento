@@ -27,6 +27,7 @@ class MemriseCourse():
         print("Gathering preliminary data")
         self.level = []
         self.itemCount = 0
+        self.thingPattern = re.compile("thing \w+-\w+")
 
         url = url if not url.endswith("/") else url[0:-1]
         courseId = url.split("/")[-2]
@@ -67,7 +68,7 @@ class MemriseCourse():
         randomThingId = None
         for i in self.levelUrls:
             soup = BeautifulSoup(requests.get(i).content, features="lxml")
-            thing = soup.find("div", class_ = "thing text-text")
+            thing = soup.find("div", class_ = self.thingPattern)
             if thing:
                 randomThingId = thing["data-thing-id"]
                 break
@@ -93,8 +94,7 @@ class MemriseCourse():
                 continue
             
             # Handle separately if the level is multimedia
-            thing = soup.find("div", class_ = "thing text-text")
-            if not thing:
+            if soup.find("div", class_ = "multimedia-wrapper"):
                 levelContent["isMultimedia"] = True
                 
                 pattern = re.compile("var level_multimedia = '(.*?)';$", re.MULTILINE)
@@ -110,7 +110,7 @@ class MemriseCourse():
             levelContent["isMultimedia"] = False
 
             # Gather item IDs in level
-            levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = "thing text-text")]
+            levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = self.thingPattern)]
             self.itemCount += len(levelContent["items"])
 
             # Get level columns
@@ -174,7 +174,7 @@ class MemriseCourse():
                     if not item in uniqueItems:
                         uniqueItems.append(item)
 
-        print("Finding item information from API")
+        print("Finding item information from Memrise API")
 
         counter = 1
         totalUniqueItems = len(uniqueItems)
@@ -197,12 +197,21 @@ class MemriseCourse():
                         open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
                         self.seedbox[key]["audio"].append("assets/audio/" + audioName)
                 
+                elif itemInfo["thing"]["columns"][column]["kind"] == "image":
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "image"
+
+                    imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
+                    open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
+
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["location"] = "assets/images/" + imageName
+                
                 elif itemInfo["thing"]["columns"][column]["kind"] == "text":
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "text"
                     
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = itemInfo["thing"]["columns"][column]["val"]
-                    
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["image"] = ""
 
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
 
