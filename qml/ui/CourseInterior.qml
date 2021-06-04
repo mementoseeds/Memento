@@ -123,7 +123,16 @@ Kirigami.ScrollablePage {
             onClicked:
             {
                 if (levelPath.endsWith(".json"))
-                    rootPageStack.push("qrc:/LearningLevelView.qml", {"courseDirectory": directory, "levelPath": levelPath, "levelNumber": (index + 1), "levelTitle": levelTitle, "itemAmount": itemAmount, "levelCompleted": levelCompleted})
+                    rootPageStack.push("qrc:/LearningLevelView.qml", {
+                        "courseDirectory": directory,
+                        "levelPath": levelPath,
+                        "levelNumber": (index + 1),
+                        "levelTitle": levelTitle,
+                        "testColumnType": testColumnType,
+                        "promptColumnType": promptColumnType,
+                        "itemAmount": itemAmount,
+                        "levelCompleted": levelCompleted})
+
                 else if (levelPath.endsWith(".md"))
                     rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
             }
@@ -134,11 +143,13 @@ Kirigami.ScrollablePage {
 
     Connections {
         target: globalBackend
-        function onAddCourseLevel(levelPath, levelTitle, isLearning, itemAmount, levelCompleted)
+        function onAddCourseLevel(levelPath, levelTitle, testColumnType, promptColumnType, isLearning, itemAmount, levelCompleted)
         {
             courseLevelsListModel.append({
                 "levelPath": levelPath,
                 "levelTitle": levelTitle,
+                "testColumnType": testColumnType,
+                "promptColumnType": promptColumnType,
                 "isLearning": isLearning,
                 "itemAmount": itemAmount,
                 "levelCompleted": levelCompleted

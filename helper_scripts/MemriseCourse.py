@@ -22,12 +22,16 @@ import requests
 from bs4 import BeautifulSoup
 
 class MemriseCourse():
+
+    thingPattern = re.compile("thing \w+-\w+")
+    testColumnTypePattern = re.compile("col_a col \w+")
+    promptColumnTypePattern = re.compile("col_b col \w+")
+
     def __init__(self, url):
         # Setup
         print("Gathering preliminary data")
         self.level = []
         self.itemCount = 0
-        self.thingPattern = re.compile("thing \w+-\w+")
 
         url = url if not url.endswith("/") else url[0:-1]
         courseId = url.split("/")[-2]
@@ -68,7 +72,7 @@ class MemriseCourse():
         randomThingId = None
         for i in self.levelUrls:
             soup = BeautifulSoup(requests.get(i).content, features="lxml")
-            thing = soup.find("div", class_ = self.thingPattern)
+            thing = soup.find("div", class_ = MemriseCourse.thingPattern)
             if thing:
                 randomThingId = thing["data-thing-id"]
                 break
@@ -109,8 +113,12 @@ class MemriseCourse():
             # Handle if it is a normal level
             levelContent["isMultimedia"] = False
 
+            # Get column types
+            levelContent["testColumnType"] = soup.find("div", class_ = MemriseCourse.testColumnTypePattern)["class"][-1]
+            levelContent["promptColumnType"] = soup.find("div", class_ = MemriseCourse.promptColumnTypePattern)["class"][-1]
+
             # Gather item IDs in level
-            levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = self.thingPattern)]
+            levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = MemriseCourse.thingPattern)]
             self.itemCount += len(levelContent["items"])
 
             # Get level columns
@@ -204,7 +212,7 @@ class MemriseCourse():
                     imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
                     open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
 
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["location"] = "assets/images/" + imageName
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
                 
                 elif itemInfo["thing"]["columns"][column]["kind"] == "text":
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
@@ -234,7 +242,9 @@ class MemriseCourse():
                 levelInfo = {"title": self.level[i]["title"],
                     "completed": False,
                     "test": self.pool["pool"]["columns"][self.level[i]["testColumn"]]["label"],
-                    "prompt": self.pool["pool"]["columns"][self.level[i]["promptColumn"]]["label"]}
+                    "prompt": self.pool["pool"]["columns"][self.level[i]["promptColumn"]]["label"],
+                    "testType": self.level[i]["testColumnType"],
+                    "promptType": self.level[i]["promptColumnType"]}
 
                 seeds = {}
                 for item in self.level[i]["items"]:

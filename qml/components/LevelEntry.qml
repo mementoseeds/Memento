@@ -30,25 +30,35 @@ Item {
         anchors.right: parent.right
         color: "transparent"
 
-        Kirigami.Heading {
+        Loader {
             id: levelFirstColumn
             anchors.left: parent.left
             width: parent.width / 3
-            text: test
-            level: 2
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignLeft
+            property string columnEntry: test
+            sourceComponent:
+            {
+                if (testColumnType === "text")
+                    return textColumnComponent
+                else if (testColumnType === "image")
+                    return imageColumnComponent
+            }
         }
 
-        Kirigami.Heading {
+        Loader {
             id: levelSecondColumn
             anchors.left: levelFirstColumn.right
             anchors.right: levelThirdColumn.left
-            width: parent.width / 3
-            text: prompt
-            level: 2
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignLeft
+            anchors.leftMargin: 10
+            anchors.rightMargin: 10
+            width: parent.width / 3 - anchors.leftMargin - anchors.rightMargin
+            property string columnEntry: prompt
+            sourceComponent:
+            {
+                if (promptColumnType === "text")
+                    return textColumnComponent
+                else if (promptColumnType === "image")
+                    return imageColumnComponent
+            }
         }
 
         Kirigami.Heading {
@@ -58,6 +68,24 @@ Item {
             text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
             level: 4
             horizontalAlignment: Text.AlignRight
+        }
+    }
+
+    Component {
+        id: textColumnComponent
+        Kirigami.Heading {
+            text: columnEntry
+            level: 2
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            horizontalAlignment: Text.AlignLeft
+        }
+    }
+
+    Component {
+        id: imageColumnComponent
+        Image {
+            source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnEntry)
+            fillMode: Image.PreserveAspectFit
         }
     }
 }

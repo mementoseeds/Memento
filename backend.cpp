@@ -80,6 +80,8 @@ void Backend::getCourseLevels(QString directory)
             emit addCourseLevel(
                 levelPath,
                 levelInfo["title"].toString(),
+                levelInfo["testType"].toString(),
+                levelInfo["promptType"].toString(),
                 true,
                 levelInfo["seeds"].toObject().count(),
                 levelInfo["completed"].toBool()
@@ -90,7 +92,7 @@ void Backend::getCourseLevels(QString directory)
             QString info = infoFile.readLine();
             QString levelTitle = QRegularExpression("\\(.*\\)$").match(info).captured().replace(QRegularExpression("^\\(|\\)$"), "");
 
-            emit addCourseLevel(levelPath, levelTitle, false, 0, false);
+            emit addCourseLevel(levelPath, levelTitle, "", "", false, 0, false);
         }
 
         infoFile.close();

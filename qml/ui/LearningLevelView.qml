@@ -25,6 +25,8 @@ Kirigami.ScrollablePage {
     property string levelPath: ""
     property int levelNumber: 0
     property string levelTitle: ""
+    property string testColumnType: ""
+    property string promptColumnType: ""
     property int itemAmount: 0
     property bool levelCompleted: false
 
