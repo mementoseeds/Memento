@@ -111,7 +111,24 @@ Kirigami.ScrollablePage {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
+            }
+
+            RowLayout {
                 Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
+
+                ComboBox {
+                    model: ["Reset"]
+                    onActivated: console.debug(index)
+                }
+
+                Label {
+                    text: ""
+                    Layout.fillWidth: true
+                }
+
+                Button {
+                    text: completed ? "Water" : "Plant"
+                }
             }
         }
 

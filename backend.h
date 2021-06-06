@@ -62,6 +62,23 @@ public:
 
     Q_INVOKABLE void getLevelItems(QString courseDirectory, QString levelPath);
 
+    Q_INVOKABLE void loadSeedbox(QString courseDirectory);
+    Q_INVOKABLE void unloadSeedbox();
+
+    enum TestType
+    {
+        PREVIEW,
+        MULTIPLECHOICE,
+        TYPING,
+        TAPPING
+    };
+    Q_ENUMS(TestType)
+
+    static void registerTestTypeInQML()
+    {
+       qmlRegisterType<Backend>("TestType", 1, 0, "TestType");
+    }
+
 signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void finishedAddingCourses();
@@ -71,6 +88,7 @@ signals:
 
 private:
 
+    QJsonDocument globalSeedbox;
     QVariantMap userSettings;
 };
 

@@ -18,9 +18,9 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
+import TestType 1.0
 
 Kirigami.ScrollablePage {
-
     property string courseDirectory: ""
     property string levelPath: ""
     property int levelNumber: 0
@@ -63,39 +63,45 @@ Kirigami.ScrollablePage {
             }
 
             RowLayout {
+                Layout.preferredWidth: parent.width
 
                 ComboBox {
                     model: ["Preview", "Reset"]
-                    onActivated: console.debug(index)
-                }
+                    Layout.alignment: Qt.AlignLeft
+                    onActivated:
+                    {
+                        if (index === 0)
+                        {
+                            var items = []
+                            for (var i = 0; i < levelEntryListModel.count; i++)
+                                items.push(levelEntryListModel.get(i).id)
 
-                Label {
-                    text: ""
-                    Layout.fillWidth: true
+                            rootPageStack.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview"})
+                        }
+                    }
                 }
 
                 Button {
                     text: levelCompleted ? "Water" : "Plant"
+                    Layout.alignment: Qt.AlignRight
                 }
             }
 
             RowLayout {
+                Layout.preferredWidth: parent.width
                 Layout.bottomMargin: 20
 
                 Kirigami.Heading {
                     text: itemAmount + " Items"
                     level: 2
-                }
-
-                Label {
-                    text: ""
-                    Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
                 }
 
                 Kirigami.Heading {
                     id: ignoredAmountHeading
                     text: "N Ignored"
                     level: 2
+                    Layout.alignment: Qt.AlignRight
 
                     Connections {
                         target: globalBackend

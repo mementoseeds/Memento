@@ -13,5 +13,7 @@
         <file alias="LearningLevelView.qml">qml/ui/LearningLevelView.qml</file>
         <file alias="LevelEntry.qml">qml/components/LevelEntry.qml</file>
         <file alias="LevelHeader.qml">qml/components/LevelHeader.qml</file>
+        <file alias="StagingArea.qml">qml/ui/StagingArea.qml</file>
+        <file alias="Preview.qml">qml/tests/Preview.qml</file>
     </qresource>
 </RCC>

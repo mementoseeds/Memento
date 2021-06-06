@@ -20,6 +20,7 @@
 #include "./3rdparty/kirigami/src/kirigamiplugin.h"
 Q_IMPORT_PLUGIN(KirigamiPlugin)
 #endif
+#include "backend.h"
 
 int main(int argc, char *argv[])
 {
@@ -37,6 +38,8 @@ int main(int argc, char *argv[])
     #ifdef Q_OS_ANDROID
     KirigamiPlugin::getInstance().registerTypes(&engine);
     #endif
+
+    Backend::registerTestTypeInQML();
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

@@ -164,3 +164,18 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
 
     emit finishedAddingLevel();
 }
+
+void Backend::loadSeedbox(QString courseDirectory)
+{
+    QFile seedboxFile(courseDirectory + "/seedbox.json");
+    seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString seedboxContent = seedboxFile.readAll();
+    seedboxFile.close();
+    QJsonDocument globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
+    seedboxContent.clear();
+}
+
+void Backend::unloadSeedbox()
+{
+    globalSeedbox.~QJsonDocument();
+}
