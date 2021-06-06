@@ -28,6 +28,33 @@ Kirigami.Page {
 
     Component.onDestruction: globalBackend.unloadSeedbox()
 
+    actions {
+        left: Kirigami.Action {
+            visible: testType == "preview"
+            text: "Back"
+            iconName: "arrow-left"
+            shortcut: "Left"
+            tooltip: "Left arrow"
+            onTriggered:
+            {
+                if (previewIndex !== 1)
+                {
+                    previewIndex -= 2
+                    triggerNextItem()
+                }
+            }
+        }
+
+        right: Kirigami.Action {
+            visible: testType == "preview"
+            text: "Forward"
+            iconName: "arrow-right"
+            shortcut: "Right"
+            tooltip: "Right arrow"
+            onTriggered: triggerNextItem()
+        }
+    }
+
     function triggerNextItem()
     {
         if (testType === "preview")

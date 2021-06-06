@@ -27,19 +27,15 @@ Kirigami.ScrollablePage {
     ListView {
         spacing: 10
 
-        header: RowLayout {
-            anchors.left: parent.left
-            anchors.leftMargin: parent.width / 2 - childrenRect.width / 2
+//        header: RowLayout {
+//            anchors.left: parent.left
+//            anchors.leftMargin: parent.width / 2 - childrenRect.width / 2
 
 //            Button {
-//                text: "Back"
+//                text: "Forward"
+//                onClicked: triggerNextItem()
 //            }
-
-            Button {
-                text: "Forward"
-                onClicked: triggerNextItem()
-            }
-        }
+//        }
 
         model: ListModel{id: previewListModel}
         delegate: Loader {
