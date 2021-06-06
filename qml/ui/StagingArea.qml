@@ -26,14 +26,13 @@ Kirigami.Page {
     property string testType: ""
     property int previewIndex: 0
 
-    Component.onCompleted: globalBackend.loadSeedbox(courseDirectory)
     Component.onDestruction: globalBackend.unloadSeedbox()
 
     function triggerNextItem()
     {
         if (testType === "preview")
         {
-            if (previewIndex !== itemArray.length - 1)
+            if (previewIndex !== itemArray.length)
             {
                 testLoader.active = false
                 testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[previewIndex]})
@@ -41,7 +40,7 @@ Kirigami.Page {
                 previewIndex++
             }
             else
-                console.debug("reached end")
+                rootPageStack.pop()
         }
     }
 
@@ -49,6 +48,10 @@ Kirigami.Page {
         id: testLoader
         anchors.fill: parent
         active: false
-        Component.onCompleted: triggerNextItem()
+        Component.onCompleted:
+        {
+            globalBackend.loadSeedbox(courseDirectory)
+            triggerNextItem()
+        }
     }
 }

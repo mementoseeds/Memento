@@ -171,11 +171,29 @@ void Backend::loadSeedbox(QString courseDirectory)
     seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString seedboxContent = seedboxFile.readAll();
     seedboxFile.close();
-    QJsonDocument globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
+    globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
     seedboxContent.clear();
 }
 
 void Backend::unloadSeedbox()
 {
-    globalSeedbox.~QJsonDocument();
+    globalSeedbox = QJsonDocument();
+}
+
+void Backend::readItem(QString itemId)
+{
+    QJsonObject item = globalSeedbox[itemId].toObject();
+
+    emit addItemDetails("attributes", "Attributes", item["attributes"].toString(), QVariantList());
+
+    emit addItemDetails("audio", "Audio", QString(), item["audio"].toArray().toVariantList());
+
+    foreach (QString column, item.keys())
+    {
+        if (item[column].isObject())
+        {
+            QJsonObject columnData = item[column].toObject();
+            emit addItemDetails(columnData["type"].toString(), column, columnData["primary"].toString(), columnData["alternative"].toArray().toVariantList());
+        }
+    }
 }

@@ -20,7 +20,6 @@ import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Kirigami.ScrollablePage {
-
     property string levelTitle: ""
     property int levelNumber: 0
     property string levelContent: ""

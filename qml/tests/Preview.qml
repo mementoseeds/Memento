@@ -22,9 +22,85 @@ import QtQuick.Controls 2.15
 Kirigami.ScrollablePage {
     property string itemId: ""
 
-    Component.onCompleted: console.debug(itemId)
+    Component.onCompleted: globalBackend.readItem(itemId)
 
-    Kirigami.Heading {
-        text: itemId
+    ListView {
+        spacing: 10
+
+        header: RowLayout {
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width / 2 - childrenRect.width / 2
+
+//            Button {
+//                text: "Back"
+//            }
+
+            Button {
+                text: "Forward"
+                onClicked: triggerNextItem()
+            }
+        }
+
+        model: ListModel{id: previewListModel}
+        delegate: Loader {
+            width: parent.width
+
+            property string type: model.type
+            property string columnName: model.columnName
+            property string primary: model.primary
+            property var other: model.other
+
+            sourceComponent: switch (type)
+                {
+                    case "attributes":
+                    case "text": return textComponent
+                }
+        }
+    }
+
+    Connections {
+        target: globalBackend
+        function onAddItemDetails(type, columnName, primary, other)
+        {
+            previewListModel.append({"type": type, "columnName": columnName, "primary": primary, "other": other})
+        }
+    }
+
+    Component {
+        id: textComponent
+        ColumnLayout {
+            width: parent.width
+            spacing: 10
+
+            Kirigami.Heading {
+                id: textColumnName
+                visible: textPrimary.visible
+                text: columnName
+                level: 5
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Kirigami.Heading {
+                id: textPrimary
+                visible: text.length > 0
+                text: primary
+                level: 1
+                font.pointSize: 20
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Rectangle {
+                visible: textColumnName.visible && textPrimary.visible
+                Layout.topMargin: 10
+                color: "gray"
+                height: 2
+                Layout.fillWidth: true
+                radius: 50
+            }
+        }
     }
 }
