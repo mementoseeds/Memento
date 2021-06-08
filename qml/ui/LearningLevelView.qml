@@ -25,6 +25,8 @@ Kirigami.ScrollablePage {
     property string levelPath: ""
     property int levelNumber: 0
     property string levelTitle: ""
+    property string testColumn: ""
+    property string promptColumn: ""
     property string testColumnType: ""
     property string promptColumnType: ""
     property int itemAmount: 0
@@ -76,7 +78,7 @@ Kirigami.ScrollablePage {
                             for (var i = 0; i < levelEntryListModel.count; i++)
                                 items.push(levelEntryListModel.get(i).id)
 
-                            rootPageStack.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview"})
+                            rootPageStack.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                         }
                     }
                 }

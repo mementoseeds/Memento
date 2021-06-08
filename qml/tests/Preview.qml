@@ -21,8 +21,10 @@ import QtQuick.Controls 2.15
 
 Kirigami.ScrollablePage {
     property string itemId: ""
+    property string testColumn: ""
+    property string promptColumn: ""
 
-    Component.onCompleted: globalBackend.readItem(itemId)
+    Component.onCompleted: globalBackend.readItem(itemId, testColumn, promptColumn)
 
     ListView {
         spacing: 10

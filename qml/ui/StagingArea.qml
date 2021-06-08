@@ -24,6 +24,8 @@ Kirigami.Page {
     property string courseDirectory: ""
     property var itemArray: []
     property string testType: ""
+    property string testColumn: ""
+    property string promptColumn: ""
     property int previewIndex: 0
 
     Component.onDestruction: globalBackend.unloadSeedbox()
@@ -62,7 +64,7 @@ Kirigami.Page {
             if (previewIndex !== itemArray.length)
             {
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[previewIndex]})
+                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[previewIndex], "testColumn": testColumn, "promptColumn": promptColumn})
                 testLoader.active = true
                 previewIndex++
             }

@@ -65,7 +65,7 @@ public:
     Q_INVOKABLE void loadSeedbox(QString courseDirectory);
     Q_INVOKABLE void unloadSeedbox();
 
-    Q_INVOKABLE void readItem(QString itemId);
+    Q_INVOKABLE void readItem(QString itemId, QString testColumn, QString promptColumn);
 
     enum TestType
     {
@@ -85,7 +85,7 @@ signals:
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void finishedAddingCourses();
 
-    void addCourseLevel(QString levelPath, QString levelTitle, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
+    void addCourseLevel(QString levelPath, QString levelTitle, QString testColumn, QString promptColumn, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
     void addLevelItem(QString id, QString test, QString prompt, bool planted, QString nextWatering, bool ignored, bool difficult);
     void finishedAddingLevel();
 

@@ -80,6 +80,8 @@ void Backend::getCourseLevels(QString directory)
             emit addCourseLevel(
                 levelPath,
                 levelInfo["title"].toString(),
+                levelInfo["test"].toString(),
+                levelInfo["prompt"].toString(),
                 levelInfo["testType"].toString(),
                 levelInfo["promptType"].toString(),
                 true,
@@ -92,7 +94,7 @@ void Backend::getCourseLevels(QString directory)
             QString info = infoFile.readLine();
             QString levelTitle = QRegularExpression("\\(.*\\)$").match(info).captured().replace(QRegularExpression("^\\(|\\)$"), "");
 
-            emit addCourseLevel(levelPath, levelTitle, "", "", false, 0, false);
+            emit addCourseLevel(levelPath, levelTitle, QString(), QString(), QString(), QString(), false, 0, false);
         }
 
         infoFile.close();
@@ -180,7 +182,7 @@ void Backend::unloadSeedbox()
     globalSeedbox = QJsonDocument();
 }
 
-void Backend::readItem(QString itemId)
+void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
     QJsonObject item = globalSeedbox[itemId].toObject();
 
@@ -188,9 +190,14 @@ void Backend::readItem(QString itemId)
 
     emit addItemDetails("audio", "Audio", QString(), item["audio"].toArray().toVariantList());
 
+    QJsonObject testColumnObj = item[testColumn].toObject();
+    QJsonObject promptColumnObj = item[promptColumn].toObject();
+    emit addItemDetails(testColumnObj["type"].toString(), testColumn, testColumnObj["primary"].toString(), testColumnObj["alternative"].toArray().toVariantList());
+    emit addItemDetails(promptColumnObj["type"].toString(), promptColumn, promptColumnObj["primary"].toString(), promptColumnObj["alternative"].toArray().toVariantList());
+
     foreach (QString column, item.keys())
     {
-        if (item[column].isObject())
+        if (item[column].isObject() && column.compare(testColumn) != 0 && column.compare(promptColumn) != 0)
         {
             QJsonObject columnData = item[column].toObject();
             emit addItemDetails(columnData["type"].toString(), column, columnData["primary"].toString(), columnData["alternative"].toArray().toVariantList());

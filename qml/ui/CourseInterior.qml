@@ -145,6 +145,8 @@ Kirigami.ScrollablePage {
                         "levelPath": levelPath,
                         "levelNumber": (index + 1),
                         "levelTitle": levelTitle,
+                        "testColumn": testColumn,
+                        "promptColumn": promptColumn,
                         "testColumnType": testColumnType,
                         "promptColumnType": promptColumnType,
                         "itemAmount": itemAmount,
@@ -160,11 +162,13 @@ Kirigami.ScrollablePage {
 
     Connections {
         target: globalBackend
-        function onAddCourseLevel(levelPath, levelTitle, testColumnType, promptColumnType, isLearning, itemAmount, levelCompleted)
+        function onAddCourseLevel(levelPath, levelTitle, testColumn, promptColumn, testColumnType, promptColumnType, isLearning, itemAmount, levelCompleted)
         {
             courseLevelsListModel.append({
                 "levelPath": levelPath,
                 "levelTitle": levelTitle,
+                "testColumn": testColumn,
+                "promptColumn": promptColumn,
                 "testColumnType": testColumnType,
                 "promptColumnType": promptColumnType,
                 "isLearning": isLearning,
