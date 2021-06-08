@@ -41,8 +41,8 @@ Kirigami.ScrollablePage {
             sourceComponent: switch (type)
                 {
                     case "attributes":
+                    case "alternative":
                     case "text": return textComponent
-                    case "alternative": return alternativeComponent
                     case "audio": return audioComponent
                 }
         }
@@ -94,11 +94,10 @@ Kirigami.ScrollablePage {
         id: textComponent
         ColumnLayout {
             width: parent.width
-            spacing: 10
 
             Kirigami.Heading {
                 id: textName
-                visible: textContent.visible
+                visible: textContent.visible && type !== "alternative"
                 text: name
                 level: 4
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -110,48 +109,14 @@ Kirigami.ScrollablePage {
                 id: textContent
                 visible: text.length > 0
                 text: content
-                font.pointSize: type === "attributes" ? 12 : 20
+                font.pointSize: type === "attributes" || type === "alternative" ? 12 : 20
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
             }
 
             Rectangle {
-                visible: type === "attributes"
-                Layout.topMargin: 10
-                color: "gray"
-                height: 2
-                Layout.fillWidth: true
-                radius: 50
-            }
-        }
-    }
-
-    Component {
-        id: alternativeComponent
-        ColumnLayout {
-            width: parent.width
-
-            Kirigami.Heading {
-                visible: textContent.visible
-                text: name
-                level: 5
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-                Layout.preferredWidth: parent.width
-            }
-
-            Kirigami.Heading {
-                id: textContent
-                visible: text.length > 0
-                text: content
-                level: 4
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-                Layout.preferredWidth: parent.width
-            }
-
-            Rectangle {
+                visible: type !== "text"
                 Layout.topMargin: 10
                 color: "gray"
                 height: 2
