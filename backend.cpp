@@ -186,21 +186,53 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
     QJsonObject item = globalSeedbox[itemId].toObject();
 
-    emit addItemDetails("attributes", "Attributes", item["attributes"].toString(), QVariantList());
+    emit addItemDetails("attributes", "Attributes", item["attributes"].toString());
 
-    emit addItemDetails("audio", "Audio", QString(), item["audio"].toArray().toVariantList());
+    //emit addItemDetails("audio", "Audio", QString());
 
     QJsonObject testColumnObj = item[testColumn].toObject();
     QJsonObject promptColumnObj = item[promptColumn].toObject();
-    emit addItemDetails(testColumnObj["type"].toString(), testColumn, testColumnObj["primary"].toString(), testColumnObj["alternative"].toArray().toVariantList());
-    emit addItemDetails(promptColumnObj["type"].toString(), promptColumn, promptColumnObj["primary"].toString(), promptColumnObj["alternative"].toArray().toVariantList());
 
+    QStringList alternatives;
+
+    // Add all test column info first
+    emit addItemDetails(testColumnObj["type"].toString(), testColumn, testColumnObj["primary"].toString());
+    foreach (QJsonValue val, testColumnObj["alternative"].toArray())
+    {
+        QString string = val.toString();
+        if (!string.startsWith("_"))
+            alternatives.append(string);
+    }
+    emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+    alternatives.clear();
+
+    // Add all prompt column info second
+    emit addItemDetails(promptColumnObj["type"].toString(), promptColumn, promptColumnObj["primary"].toString());
+    foreach (QJsonValue val, promptColumnObj["alternative"].toArray())
+    {
+        QString string = val.toString();
+        if (!string.startsWith("_"))
+            alternatives.append(string);
+    }
+    emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+    alternatives.clear();
+
+    // Add all remaining column info last
     foreach (QString column, item.keys())
     {
         if (item[column].isObject() && column.compare(testColumn) != 0 && column.compare(promptColumn) != 0)
         {
             QJsonObject columnData = item[column].toObject();
-            emit addItemDetails(columnData["type"].toString(), column, columnData["primary"].toString(), columnData["alternative"].toArray().toVariantList());
+            emit addItemDetails(columnData["type"].toString(), column, columnData["primary"].toString());
+
+            foreach (QJsonValue val, columnData["alternative"].toArray())
+            {
+                QString string = val.toString();
+                if (!string.startsWith("_"))
+                    alternatives.append(string);
+            }
+            emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+            alternatives.clear();
         }
     }
 }

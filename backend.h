@@ -89,7 +89,7 @@ signals:
     void addLevelItem(QString id, QString test, QString prompt, bool planted, QString nextWatering, bool ignored, bool difficult);
     void finishedAddingLevel();
 
-    void addItemDetails(QString type, QString columnName, QString primary, QVariantList other);
+    void addItemDetails(QString type, QString name, QString content);
 private:
 
     QJsonDocument globalSeedbox;

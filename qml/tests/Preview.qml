@@ -18,6 +18,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 
 Kirigami.ScrollablePage {
     property string itemId: ""
@@ -44,23 +45,24 @@ Kirigami.ScrollablePage {
             width: parent.width
 
             property string type: model.type
-            property string columnName: model.columnName
-            property string primary: model.primary
-            property var other: model.other
+            property string name: model.name
+            property string content: model.content
 
             sourceComponent: switch (type)
                 {
                     case "attributes":
                     case "text": return textComponent
+                    case "alternative": return alternativeComponent
+                    //case "audio": return audioComponent
                 }
         }
     }
 
     Connections {
         target: globalBackend
-        function onAddItemDetails(type, columnName, primary, other)
+        function onAddItemDetails(type, name, content)
         {
-            previewListModel.append({"type": type, "columnName": columnName, "primary": primary, "other": other})
+            previewListModel.append({"type": type, "name": name, "content": content})
         }
     }
 
@@ -71,28 +73,74 @@ Kirigami.ScrollablePage {
             spacing: 10
 
             Kirigami.Heading {
-                id: textColumnName
-                visible: textPrimary.visible
-                text: columnName
-                level: 5
+                id: textName
+                visible: textContent.visible
+                text: name
+                level: 4
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.preferredWidth: parent.width
                 horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
             }
 
             Kirigami.Heading {
-                id: textPrimary
+                id: textContent
                 visible: text.length > 0
-                text: primary
-                level: 1
-                font.pointSize: 20
+                text: content
+                font.pointSize: type === "attributes" ? 12 : 20
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.preferredWidth: parent.width
                 horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
+            }
+        }
+    }
+
+    Component {
+        id: alternativeComponent
+        ColumnLayout {
+            width: parent.width
+
+            Kirigami.Heading {
+                visible: textContent.visible
+                text: name
+                level: 5
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
+            }
+
+            Kirigami.Heading {
+                id: textContent
+                visible: text.length > 0
+                text: content
+                level: 4
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
             }
 
             Rectangle {
-                visible: textColumnName.visible && textPrimary.visible
+                Layout.topMargin: 10
+                color: "gray"
+                height: 2
+                Layout.fillWidth: true
+                radius: 50
+            }
+        }
+    }
+
+    Component {
+        id: audioComponent
+
+        ColumnLayout {
+            width: parent.width
+
+            Audio {
+                source: primary
+                autoPlay: true
+                audioRole: Audio.GameRole
+            }
+
+            Rectangle {
                 Layout.topMargin: 10
                 color: "gray"
                 height: 2
