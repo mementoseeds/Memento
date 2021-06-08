@@ -40,10 +40,12 @@ Kirigami.ScrollablePage {
 
             sourceComponent: switch (type)
                 {
+                    case "audio": return audioComponent
                     case "attributes":
                     case "alternative":
                     case "text": return textComponent
-                    case "audio": return audioComponent
+                    case "image": return imageComponent
+                    case "separator": return separatorComponent
                 }
         }
     }
@@ -53,6 +55,11 @@ Kirigami.ScrollablePage {
         function onAddItemDetails(type, name, content)
         {
             previewListModel.append({"type": type, "name": name, "content": content})
+        }
+
+        function onAddItemSeparator()
+        {
+            previewListModel.append({"type": "separator", "name": "", "content": ""})
         }
     }
 
@@ -114,15 +121,38 @@ Kirigami.ScrollablePage {
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
             }
+        }
+    }
 
-            Rectangle {
-                visible: type !== "text"
-                Layout.topMargin: 10
-                color: "gray"
-                height: 2
-                Layout.fillWidth: true
-                radius: 50
+    Component {
+        id: imageComponent
+
+        ColumnLayout {
+            width: parent.width
+
+            Kirigami.Heading {
+                text: name
+                level: 4
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
             }
+
+            Image {
+                source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + content)
+                sourceSize.width: Kirigami.Units.iconSizes.huge * 2
+                Layout.alignment: Qt.AlignCenter
+            }
+        }
+    }
+
+    Component {
+        id: separatorComponent
+        Rectangle {
+            width: parent.width
+            color: "gray"
+            height: 2
+            radius: 50
         }
     }
 }

@@ -90,6 +90,7 @@ signals:
     void finishedAddingLevel();
 
     void addItemDetails(QString type, QString name, QString content);
+    void addItemSeparator();
 private:
 
     QJsonDocument globalSeedbox;

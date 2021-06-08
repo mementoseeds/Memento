@@ -198,7 +198,12 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     }
 
     //Add attributes
-    emit addItemDetails("attributes", "Attributes", item["attributes"].toString());
+    QString attributes = item["attributes"].toString();
+    if (attributes.length() > 0)
+    {
+        emit addItemDetails("attributes", "Attributes", attributes);
+        emit addItemSeparator();
+    }
 
     QJsonObject testColumnObj = item[testColumn].toObject();
     QJsonObject promptColumnObj = item[promptColumn].toObject();
@@ -213,8 +218,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
-    emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+    if (alternatives.length() > 0)
+        emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
     alternatives.clear();
+    emit addItemSeparator();
 
     // Add all prompt column info second
     emit addItemDetails(promptColumnObj["type"].toString(), promptColumn, promptColumnObj["primary"].toString());
@@ -224,8 +231,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
-    emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+    if (alternatives.length() > 0)
+        emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
     alternatives.clear();
+    emit addItemSeparator();
 
     // Add all remaining column info last
     foreach (QString column, item.keys())
@@ -241,8 +250,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
                 if (!string.startsWith("_"))
                     alternatives.append(string);
             }
-            emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
+            if (alternatives.length() > 0)
+                emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
             alternatives.clear();
+            emit addItemSeparator();
         }
     }
 }
