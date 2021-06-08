@@ -30,16 +30,6 @@ Kirigami.ScrollablePage {
     ListView {
         spacing: 10
 
-//        header: RowLayout {
-//            anchors.left: parent.left
-//            anchors.leftMargin: parent.width / 2 - childrenRect.width / 2
-
-//            Button {
-//                text: "Forward"
-//                onClicked: triggerNextItem()
-//            }
-//        }
-
         model: ListModel{id: previewListModel}
         delegate: Loader {
             width: parent.width
@@ -53,7 +43,7 @@ Kirigami.ScrollablePage {
                     case "attributes":
                     case "text": return textComponent
                     case "alternative": return alternativeComponent
-                    //case "audio": return audioComponent
+                    case "audio": return audioComponent
                 }
         }
     }
@@ -63,6 +53,40 @@ Kirigami.ScrollablePage {
         function onAddItemDetails(type, name, content)
         {
             previewListModel.append({"type": type, "name": name, "content": content})
+        }
+    }
+
+    Component {
+        id: audioComponent
+
+        RowLayout {
+            width: parent.width
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Repeater {
+                    model: content.split(":")
+
+                    Image {
+                        source: "assets/icons/playaudio.svg"
+                        sourceSize.width: Kirigami.Units.iconSizes.huge
+
+                        Audio {
+                            id: audio
+                            source: Qt.resolvedUrl("file://" + courseDirectory + "/" + modelData)
+                            autoPlay: index === 0
+                            audioRole: Audio.GameRole
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: audio.play()
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -91,6 +115,15 @@ Kirigami.ScrollablePage {
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
             }
+
+            Rectangle {
+                visible: type === "attributes"
+                Layout.topMargin: 10
+                color: "gray"
+                height: 2
+                Layout.fillWidth: true
+                radius: 50
+            }
         }
     }
 
@@ -116,28 +149,6 @@ Kirigami.ScrollablePage {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
-            }
-
-            Rectangle {
-                Layout.topMargin: 10
-                color: "gray"
-                height: 2
-                Layout.fillWidth: true
-                radius: 50
-            }
-        }
-    }
-
-    Component {
-        id: audioComponent
-
-        ColumnLayout {
-            width: parent.width
-
-            Audio {
-                source: primary
-                autoPlay: true
-                audioRole: Audio.GameRole
             }
 
             Rectangle {

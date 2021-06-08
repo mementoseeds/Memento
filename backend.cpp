@@ -186,9 +186,19 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
     QJsonObject item = globalSeedbox[itemId].toObject();
 
-    emit addItemDetails("attributes", "Attributes", item["attributes"].toString());
+    //Add audio
+    QJsonArray audioArray = item["audio"].toArray();
+    if (audioArray.count() > 0)
+    {
+        QStringList audioList;
+        foreach (QJsonValue val, audioArray)
+            audioList.append(val.toString());
 
-    //emit addItemDetails("audio", "Audio", QString());
+        emit addItemDetails("audio", "Audio", audioList.join(":"));
+    }
+
+    //Add attributes
+    emit addItemDetails("attributes", "Attributes", item["attributes"].toString());
 
     QJsonObject testColumnObj = item[testColumn].toObject();
     QJsonObject promptColumnObj = item[promptColumn].toObject();

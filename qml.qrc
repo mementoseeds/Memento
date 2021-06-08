@@ -15,5 +15,6 @@
         <file alias="LevelHeader.qml">qml/components/LevelHeader.qml</file>
         <file alias="StagingArea.qml">qml/ui/StagingArea.qml</file>
         <file alias="Preview.qml">qml/tests/Preview.qml</file>
+        <file>assets/icons/playaudio.svg</file>
     </qresource>
 </RCC>
