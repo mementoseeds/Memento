@@ -16,40 +16,29 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 
-Kirigami.ScrollablePage {
-
-    actions {
-        main: Kirigami.Action {
-            text: "Close"
-            iconName: "dialog-close"
-            onTriggered: rootPageStack.pop()
-        }
-    }
+ScrollView {
+    anchors.fill: parent
+    contentHeight: optionsColumnLayout.height + 50
+    contentWidth: root.width
 
     ColumnLayout {
+        id: optionsColumnLayout
+        anchors.left: parent.left
+        anchors.right: parent.right
 
         RowLayout {
-            Layout.leftMargin: 20
-            Layout.fillWidth: true
+            Layout.alignment: Qt.AlignCenter
 
-            Kirigami.Heading {
+            Label {
                 text: "Courses location"
-                level: 3
             }
 
             Button {
                 text: "Browse"
                 onClicked: fileDialog.open()
-            }
-
-            TextField {
-                id: coursesLocationTextField
-                text: userSettings["coursesLocation"]
-                Layout.fillWidth: true
             }
 
             Button {
@@ -60,6 +49,14 @@ Kirigami.ScrollablePage {
                     globalBackend.setUserSettings(userSettings)
                 }
             }
+        }
+
+        TextField {
+            id: coursesLocationTextField
+            text: userSettings["coursesLocation"]
+            Layout.fillWidth: true
+            Layout.leftMargin: 10
+            Layout.rightMargin: 10
         }
     }
 

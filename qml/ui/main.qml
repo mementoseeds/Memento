@@ -15,23 +15,21 @@
  */
 
 import QtQuick 2.15
-import QtQuick.Window 2.15
-import org.kde.kirigami 2.4 as Kirigami
+import QtQuick.Controls 2.15
 import Memento.Backend 1.0
 
-Kirigami.ApplicationWindow {
+ApplicationWindow {
 
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
 
     id: root
+    visible: true
     width: !platformIsMobile ? 1500 : undefined
     height: !platformIsMobile ? 1000 : undefined
     title: "Memento"
+    color: "#333333"
 
     property var userSettings: globalBackend.getUserSettings()
-
-    property alias rootColor: root.color
-    property alias rootPageStack: root.pageStack
 
     Item {
         id: signalSource
@@ -44,54 +42,42 @@ Kirigami.ApplicationWindow {
         id: globalBackend
     }
 
-    globalDrawer: Kirigami.GlobalDrawer {
-        title: "Memento"
-        isMenu: true
-        titleIcon: "applications-graphics"
-        actions: [
-            Kirigami.Action {
-                text: "Options"
-                iconName: "games-config-options"
-                onTriggered: root.pageStack.push("qrc:/Options.qml")
-            }
-        ]
+    StackView {
+        id: rootStackView
+        anchors.fill: parent
+        initialItem: Options{}
+
+        pushEnter: Transition {
+               PropertyAnimation {
+                   property: "opacity"
+                   from: 0
+                   to: 1
+                   duration: 100
+               }
+           }
+       pushExit: Transition {
+           PropertyAnimation {
+               property: "opacity"
+               from: 1
+               to: 0
+               duration: 100
+           }
+       }
+       popEnter: Transition {
+           PropertyAnimation {
+               property: "opacity"
+               from: 0
+               to: 1
+               duration: 100
+           }
+       }
+       popExit: Transition {
+           PropertyAnimation {
+               property: "opacity"
+               from: 1
+               to: 0
+               duration: 100
+           }
+       }
     }
-
-    pageStack.initialPage: CourseList{}
-
-//    Component {
-//        id: mainPageComponent
-
-//        Kirigami.Page {
-//            title: "Memento"
-
-//             actions {
-//                 main: Kirigami.Action {
-//                     iconName: "go-home"
-//                     onTriggered: showPassiveNotification("Main action triggered")
-//                 }
-
-//                 left: Kirigami.Action {
-//                     icon.name: "go-previous"
-//                     onTriggered: showPassiveNotification("Left action triggered")
-//                 }
-//                 right: Kirigami.Action {
-//                     icon.name: "go-next"
-//                     onTriggered: showPassiveNotification("Right action triggered")
-//                 }
-//                 contextualActions: [
-//                     Kirigami.Action {
-//                         text: "Contextual Action 1"
-//                         icon.name: "bookmarks"
-//                         onTriggered: showPassiveNotification("Contextual action 1 clicked")
-//                     },
-//                     Kirigami.Action {
-//                         text: "Contextual Action 2"
-//                         icon.name: "folder"
-//                         enabled: false
-//                     }
-//                 ]
-//             }
-//        }
-//    }
 }
