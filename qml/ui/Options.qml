@@ -18,6 +18,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
+import QtQuick.Controls.Material 2.12
 
 ScrollView {
     anchors.fill: parent
@@ -57,6 +58,7 @@ ScrollView {
             Layout.fillWidth: true
             Layout.leftMargin: 10
             Layout.rightMargin: 10
+            Material.accent: Material.Indigo
         }
     }
 

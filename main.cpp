@@ -16,10 +16,6 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#ifdef Q_OS_ANDROID
-#include "./3rdparty/kirigami/src/kirigamiplugin.h"
-Q_IMPORT_PLUGIN(KirigamiPlugin)
-#endif
 #include "backend.h"
 
 int main(int argc, char *argv[])
@@ -35,9 +31,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(QLatin1String("Memento"));
     QCoreApplication::setOrganizationName(QLatin1String("Memento Seeds"));
 
-    #ifdef Q_OS_ANDROID
-    KirigamiPlugin::getInstance().registerTypes(&engine);
-    #endif
+    QQuickStyle::setStyle("Material");
 
     Backend::registerTestTypeInQML();
 

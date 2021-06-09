@@ -30,8 +30,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-# Static link Kirigami on Android
-android: include(3rdparty/kirigami/kirigami.pri)
-
 HEADERS += \
     backend.h

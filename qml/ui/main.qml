@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import Memento.Backend 1.0
+import QtQuick.Controls.Material 2.12
 
 ApplicationWindow {
 
@@ -28,6 +29,7 @@ ApplicationWindow {
     height: !platformIsMobile ? 1000 : undefined
     title: "Memento"
     color: "#333333"
+    Material.theme: Material.Dark
 
     property var userSettings: globalBackend.getUserSettings()
 

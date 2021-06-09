@@ -39,6 +39,9 @@
 //For saving user settings
 #include <QSettings>
 
+//For Material style
+#include <QQuickStyle>
+
 class Backend : public QObject
 {
     Q_OBJECT
