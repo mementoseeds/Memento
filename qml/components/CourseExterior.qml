@@ -95,21 +95,26 @@ Item {
     MouseArea {
         anchors.fill: parent
         z: -1
+        cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
         onEntered: itemBackground.color = "#3F51B5"
         onExited: itemBackground.color = "transparent"
-        onClicked: rootStackView.push("qrc:/CourseInterior.qml", {
-            "directory": directory,
-            "courseTitle": title,
-            "author": author,
-            "description": description,
-            "category": category,
-            "icon": icon,
-            "items": items,
-            "planted": planted,
-            "water": water,
-            "difficult": difficult,
-            "ignored": ignored
-                })
+        onClicked:
+        {
+            mainToolbarTitle.text = title
+            rootStackView.push("qrc:/CourseInterior.qml", {
+                        "directory": directory,
+                        "courseTitle": title,
+                        "author": author,
+                        "description": description,
+                        "category": category,
+                        "icon": icon,
+                        "items": items,
+                        "planted": planted,
+                        "water": water,
+                        "difficult": difficult,
+                        "ignored": ignored
+                            })
+        }
     }
 }

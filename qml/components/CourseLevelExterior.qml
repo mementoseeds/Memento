@@ -16,12 +16,15 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Item {
-    implicitWidth: courseExteriorDelegate.implicitWidth
-    implicitHeight: courseExteriorDelegate.implicitHeight
+    property int marginBase: 20
+
+    width: courseExteriorDelegate.width
+    height: courseExteriorDelegate.height
+
+    Component.onCompleted: console.debug(height, width)
 
     ColumnLayout {
         id: courseExteriorDelegate
@@ -36,11 +39,10 @@ Item {
             color: "gray"
             Layout.alignment: Qt.AlignHCenter
 
-            Kirigami.Heading {
+            Label {
                 id: levelNumberIndicator
                 text: index + 1
                 font.bold: true
-                level: 2
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
             }
@@ -54,20 +56,18 @@ Item {
             Layout.alignment: Qt.AlignHCenter
         }
 
-        Kirigami.Heading {
+        Label {
             text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
             font.bold: levelCompleted
-            level: levelCompleted ? 1 : 5
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             Layout.preferredWidth: parent.width
             Layout.alignment: Qt.AlignCenter
         }
 
-        Kirigami.Heading {
+        Label {
             text: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
             font.bold: true
-            level: 2
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             Layout.preferredWidth: parent.width
@@ -81,10 +81,9 @@ Item {
             color: "gray"
             Layout.alignment: Qt.AlignHCenter
 
-            Kirigami.Heading {
+            Label {
                 id: itemAmountIndicator
                 text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
-                level: 5
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter

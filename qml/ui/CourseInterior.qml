@@ -14,12 +14,12 @@
  *    along with Memento.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import QtQuick 2.0
+import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
-Kirigami.ScrollablePage {
+Item {
+    property int marginBase: 20
 
     property string directory: ""
     property string courseTitle: ""
@@ -35,47 +35,37 @@ Kirigami.ScrollablePage {
     property bool completed: false
 
     Component.onCompleted: globalBackend.getCourseLevels(directory)
+    Component.onDestruction: mainToolbarTitle.text = root.title
 
-    actions {
-        main: Kirigami.Action {
-            text: "Close"
-            iconName: "dialog-close"
-            shortcut: "Escape"
-            onTriggered: rootPageStack.pop()
-        }
-        right: Kirigami.Action {
-            text: "Info"
-            iconName: "documentinfo"
-            onTriggered: showPassiveNotification("Info Stuff")
-        }
-    }
-
-    Kirigami.CardsGridView {
+    GridView {
+        anchors.fill: parent
+        anchors.leftMargin: marginBase
+        anchors.rightMargin: marginBase
+        ScrollBar.vertical: ScrollBar{}
+        cellWidth: 200
+        cellHeight: 200
 
         header: ColumnLayout {
             width: parent.width
 
-            Kirigami.Heading {
+            Label {
                 id: courseTitleHeading
                 text: courseTitle
                 font.bold: true
-                level: 1
                 Layout.fillWidth: true
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
             }
 
-            Kirigami.Heading {
+            Label {
                 text: "Created by " + author
-                level: 2
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
             }
 
-            Kirigami.Heading {
+            Label {
                 text: category
-                level: 3
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
@@ -88,13 +78,12 @@ Kirigami.ScrollablePage {
                 Layout.alignment: Qt.AlignHCenter
             }
 
-            Kirigami.Heading {
+            Label {
                 text: description
-                level: 2
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
-                Layout.bottomMargin: Kirigami.Units.largeSpacing
+                Layout.bottomMargin: 20
             }
 
             Rectangle {
@@ -104,17 +93,16 @@ Kirigami.ScrollablePage {
                 radius: 50
             }
 
-            Kirigami.Heading {
+            Label {
                 text: "Levels (" + courseLevelsListModel.count + ")"
                 font.bold: true
-                level: 2
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 horizontalAlignment: Text.AlignHCenter
             }
 
             RowLayout {
-                Layout.bottomMargin: Kirigami.Units.largeSpacing * 2
+                Layout.bottomMargin: 40
 
                 ComboBox {
                     model: ["Reset"]
@@ -134,30 +122,26 @@ Kirigami.ScrollablePage {
 
         model: ListModel {id: courseLevelsListModel}
 
-        delegate: Kirigami.AbstractCard {
-            showClickFeedback: true
+        delegate: CourseLevelExterior {}
 
-            onClicked:
-            {
-                if (levelPath.endsWith(".json"))
-                    rootPageStack.push("qrc:/LearningLevelView.qml", {
-                        "courseDirectory": directory,
-                        "levelPath": levelPath,
-                        "levelNumber": (index + 1),
-                        "levelTitle": levelTitle,
-                        "testColumn": testColumn,
-                        "promptColumn": promptColumn,
-                        "testColumnType": testColumnType,
-                        "promptColumnType": promptColumnType,
-                        "itemAmount": itemAmount,
-                        "levelCompleted": levelCompleted})
+//            onClicked:
+//            {
+//                if (levelPath.endsWith(".json"))
+//                    rootPageStack.push("qrc:/LearningLevelView.qml", {
+//                        "courseDirectory": directory,
+//                        "levelPath": levelPath,
+//                        "levelNumber": (index + 1),
+//                        "levelTitle": levelTitle,
+//                        "testColumn": testColumn,
+//                        "promptColumn": promptColumn,
+//                        "testColumnType": testColumnType,
+//                        "promptColumnType": promptColumnType,
+//                        "itemAmount": itemAmount,
+//                        "levelCompleted": levelCompleted})
 
-                else if (levelPath.endsWith(".md"))
-                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
-            }
-
-            contentItem: CourseLevelExterior{}
-        }
+//                else if (levelPath.endsWith(".md"))
+//                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
+//            }
     }
 
     Connections {
