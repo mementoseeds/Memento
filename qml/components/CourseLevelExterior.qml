@@ -21,73 +21,92 @@ import QtQuick.Controls 2.15
 Item {
     property int marginBase: 20
 
-    width: courseExteriorDelegate.width
-    height: courseExteriorDelegate.height
+    width: cellBody.width
+    height: cellBody.height
 
-    Component.onCompleted: console.debug(height, width)
+    Rectangle  {
+        id: cellBody
+        width: 250
+        height: cellColumnLayout.height + marginBase
+        color: "transparent"
+        border.width: 1
+        border.color: "gray"
+        radius: 10
 
-    ColumnLayout {
-        id: courseExteriorDelegate
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        Behavior on color {
+            ColorAnimation {duration: 200}
+        }
 
-        Rectangle {
-            width: levelNumberIndicator.contentWidth + 10
-            height: levelNumberIndicator.contentHeight + 5
-            radius: 100
-            color: "gray"
-            Layout.alignment: Qt.AlignHCenter
+        ColumnLayout {
+            id: cellColumnLayout
+            width: parent.width
 
-            Label {
-                id: levelNumberIndicator
-                text: index + 1
-                font.bold: true
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+            Rectangle {
+                width: levelNumberIndicator.contentWidth + 10
+                height: levelNumberIndicator.contentHeight + 5
+                radius: 100
+                color: "gray"
+                Layout.alignment: Qt.AlignCenter
+                Layout.topMargin: marginBase / 2
+
+                Label {
+                    id: levelNumberIndicator
+                    text: index + 1
+                    font.bold: true
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
-        }
 
-        Image {
-            Layout.topMargin: 10
-            source: isLearning ? (levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg") : "assets/icons/media.svg"
-            sourceSize.width: levelCompleted ? 100 : 80
-            sourceSize.height: 100
-            Layout.alignment: Qt.AlignHCenter
-        }
-
-        Label {
-            text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
-            font.bold: levelCompleted
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.preferredWidth: parent.width
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Label {
-            text: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
-            font.bold: true
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.preferredWidth: parent.width
-            Layout.alignment: Qt.AlignCenter
-        }
-
-        Rectangle {
-            width: itemAmountIndicator.contentWidth + 10
-            height: itemAmountIndicator.contentHeight + 5
-            radius: 100
-            color: "gray"
-            Layout.alignment: Qt.AlignHCenter
+            Image {
+                Layout.topMargin: 10
+                source: isLearning ? (levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg") : "assets/icons/media.svg"
+                sourceSize.width: levelCompleted ? 100 : 80
+                sourceSize.height: 100
+                Layout.alignment: Qt.AlignHCenter
+            }
 
             Label {
-                id: itemAmountIndicator
-                text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
+                text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
+                font.bold: levelCompleted
+                horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.verticalCenter: parent.verticalCenter
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: isLearning ? levelTitle : (levelTitle.length > 0 ? levelTitle : "Untitled media level")
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Rectangle {
+                width: itemAmountIndicator.contentWidth + 10
+                height: itemAmountIndicator.contentHeight + 5
+                radius: 100
+                color: "gray"
+                Layout.alignment: Qt.AlignHCenter
+
+                Label {
+                    id: itemAmountIndicator
+                    text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.verticalCenter: parent.verticalCenter
+                }
             }
         }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        cursorShape: Qt.PointingHandCursor
+        hoverEnabled: true
+        onEntered: cellBody.color = "#3F51B5"
+        onExited: cellBody.color = "transparent"
     }
 }

@@ -39,83 +39,86 @@ Item {
 
     GridView {
         anchors.fill: parent
-        anchors.leftMargin: marginBase
-        anchors.rightMargin: marginBase
-        ScrollBar.vertical: ScrollBar{}
-        cellWidth: 200
-        cellHeight: 200
+        ScrollBar.vertical: ScrollBar{width: 10}
+        cellWidth: 300
+        cellHeight: cellWidth
 
         header: ColumnLayout {
             width: parent.width
 
-            Label {
-                id: courseTitleHeading
-                text: courseTitle
-                font.bold: true
-                Layout.fillWidth: true
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-            }
+            ColumnLayout {
+                Layout.leftMargin: marginBase
+                Layout.rightMargin: marginBase
 
-            Label {
-                text: "Created by " + author
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Label {
-                text: category
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Image {
-                source: Qt.resolvedUrl("file:/" + icon)
-                sourceSize.height: 200
-                sourceSize.width: 200
-                Layout.alignment: Qt.AlignHCenter
-            }
-
-            Label {
-                text: description
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-                Layout.bottomMargin: 20
-            }
-
-            Rectangle {
-                color: "gray"
-                height: 2
-                Layout.fillWidth: true
-                radius: 50
-            }
-
-            Label {
-                text: "Levels (" + courseLevelsListModel.count + ")"
-                font.bold: true
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.fillWidth: true
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            RowLayout {
-                Layout.bottomMargin: 40
-
-                ComboBox {
-                    model: ["Reset"]
-                    onActivated: console.debug(index)
+                Label {
+                    id: courseTitleHeading
+                    text: courseTitle
+                    font.bold: true
+                    Layout.fillWidth: true
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
                 Label {
-                    text: ""
+                    text: "Created by " + author
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
                 }
 
-                Button {
-                    text: completed ? "Water" : "Plant"
+                Label {
+                    text: category
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                Image {
+                    source: Qt.resolvedUrl("file:/" + icon)
+                    sourceSize.height: 200
+                    sourceSize.width: 200
+                    Layout.alignment: Qt.AlignHCenter
+                }
+
+                Label {
+                    text: description
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    Layout.bottomMargin: 20
+                }
+
+                Rectangle {
+                    color: "gray"
+                    height: 2
+                    Layout.fillWidth: true
+                    radius: 50
+                }
+
+                Label {
+                    text: "Levels (" + courseLevelsListModel.count + ")"
+                    font.bold: true
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                }
+
+                RowLayout {
+                    Layout.bottomMargin: 40
+
+                    ComboBox {
+                        model: ["Reset"]
+                        onActivated: console.debug(index)
+                    }
+
+                    Label {
+                        text: ""
+                        Layout.fillWidth: true
+                    }
+
+                    Button {
+                        text: completed ? "Water" : "Plant"
+                    }
                 }
             }
         }
