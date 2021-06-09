@@ -21,7 +21,6 @@ import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
 Item {
-    anchors.fill: parent
 
     ScrollView {
         contentHeight: optionsColumnLayout.height

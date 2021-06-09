@@ -15,61 +15,41 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
+import QtQuick.Controls 2.15
 import QtQuick.Window 2.15
-import org.kde.kirigami 2.4 as Kirigami
 
-Kirigami.ScrollablePage {
+Item {
 
     function refreshAll()
     {
         globalBackend.getCourseList()
     }
 
-    actions {
-        main: Kirigami.Action {
-            text: "Top"
-            iconName: "arrow-up"
-            onTriggered: courseList.positionViewAtBeginning()
-        }
+    Component.onCompleted:
+    {
+        refreshAll()
     }
 
-    Component.onCompleted: refreshAll()
-
-    Kirigami.Heading {
+    Label {
         id: courseListEmptyHeading
         text: "Your course list is empty. Download some courses or set your courses directory from the settings"
-        level: 1
         anchors.fill: parent
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-        horizontalAlignment: Qt.AlignHCenter
+        horizontalAlignment: Text.AlignHCenter
         visible: false
     }
 
-    Kirigami.CardsListView {
+    ListView {
         id: courseList
+        anchors.fill: parent
+        ScrollBar.vertical: ScrollBar{}
+
+        header: Item {height: 20}
 
         model: ListModel {id: courseListModel}
 
-        delegate: Kirigami.AbstractCard {
-            //NOTE: never put a Layout as contentItem as it will cause binding loops
-            showClickFeedback: true
-
-            onClicked: root.pageStack.push("qrc:/CourseInterior.qml", {
-                "directory": directory,
-                "courseTitle": title,
-                "author": author,
-                "description": description,
-                "category": category,
-                "icon": icon,
-                "items": items,
-                "planted": planted,
-                "water": water,
-                "difficult": difficult,
-                "ignored": ignored
-                    })
-
-            contentItem: CourseExterior{}
-        }
+        delegate: CourseExterior {}
     }
 
     Connections {

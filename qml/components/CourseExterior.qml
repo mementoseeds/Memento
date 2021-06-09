@@ -16,43 +16,44 @@
 
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Item {
-    implicitWidth: courseExteriorDelegate.implicitWidth
-    implicitHeight: courseExteriorDelegate.implicitHeight
+    property int marginBase: 20
+
+    width: root.width
+    height: courseExteriorDelegate.height + marginBase * 2
 
     RowLayout {
         id: courseExteriorDelegate
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.leftMargin: marginBase
+        anchors.rightMargin: marginBase
 
         Image {
             id: courseImage
             source: "file:/" + icon
-            Layout.fillHeight: true
-            Layout.maximumHeight: Kirigami.Units.iconSizes.huge * 1.5
+            Layout.maximumHeight: 120
             Layout.preferredWidth: height
+            Layout.topMargin: marginBase
         }
 
         ColumnLayout {
             Layout.preferredWidth: parent.width - courseImage.width
-            spacing: 0
+            spacing: 5
 
-            Kirigami.Heading {
+            Label {
                 text: title
-                level: 1
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignCenter
             }
 
-            Kirigami.Heading {
+            Label {
                 text: planted + " / " + items + " | " + water + " water " + difficult + " difficult"
-                level: 2
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
@@ -69,25 +70,46 @@ Item {
                 Layout.preferredWidth: parent.width / 1.1
             }
 
-            Kirigami.Heading {
+            Label {
                 text: courseProgressBar.value / courseProgressBar.to * 100 + "%"
-                level: 4
                 Layout.alignment: Qt.AlignCenter
             }
         }
+    }
 
-//        RowLayout {
-//            id: courseButtonsRowLayout
-//            spacing: 0
+    Rectangle {
+        id: itemBackground
+        height: parent.height - marginBase
+        width: parent.width - marginBase
+        x: marginBase / 2
+        color: "transparent"
+        border.width: 1
+        border.color: "gray"
+        z: -1
 
-//            Button {
-//                text: "Plant"
-//                visible: !completed
-//            }
+        Behavior on color {
+            ColorAnimation {duration: 200}
+        }
+    }
 
-//            Button {
-//                text: "Water"
-//            }
-//        }
+    MouseArea {
+        anchors.fill: parent
+        z: -1
+        hoverEnabled: true
+        onEntered: itemBackground.color = "#3F51B5"
+        onExited: itemBackground.color = "transparent"
+        onClicked: rootStackView.push("qrc:/CourseInterior.qml", {
+            "directory": directory,
+            "courseTitle": title,
+            "author": author,
+            "description": description,
+            "category": category,
+            "icon": icon,
+            "items": items,
+            "planted": planted,
+            "water": water,
+            "difficult": difficult,
+            "ignored": ignored
+                })
     }
 }
