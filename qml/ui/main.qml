@@ -15,6 +15,7 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import Memento.Backend 1.0
 import QtQuick.Controls.Material 2.12
@@ -44,10 +45,52 @@ ApplicationWindow {
         id: globalBackend
     }
 
+    Shortcut {
+        sequence: "Esc"
+        onActivated: backButton.clicked()
+    }
+
+    header: ToolBar {
+        RowLayout {
+            anchors.fill: parent
+            ToolButton {
+                id: backButton
+                icon.name: "back"
+                onClicked: rootStackView.pop()
+            }
+            Label {
+                id: mainToolbarTitle
+                text: "Course List"
+                elide: Label.ElideRight
+                horizontalAlignment: Qt.AlignHCenter
+                verticalAlignment: Qt.AlignVCenter
+                Layout.fillWidth: true
+            }
+            ToolButton {
+                text: qsTr("⋮")
+                onClicked:
+                {
+                    mainMenuBar.x = this.x
+                    mainMenuBar.y = this.y + 40
+                    mainMenuBar.open()
+                }
+            }
+        }
+
+        Menu {
+            id: mainMenuBar
+            Action {
+                text: "&Options"
+                icon.name: "games-config-options"
+                shortcut: "Ctrl+p"
+                onTriggered: rootStackView.push("qrc:/Options.qml")
+            }
+        }
+    }
+
     StackView {
         id: rootStackView
         anchors.fill: parent
-        initialItem: Options{}
 
         pushEnter: Transition {
                PropertyAnimation {

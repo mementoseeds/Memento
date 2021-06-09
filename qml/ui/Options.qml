@@ -20,55 +20,58 @@ import QtQuick.Controls 2.15
 import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
-ScrollView {
+Item {
     anchors.fill: parent
-    contentHeight: optionsColumnLayout.height + 50
-    contentWidth: root.width
 
-    ColumnLayout {
-        id: optionsColumnLayout
-        anchors.left: parent.left
-        anchors.right: parent.right
+    ScrollView {
+        contentHeight: optionsColumnLayout.height
+        contentWidth: root.width
 
-        RowLayout {
-            Layout.alignment: Qt.AlignCenter
+        ColumnLayout {
+            id: optionsColumnLayout
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.leftMargin: 20
+            anchors.rightMargin: 20
 
-            Label {
-                text: "Courses location"
-            }
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
 
-            Button {
-                text: "Browse"
-                onClicked: fileDialog.open()
-            }
+                Label {
+                    text: "Courses location"
+                }
 
-            Button {
-                text: "Apply"
-                onClicked:
-                {
-                    userSettings["coursesLocation"] = coursesLocationTextField.text
-                    globalBackend.setUserSettings(userSettings)
+                Button {
+                    text: "Browse"
+                    onClicked: fileDialog.open()
+                }
+
+                Button {
+                    text: "Apply"
+                    onClicked:
+                    {
+                        userSettings["coursesLocation"] = coursesLocationTextField.text
+                        globalBackend.setUserSettings(userSettings)
+                    }
                 }
             }
+
+            TextField {
+                id: coursesLocationTextField
+                text: userSettings["coursesLocation"]
+                Layout.fillWidth: true
+                Material.accent: Material.Indigo
+            }
         }
 
-        TextField {
-            id: coursesLocationTextField
-            text: userSettings["coursesLocation"]
-            Layout.fillWidth: true
-            Layout.leftMargin: 10
-            Layout.rightMargin: 10
-            Material.accent: Material.Indigo
+        FileDialog {
+            id: fileDialog
+            title: "Choose courses directory"
+            folder: shortcuts.home
+            selectExisting: true
+            selectFolder: true
+            selectMultiple: false
+            onAccepted: coursesLocationTextField.text = globalBackend.getLocalFile(fileUrl)
         }
-    }
-
-    FileDialog {
-        id: fileDialog
-        title: "Choose courses directory"
-        folder: shortcuts.home
-        selectExisting: true
-        selectFolder: true
-        selectMultiple: false
-        onAccepted: coursesLocationTextField.text = globalBackend.getLocalFile(fileUrl)
     }
 }
