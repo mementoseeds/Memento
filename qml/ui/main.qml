@@ -54,9 +54,14 @@ ApplicationWindow {
         RowLayout {
             anchors.fill: parent
             ToolButton {
-                id: backButton
-                icon.name: "back"
-                onClicked: rootStackView.pop()
+                icon.source: "assets/actions/open-menu-symbolic.svg"
+                display: AbstractButton.IconOnly
+                onClicked:
+                {
+                    mainMenuBar.x = this.x
+                    mainMenuBar.y = this.y + 40
+                    mainMenuBar.open()
+                }
             }
             Label {
                 id: mainToolbarTitle
@@ -67,13 +72,10 @@ ApplicationWindow {
                 Layout.fillWidth: true
             }
             ToolButton {
-                text: qsTr("⋮")
-                onClicked:
-                {
-                    mainMenuBar.x = this.x
-                    mainMenuBar.y = this.y + 40
-                    mainMenuBar.open()
-                }
+                id: backButton
+                icon.source: "assets/actions/go-previous.svg"
+                display: AbstractButton.IconOnly
+                onClicked: rootStackView.pop()
             }
         }
 
@@ -81,7 +83,7 @@ ApplicationWindow {
             id: mainMenuBar
             Action {
                 text: "&Options"
-                icon.name: "games-config-options"
+                icon.source: "assets/actions/configure.svg"
                 shortcut: "Ctrl+p"
                 onTriggered: rootStackView.push("qrc:/Options.qml")
             }

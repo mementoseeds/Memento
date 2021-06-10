@@ -16,5 +16,9 @@
         <file alias="StagingArea.qml">qml/ui/StagingArea.qml</file>
         <file alias="Preview.qml">qml/tests/Preview.qml</file>
         <file>assets/icons/playaudio.svg</file>
+        <file>assets/actions/open-menu-symbolic.svg</file>
+        <file>assets/actions/configure.svg</file>
+        <file>assets/actions/go-next.svg</file>
+        <file>assets/actions/go-previous.svg</file>
     </qresource>
 </RCC>

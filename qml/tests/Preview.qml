@@ -48,7 +48,8 @@ Item {
 
                 Button {
                     id: backButton
-                    icon.name: "back"
+                    icon.source: "assets/actions/go-previous.svg"
+                    display: AbstractButton.IconOnly
                     onClicked:
                     {
                         if (previewIndex !== 1)
@@ -61,7 +62,8 @@ Item {
 
                 Button {
                     id: forwardButton
-                    icon.name: "draw-arrow-forward"
+                    icon.source: "assets/actions/go-next.svg"
+                    display: AbstractButton.IconOnly
                     onClicked: triggerNextItem()
                 }
             }

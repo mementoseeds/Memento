@@ -1,4 +1,4 @@
-QT += quick core quickcontrols2 widgets
+QT += quick core quickcontrols2 widgets svg
 
 CONFIG += c++11 qmltypes
 
@@ -32,3 +32,23 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     backend.h
+
+android {
+
+    QT += androidextras
+
+    # armeabi-v7a arm64-v8a x86 x86_64
+    ANDROID_ABIS += arm64-v8a
+
+    ANDROID_PACKAGE_SOURCE_DIR = $$PWD/Android-source
+
+    DISTFILES += \
+    Android-source/AndroidManifest.xml \
+    Android-source/build.gradle \
+    Android-source/gradle.properties \
+    Android-source/gradle/wrapper/gradle-wrapper.jar \
+    Android-source/gradle/wrapper/gradle-wrapper.properties \
+    Android-source/gradlew \
+    Android-source/gradlew.bat \
+    Android-source/res/values/libs.xml
+}
