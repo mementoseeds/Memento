@@ -116,7 +116,7 @@ public:
     }
 
 signals:
-    void showPassiveNotification(QString text);
+    void showPassiveNotification(QString text, uint duration = 2000);
 
     #ifdef Q_OS_ANDROID
     void sendCoursePath(QString path);

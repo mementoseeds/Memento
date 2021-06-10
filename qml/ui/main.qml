@@ -40,10 +40,9 @@ ApplicationWindow {
 
     property var userSettings: globalBackend.getUserSettings()
 
-    function showPassiveNotification(text)
+    function showPassiveNotification(text, duration)
     {
-        notificationContent.text = text
-        passiveNotification.visible = true
+        passiveNotification.show(text, duration)
     }
 
     Item {
@@ -104,7 +103,7 @@ ApplicationWindow {
                             if (!closeTimer.running)
                             {
                                 closeTimer.start()
-                                showPassiveNotification("Press back again to quit")
+                                showPassiveNotification("Press back again to quit", closeTimer.interval)
                             }
                             else
                                 Qt.quit()
@@ -171,26 +170,11 @@ ApplicationWindow {
 
     Connections {
         target: globalBackend
-        function onShowPassiveNotification(text)
+        function onShowPassiveNotification(text, duration)
         {
-            showPassiveNotification(text)
+            showPassiveNotification(text, duration)
         }
     }
 
-    Popup {
-        id: passiveNotification
-        visible: false
-        width: 200
-        height: notificationContent.contentHeight + 20
-        x: root.width / 2 - width / 2
-        y: root.height - root.height / 6
-        contentItem: Label {
-            id: notificationContent
-            text: "Notification"
-            width: root.width / 2
-            anchors.centerIn: parent
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignHCenter
-        }
-    }
+    PassiveNotification {id: passiveNotification}
 }

@@ -20,5 +20,6 @@
         <file>assets/actions/configure.svg</file>
         <file>assets/actions/go-next.svg</file>
         <file>assets/actions/go-previous.svg</file>
+        <file alias="PassiveNotification.qml">qml/components/PassiveNotification.qml</file>
     </qresource>
 </RCC>
