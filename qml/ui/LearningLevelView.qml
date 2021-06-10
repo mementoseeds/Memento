@@ -68,7 +68,7 @@ Item {
                                 for (var i = 0; i < levelEntryListModel.count; i++)
                                     items.push(levelEntryListModel.get(i).id)
 
-                                rootPageStack.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                             }
                         }
                     }

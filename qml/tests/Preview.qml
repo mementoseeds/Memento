@@ -16,11 +16,10 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 import QtMultimedia 5.15
 
-Kirigami.ScrollablePage {
+Item {
     property string itemId: ""
     property string testColumn: ""
     property string promptColumn: ""
@@ -28,7 +27,45 @@ Kirigami.ScrollablePage {
     Component.onCompleted: globalBackend.readItem(itemId, testColumn, promptColumn)
 
     ListView {
+        anchors.fill: parent
         spacing: 10
+
+        header: RowLayout {
+            width: parent.width
+
+            Shortcut {
+                sequence: "Left"
+                onActivated: backButton.clicked()
+            }
+
+            Shortcut {
+                sequence: "Right"
+                onActivated: forwardButton.clicked()
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Button {
+                    id: backButton
+                    icon.name: "back"
+                    onClicked:
+                    {
+                        if (previewIndex !== 1)
+                        {
+                            previewIndex -= 2
+                            triggerNextItem()
+                        }
+                    }
+                }
+
+                Button {
+                    id: forwardButton
+                    icon.name: "draw-arrow-forward"
+                    onClicked: triggerNextItem()
+                }
+            }
+        }
 
         model: ListModel{id: previewListModel}
         delegate: Loader {
@@ -77,7 +114,7 @@ Kirigami.ScrollablePage {
 
                     Image {
                         source: "assets/icons/playaudio.svg"
-                        sourceSize.width: Kirigami.Units.iconSizes.huge
+                        sourceSize.width: 100
 
                         Audio {
                             id: audio
@@ -102,17 +139,16 @@ Kirigami.ScrollablePage {
         ColumnLayout {
             width: parent.width
 
-            Kirigami.Heading {
+            Label {
                 id: textName
                 visible: textContent.visible && type !== "alternative"
                 text: name
-                level: 4
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
             }
 
-            Kirigami.Heading {
+            Label {
                 id: textContent
                 visible: text.length > 0
                 text: content
@@ -130,9 +166,8 @@ Kirigami.ScrollablePage {
         ColumnLayout {
             width: parent.width
 
-            Kirigami.Heading {
+            Label {
                 text: name
-                level: 4
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width
@@ -140,7 +175,7 @@ Kirigami.ScrollablePage {
 
             Image {
                 source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + content)
-                sourceSize.width: Kirigami.Units.iconSizes.huge * 2
+                sourceSize.width: 200
                 Layout.alignment: Qt.AlignCenter
             }
         }

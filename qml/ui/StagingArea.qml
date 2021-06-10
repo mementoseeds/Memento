@@ -16,11 +16,10 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 import TestType 1.0
 
-Kirigami.Page {
+Item {
     property string courseDirectory: ""
     property var itemArray: []
     property string testType: ""
@@ -29,33 +28,6 @@ Kirigami.Page {
     property int previewIndex: 0
 
     Component.onDestruction: globalBackend.unloadSeedbox()
-
-    actions {
-        left: Kirigami.Action {
-            visible: testType == "preview"
-            text: "Back"
-            iconName: "arrow-left"
-            shortcut: "Left"
-            tooltip: "Left arrow"
-            onTriggered:
-            {
-                if (previewIndex !== 1)
-                {
-                    previewIndex -= 2
-                    triggerNextItem()
-                }
-            }
-        }
-
-        right: Kirigami.Action {
-            visible: testType == "preview"
-            text: "Forward"
-            iconName: "arrow-right"
-            shortcut: "Right"
-            tooltip: "Right arrow"
-            onTriggered: triggerNextItem()
-        }
-    }
 
     function triggerNextItem()
     {
@@ -69,7 +41,7 @@ Kirigami.Page {
                 previewIndex++
             }
             else
-                rootPageStack.pop()
+                rootStackView.pop()
         }
     }
 
