@@ -85,6 +85,7 @@ Item {
         color: "transparent"
         border.width: 1
         border.color: "gray"
+        radius: 10
         z: -1
 
         Behavior on color {

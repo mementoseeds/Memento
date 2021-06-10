@@ -16,50 +16,41 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
-Kirigami.ScrollablePage {
+Item {
+    property int marginBase: 20
+
     property string levelTitle: ""
     property int levelNumber: 0
     property string levelContent: ""
 
-    actions {
-        left: Kirigami.Action {
-            text: "Close"
-            iconName: "dialog-close"
-            onTriggered: rootPageStack.pop()
-        }
-        main: Kirigami.Action {
-            text: "Previous"
-            iconName: "arrow-left"
-            onTriggered: signalSource.openPreviousLevel(levelNumber - 1)
-        }
-        right: Kirigami.Action {
-            text: "Next"
-            iconName: "arrow-right"
-            onTriggered: signalSource.openNextLevel(levelNumber - 1)
-        }
-    }
+    ScrollView {
+        contentWidth: root.width
+        contentHeight: levelContentText.contentHeight + 50
 
-    ColumnLayout {
-        width: parent.width
+        ColumnLayout {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.topMargin: marginBase
+            anchors.leftMargin: marginBase
+            anchors.rightMargin: marginBase
 
-        LevelHeader {
-            levelHeaderTitle: levelTitle
-            levelHeaderNumber: levelNumber
-            levelHeaderIcon: "assets/icons/media.svg"
-            headerIsLearning: false
-        }
+            LevelHeader {
+                levelHeaderTitle: levelTitle
+                levelHeaderNumber: levelNumber
+                levelHeaderIcon: "assets/icons/media.svg"
+                headerIsLearning: false
+            }
 
-        Kirigami.Heading {
-            id: levelContentText
-            text: levelContent
-            level: 3
-            textFormat: Text.MarkdownText
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            Layout.preferredWidth: parent.width
-            onLinkActivated: Qt.openUrlExternally(link)
+            Label {
+                id: levelContentText
+                text: levelContent
+                textFormat: Text.MarkdownText
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                onLinkActivated: Qt.openUrlExternally(link)
+            }
         }
     }
 }

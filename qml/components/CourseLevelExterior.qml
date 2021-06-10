@@ -108,5 +108,23 @@ Item {
         hoverEnabled: true
         onEntered: cellBody.color = "#3F51B5"
         onExited: cellBody.color = "transparent"
+        onClicked:
+        {
+            if (levelPath.endsWith(".json"))
+                rootStackView.push("qrc:/LearningLevelView.qml", {
+                    "courseDirectory": directory,
+                    "levelPath": levelPath,
+                    "levelNumber": (index + 1),
+                    "levelTitle": levelTitle,
+                    "testColumn": testColumn,
+                    "promptColumn": promptColumn,
+                    "testColumnType": testColumnType,
+                    "promptColumnType": promptColumnType,
+                    "itemAmount": itemAmount,
+                    "levelCompleted": levelCompleted})
+
+            else if (levelPath.endsWith(".md"))
+                rootStackView.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
+        }
     }
 }

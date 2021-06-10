@@ -16,7 +16,6 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 RowLayout {
@@ -32,10 +31,9 @@ RowLayout {
     ColumnLayout {
         Layout.preferredWidth: parent.width
 
-        Kirigami.Heading {
+        Label {
             text: "Level " + levelHeaderNumber
             font.bold: true
-            level: 1
             Layout.alignment: Qt.AlignHCenter
         }
 
@@ -50,10 +48,9 @@ RowLayout {
     ColumnLayout {
         Layout.preferredWidth: parent.width
 
-        Kirigami.Heading {
+        Label {
             text: levelHeaderTitle
             font.bold: true
-            level: 1
             horizontalAlignment: Text.AlignHCenter
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             Layout.preferredWidth: parent.width
@@ -70,10 +67,9 @@ RowLayout {
             Layout.alignment: Qt.AlignCenter
         }
 
-        Kirigami.Heading {
+        Label {
             visible: headerIsLearning
             text: levelProgressBar.value / levelProgressBar.to * 100 + "%"
-            level: 4
             Layout.alignment: Qt.AlignHCenter
         }
     }
