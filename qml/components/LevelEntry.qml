@@ -37,7 +37,7 @@ Item {
             anchors.leftMargin: marginBase
             width: parent.width / 3
             property string columnEntry: test
-            sourceComponent: promptColumnType === "text" ? textColumnComponent : imageColumnComponent
+            sourceComponent: testColumnType === "text" ? textColumnComponent : imageColumnComponent
         }
 
         Loader {

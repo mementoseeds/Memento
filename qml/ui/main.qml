@@ -102,7 +102,10 @@ ApplicationWindow {
                             rootStackView.pop()
                         else if (rootStackView.depth === 1)
                             if (!closeTimer.running)
+                            {
                                 closeTimer.start()
+                                showPassiveNotification("Press back again to quit")
+                            }
                             else
                                 Qt.quit()
                     }
@@ -177,11 +180,10 @@ ApplicationWindow {
     Popup {
         id: passiveNotification
         visible: false
-        modal: true
         width: 200
         height: notificationContent.contentHeight + 20
         x: root.width / 2 - width / 2
-        y: root.height - height * (platformIsMobile ? 2 : 3)
+        y: root.height - root.height / 6
         contentItem: Label {
             id: notificationContent
             text: "Notification"

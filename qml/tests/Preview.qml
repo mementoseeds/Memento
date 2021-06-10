@@ -43,29 +43,27 @@ Item {
                 onActivated: forwardButton.clicked()
             }
 
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
-
-                Button {
-                    id: backButton
-                    icon.source: "assets/actions/go-previous.svg"
-                    display: AbstractButton.IconOnly
-                    onClicked:
+            Button {
+                id: backButton
+                Layout.alignment: Qt.AlignLeft
+                icon.source: "assets/actions/go-previous.svg"
+                display: AbstractButton.IconOnly
+                onClicked:
+                {
+                    if (previewIndex !== 1)
                     {
-                        if (previewIndex !== 1)
-                        {
-                            previewIndex -= 2
-                            triggerNextItem()
-                        }
+                        previewIndex -= 2
+                        triggerNextItem()
                     }
                 }
+            }
 
-                Button {
-                    id: forwardButton
-                    icon.source: "assets/actions/go-next.svg"
-                    display: AbstractButton.IconOnly
-                    onClicked: triggerNextItem()
-                }
+            Button {
+                id: forwardButton
+                Layout.alignment: Qt.AlignRight
+                icon.source: "assets/actions/go-next.svg"
+                display: AbstractButton.IconOnly
+                onClicked: triggerNextItem()
             }
         }
 
