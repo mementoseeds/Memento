@@ -19,7 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
 
     property string directory: ""
     property string courseTitle: ""
@@ -40,6 +40,7 @@ Item {
     GridView {
         anchors.fill: parent
         ScrollBar.vertical: ScrollBar{width: 10}
+        maximumFlickVelocity: 6000
         cellWidth: 300
         cellHeight: cellWidth
 

@@ -19,7 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
 
     width: root.width
     height: courseExteriorDelegate.height + marginBase * 2

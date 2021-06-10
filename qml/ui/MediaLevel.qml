@@ -19,15 +19,15 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
 
     property string levelTitle: ""
     property int levelNumber: 0
     property string levelContent: ""
 
     ScrollView {
+        anchors.fill: parent
         contentWidth: root.width
-        contentHeight: levelContentText.contentHeight + 50
 
         ColumnLayout {
             anchors.left: parent.left
@@ -44,7 +44,6 @@ Item {
             }
 
             Label {
-                id: levelContentText
                 text: levelContent
                 textFormat: Text.MarkdownText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere

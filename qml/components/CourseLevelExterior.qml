@@ -19,7 +19,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
+    //property int imageHeight: platformIsMobile ? 50 : 100
 
     width: cellBody.width
     height: cellBody.height
@@ -28,6 +29,8 @@ Item {
         id: cellBody
         width: 250
         height: cellColumnLayout.height + marginBase
+        x: platformIsMobile ? (root.width / 2 - width / 2) : 0
+
         color: "transparent"
         border.width: 1
         border.color: "gray"
@@ -103,7 +106,7 @@ Item {
     }
 
     MouseArea {
-        anchors.fill: parent
+        anchors.fill: cellBody
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
         onEntered: cellBody.color = "#3F51B5"

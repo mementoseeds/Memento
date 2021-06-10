@@ -19,7 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
 
     width: root.width - marginBase * 2
     x: marginBase
@@ -57,6 +57,7 @@ Item {
             anchors.rightMargin: marginBase
             width: parent.width / 3
             text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
+            font.pointSize: 8
             horizontalAlignment: Text.AlignRight
         }
     }
@@ -71,7 +72,7 @@ Item {
         id: textColumnComponent
         Label {
             text: columnEntry
-            font.pointSize: 10
+            font.pointSize: 12
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
         }

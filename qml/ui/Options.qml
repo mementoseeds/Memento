@@ -24,11 +24,10 @@ Item {
     objectName: "Options.qml"
 
     ScrollView {
-        contentHeight: optionsColumnLayout.height
+        anchors.fill: parent
         contentWidth: root.width
 
         ColumnLayout {
-            id: optionsColumnLayout
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.leftMargin: 20

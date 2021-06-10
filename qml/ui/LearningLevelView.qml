@@ -20,7 +20,7 @@ import QtQuick.Controls 2.15
 import TestType 1.0
 
 Item {
-    property int marginBase: 20
+    property int marginBase: 10
 
     property string courseDirectory: ""
     property string levelPath: ""
