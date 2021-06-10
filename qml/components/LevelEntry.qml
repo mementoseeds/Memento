@@ -16,32 +16,28 @@
 
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
-import org.kde.kirigami 2.4 as Kirigami
 import QtQuick.Controls 2.15
 
 Item {
-    implicitWidth: levelEntryDelegate.childrenRect.width
-    implicitHeight: levelEntryDelegate.childrenRect.height
+    property int marginBase: 20
+
+    width: root.width - marginBase * 2
+    x: marginBase
+    height: levelEntryDelegate.childrenRect.height + 10
 
     Rectangle {
         id: levelEntryDelegate
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
+        height: childrenRect.height + 15
+        width: parent.width
         color: "transparent"
 
         Loader {
             id: levelFirstColumn
             anchors.left: parent.left
+            anchors.leftMargin: marginBase
             width: parent.width / 3
             property string columnEntry: test
-            sourceComponent:
-            {
-                if (testColumnType === "text")
-                    return textColumnComponent
-                else if (testColumnType === "image")
-                    return imageColumnComponent
-            }
+            sourceComponent: promptColumnType === "text" ? textColumnComponent : imageColumnComponent
         }
 
         Loader {
@@ -52,30 +48,30 @@ Item {
             anchors.rightMargin: 10
             width: parent.width / 3 - anchors.leftMargin - anchors.rightMargin
             property string columnEntry: prompt
-            sourceComponent:
-            {
-                if (promptColumnType === "text")
-                    return textColumnComponent
-                else if (promptColumnType === "image")
-                    return imageColumnComponent
-            }
+            sourceComponent: promptColumnType === "text" ? textColumnComponent : imageColumnComponent
         }
 
-        Kirigami.Heading {
+        Label {
             id: levelThirdColumn
             anchors.right: parent.right
+            anchors.rightMargin: marginBase
             width: parent.width / 3
             text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
-            level: 4
             horizontalAlignment: Text.AlignRight
         }
     }
 
+    Rectangle {
+        width: parent.width
+        anchors.top: levelEntryDelegate.bottom
+        height: 1
+    }
+
     Component {
         id: textColumnComponent
-        Kirigami.Heading {
+        Label {
             text: columnEntry
-            level: 2
+            font.pointSize: 10
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
         }
@@ -86,6 +82,7 @@ Item {
         Image {
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnEntry)
             fillMode: Image.PreserveAspectFit
+            height: 200
         }
     }
 }
