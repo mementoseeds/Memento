@@ -50,5 +50,7 @@ android {
     Android-source/gradle/wrapper/gradle-wrapper.properties \
     Android-source/gradlew \
     Android-source/gradlew.bat \
-    Android-source/res/values/libs.xml
+    Android-source/res/values/libs.xml \
+    Android-source/src/com/seeds/memento/Backend.java \
+    Android-source/src/com/seeds/memento/MainActivity.java
 }

@@ -21,6 +21,7 @@ import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
 Item {
+    objectName: "Options.qml"
 
     ScrollView {
         contentHeight: optionsColumnLayout.height
@@ -42,7 +43,13 @@ Item {
 
                 Button {
                     text: "Browse"
-                    onClicked: fileDialog.open()
+                    onClicked:
+                    {
+                        if (Qt.platform.os === "android")
+                            globalBackend.androidOpenFileDialog()
+                        else
+                            fileDialog.open()
+                    }
                 }
 
                 Button {
@@ -71,6 +78,15 @@ Item {
             selectFolder: true
             selectMultiple: false
             onAccepted: coursesLocationTextField.text = globalBackend.getLocalFile(fileUrl)
+        }
+    }
+
+    Connections {
+        target: globalBackend
+        ignoreUnknownSignals: true
+        function onSendCoursePath(path)
+        {
+            coursesLocationTextField.text = path
         }
     }
 }

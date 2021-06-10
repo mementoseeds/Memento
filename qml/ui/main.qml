@@ -22,6 +22,12 @@ import QtQuick.Controls.Material 2.12
 
 ApplicationWindow {
 
+    Component.onCompleted:
+    {
+        globalBackend.debugFun()
+        globalBackend.setGlobalBackendInstance()
+    }
+
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
 
     id: root
@@ -85,7 +91,11 @@ ApplicationWindow {
                 text: "&Options"
                 icon.source: "assets/actions/configure.svg"
                 shortcut: "Ctrl+p"
-                onTriggered: rootStackView.push("qrc:/Options.qml")
+                onTriggered:
+                {
+                    if (rootStackView.currentItem.objectName !== "Options.qml")
+                        rootStackView.push("qrc:/Options.qml")
+                }
             }
         }
     }

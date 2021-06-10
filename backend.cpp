@@ -16,17 +16,43 @@
 
 #include "backend.h"
 
+Backend *Backend::m_instance = nullptr;
+
 Backend::Backend(QObject *parent) : QObject(parent) {}
 
 void Backend::debugFun()
 {
-    qDebug() << "Hello there";
+    //Do stuff
+}
+
+void Backend::setGlobalBackendInstance()
+{
+    m_instance = this;
 }
 
 QString Backend::getLocalFile(QUrl url)
 {
     return url.toLocalFile();
 }
+
+#ifdef Q_OS_ANDROID
+void Backend::androidOpenFileDialog()
+{
+    QtAndroid::PermissionResult permissionResult = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+
+    if (permissionResult == QtAndroid::PermissionResult::Granted)
+        QAndroidJniObject::callStaticMethod<void>("com/seeds/memento/Backend", "androidOpenFileDialog", "(Landroid/app/Activity;)V", QtAndroid::androidActivity().object());
+    else
+    {
+        QtAndroid::requestPermissionsSync(QStringList({"android.permission.READ_EXTERNAL_STORAGE", "android.permission.WRITE_EXTERNAL_STORAGE"}));
+        QtAndroid::PermissionResult permissionResult = QtAndroid::checkPermission(QString("android.permission.READ_EXTERNAL_STORAGE"));
+        if (permissionResult == QtAndroid::PermissionResult::Granted)
+            androidOpenFileDialog();
+        else
+            ;//Create inapp notification
+    }
+}
+#endif
 
 void Backend::getCourseList()
 {

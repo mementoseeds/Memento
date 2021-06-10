@@ -22,6 +22,13 @@
 #include <qqml.h>
 #include <QDebug>
 
+//Custom definitions
+#if (defined Q_OS_WINDOWS || defined Q_OS_MACOS || defined Q_OS_LINUX) && !defined Q_OS_ANDROID
+#define PLATFORM_IS_DESKTOP
+#elif defined Q_OS_ANDROID || defined Q_OS_IOS
+#define PLATFORM_IS_MOBILE
+#endif
+
 //For reading courses dir
 #include <QDir>
 
@@ -42,6 +49,19 @@
 //For Material style
 #include <QQuickStyle>
 
+#ifdef Q_OS_ANDROID
+
+//For Android extras
+#include <QtAndroid>
+
+//For executing Java functions from C++, sending and receiving values
+#include <QAndroidJniObject>
+
+//For registering native C++ functions that can be called from Java
+#include <QAndroidJniEnvironment>
+
+#endif
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -51,9 +71,20 @@ class Backend : public QObject
 public:
     explicit Backend(QObject *parent = nullptr);
 
+    static Backend *getGlobalBackendInstance()
+    {
+        return m_instance;
+    }
+
     Q_INVOKABLE void debugFun();
 
+    Q_INVOKABLE void setGlobalBackendInstance();
+
     Q_INVOKABLE QString getLocalFile(QUrl url);
+
+    #ifdef Q_OS_ANDROID
+    Q_INVOKABLE void androidOpenFileDialog();
+    #endif
 
     Q_INVOKABLE void getCourseList();
     Q_INVOKABLE void getCourseLevels(QString directory);
@@ -85,6 +116,10 @@ public:
     }
 
 signals:
+    #ifdef Q_OS_ANDROID
+    void sendCoursePath(QString path);
+    #endif
+
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void finishedAddingCourses();
 
@@ -95,6 +130,7 @@ signals:
     void addItemDetails(QString type, QString name, QString content);
     void addItemSeparator();
 private:
+    static Backend *m_instance;
 
     QJsonDocument globalSeedbox;
     QVariantMap userSettings;
