@@ -49,7 +49,7 @@ void Backend::androidOpenFileDialog()
         if (permissionResult == QtAndroid::PermissionResult::Granted)
             androidOpenFileDialog();
         else
-            ;//Create inapp notification
+            emit showPassiveNotification("You must allow storage permission to set a course directory");
     }
 }
 #endif

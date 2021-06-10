@@ -40,6 +40,12 @@ ApplicationWindow {
 
     property var userSettings: globalBackend.getUserSettings()
 
+    function showPassiveNotification(text)
+    {
+        notificationContent.text = text
+        passiveNotification.visible = true
+    }
+
     Item {
         id: signalSource
         visible: false
@@ -90,7 +96,6 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 onClicked:
                 {
-                    console.debug(rootStackView.depth)
                     if (platformIsMobile)
                     {
                         if (rootStackView.depth > 1)
@@ -159,5 +164,31 @@ ApplicationWindow {
                duration: 100
            }
        }
+    }
+
+    Connections {
+        target: globalBackend
+        function onShowPassiveNotification(text)
+        {
+            showPassiveNotification(text)
+        }
+    }
+
+    Popup {
+        id: passiveNotification
+        visible: false
+        modal: true
+        width: 200
+        height: notificationContent.contentHeight + 20
+        x: root.width / 2 - width / 2
+        y: root.height - height * (platformIsMobile ? 2 : 3)
+        contentItem: Label {
+            id: notificationContent
+            text: "Notification"
+            width: root.width / 2
+            anchors.centerIn: parent
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            horizontalAlignment: Text.AlignHCenter
+        }
     }
 }

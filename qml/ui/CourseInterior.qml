@@ -108,7 +108,7 @@ Item {
 
                     ComboBox {
                         model: ["Reset"]
-                        onActivated: console.debug(index)
+                        onActivated: showPassiveNotification("hello")
                     }
 
                     Label {
