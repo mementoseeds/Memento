@@ -51,8 +51,15 @@ ApplicationWindow {
         id: globalBackend
     }
 
+    Timer {
+        id: closeTimer
+        interval: 2000
+        running: false
+        repeat: false
+    }
+
     Shortcut {
-        sequence: "Esc"
+        sequences: ["Esc", "Back"]
         onActivated: backButton.clicked()
     }
 
@@ -81,7 +88,22 @@ ApplicationWindow {
                 id: backButton
                 icon.source: "assets/actions/go-previous.svg"
                 display: AbstractButton.IconOnly
-                onClicked: rootStackView.pop()
+                onClicked:
+                {
+                    console.debug(rootStackView.depth)
+                    if (platformIsMobile)
+                    {
+                        if (rootStackView.depth > 1)
+                            rootStackView.pop()
+                        else if (rootStackView.depth === 1)
+                            if (!closeTimer.running)
+                                closeTimer.start()
+                            else
+                                Qt.quit()
+                    }
+                    else
+                        rootStackView.pop()
+                }
             }
         }
 
