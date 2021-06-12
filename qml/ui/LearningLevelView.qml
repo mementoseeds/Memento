@@ -62,13 +62,13 @@ Item {
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
-                            if (index === 0)
+                            if (currentText === "Preview")
                             {
                                 var items = []
                                 for (var i = 0; i < levelEntryListModel.count; i++)
                                     items.push(levelEntryListModel.get(i).id)
 
-                                rootStackView.replace("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                             }
                         }
                     }

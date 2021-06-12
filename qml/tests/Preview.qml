@@ -114,7 +114,7 @@ Item {
 
                     Image {
                         source: "assets/icons/playaudio.svg"
-                        sourceSize.width: 100
+                        sourceSize.width: platformIsMobile ? 50 : 100
 
                         Audio {
                             id: audio

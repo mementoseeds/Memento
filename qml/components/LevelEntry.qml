@@ -62,6 +62,12 @@ Item {
         }
     }
 
+    MouseArea {
+        anchors.fill: levelEntryDelegate
+        cursorShape: Qt.PointingHandCursor
+        onClicked: rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": [id], "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+    }
+
     Rectangle {
         width: parent.width
         anchors.top: levelEntryDelegate.bottom
