@@ -35,6 +35,19 @@ Item {
 
     Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
 
+    function getItemArray(total)
+    {
+        var items = []
+        for (var i = 0; i < total; i++)
+        {
+            var itemId = levelEntryListModel.get(i).id
+            if (typeof(itemId) !== "undefined")
+                items.push(itemId)
+        }
+
+        return items
+    }
+
     ListView {
         anchors.fill: parent
         spacing: 20
@@ -58,24 +71,25 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
                             if (currentText === "Preview")
-                            {
-                                var items = []
-                                for (var i = 0; i < levelEntryListModel.count; i++)
-                                    items.push(levelEntryListModel.get(i).id)
-
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": items, "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
-                            }
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(levelEntryListModel.count), "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                         }
                     }
 
                     Button {
                         text: levelCompleted ? "Water" : "Plant"
                         Layout.alignment: Qt.AlignRight
+                        onClicked:
+                        {
+                            if (text === "Plant")
+                            {
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(5), "testType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                            }
+                        }
                     }
                 }
 

@@ -25,9 +25,22 @@ Item {
     property string testType: ""
     property string testColumn: ""
     property string promptColumn: ""
+
     property int previewIndex: 0
+    property int testAmount: 0
+    property var tests: []
 
     Component.onDestruction: globalBackend.unloadSeedbox()
+    Component.onCompleted:
+    {
+        if (testType !== "preview")
+        {
+            testAmount = 5 * itemArray.length
+            //Change 5 to user amount
+            //var tests = Array.from({length: testAmount}, () => Math.floor(Math.random() * 2))
+            tests = [2,2,2,2,2]
+        }
+    }
 
     function triggerNextItem()
     {
@@ -42,6 +55,10 @@ Item {
             }
             else
                 rootStackView.pop()
+        }
+        else if (testType === "plant")
+        {
+
         }
     }
 
