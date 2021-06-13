@@ -50,9 +50,9 @@ Item {
                 display: AbstractButton.IconOnly
                 onClicked:
                 {
-                    if (previewIndex !== 1)
+                    if (itemIndex !== 1)
                     {
-                        previewIndex -= 2
+                        itemIndex -= 2
                         triggerNextItem()
                     }
                 }

@@ -26,8 +26,7 @@ Item {
     property string testColumn: ""
     property string promptColumn: ""
 
-    property int previewIndex: 0
-    property int testAmount: 0
+    property int itemIndex: 0
     property var tests: []
 
     Component.onDestruction: globalBackend.unloadSeedbox()
@@ -35,10 +34,18 @@ Item {
     {
         if (testType !== "preview")
         {
-            testAmount = 5 * itemArray.length
             //Change 5 to user amount
-            //var tests = Array.from({length: testAmount}, () => Math.floor(Math.random() * 2))
-            tests = [2,2,2,2,2]
+
+            //Create array of dicts for amount of tests, the item to test on and its test type
+            for (var i = 0; i < itemArray.length; i++)
+            {
+                for (var o = 0; o < 5; o++)
+                {
+                    var myMap = {}
+                    myMap[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
+                    tests.push(myMap)
+                }
+            }
         }
     }
 
@@ -46,19 +53,29 @@ Item {
     {
         if (testType === "preview")
         {
-            if (previewIndex !== itemArray.length)
+            if (itemIndex !== itemArray.length)
             {
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[previewIndex], "testColumn": testColumn, "promptColumn": promptColumn})
+                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[itemIndex], "testColumn": testColumn, "promptColumn": promptColumn})
                 testLoader.active = true
-                previewIndex++
+                itemIndex++
             }
             else
                 rootStackView.pop()
         }
         else if (testType === "plant")
         {
+            var itemId = Object.keys(tests[itemIndex]).toString()
 
+            testLoader.active = false
+            switch (tests[itemIndex][itemId])
+            {
+                case TestType.TYPING:
+                    testLoader.setSource("qrc:/Typing.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
+                    break
+            }
+            testLoader.active = true
+            itemIndex++
         }
     }
 

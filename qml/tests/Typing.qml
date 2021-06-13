@@ -19,6 +19,9 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
+    property string itemId: ""
+    property string testColumn: ""
+    property string promptColumn: ""
 
 
 }
