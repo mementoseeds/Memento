@@ -283,3 +283,17 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         }
     }
 }
+
+QString Backend::readItemAttributes(QString itemId)
+{
+    return globalSeedbox[itemId].toObject()["attributes"].toString();
+}
+
+QVariantList Backend::readItemColumn(QString itemId, QString column)
+{
+    QVariantList list;
+    QJsonObject item = globalSeedbox[itemId].toObject()[column].toObject();
+    list.append(item["type"].toString());
+    list.append(item["primary"].toString());
+    return list;
+}

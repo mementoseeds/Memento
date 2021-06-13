@@ -21,6 +21,8 @@ import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
 Item {
+    property int marginBase: 10
+
     objectName: "Options.qml"
 
     ScrollView {
@@ -30,8 +32,8 @@ Item {
         ColumnLayout {
             anchors.left: parent.left
             anchors.right: parent.right
-            anchors.leftMargin: 20
-            anchors.rightMargin: 20
+            anchors.leftMargin: marginBase
+            anchors.rightMargin: marginBase
 
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
