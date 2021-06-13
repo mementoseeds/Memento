@@ -19,6 +19,8 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 ColumnLayout {
+    property alias cooldownTimer: cooldownTimer
+
     spacing: 20
 
     Loader {
@@ -75,5 +77,13 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
         }
+    }
+
+    Timer {
+        id: cooldownTimer
+        interval: 1500
+        running: false
+        repeat: false
+        onTriggered: triggerNextItem()
     }
 }

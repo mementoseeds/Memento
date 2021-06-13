@@ -34,15 +34,19 @@ Item {
     property bool levelCompleted: false
 
     Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
+    Component.onDestruction: globalBackend.unloadGlobalLevel();
 
     function getItemArray(total)
     {
         var items = []
         for (var i = 0; i < total; i++)
         {
-            var itemId = levelEntryListModel.get(i).id
-            if (typeof(itemId) !== "undefined")
-                items.push(itemId)
+            if ((i + 1) <= levelEntryListModel.count)
+            {
+                var item = levelEntryListModel.get(i)
+                if (!item.planted)
+                    items.push(item.id)
+            }
         }
 
         return items

@@ -36,7 +36,7 @@ Item {
             anchors.leftMargin: marginBase
             anchors.rightMargin: marginBase
 
-            TestHeader {}
+            TestHeader {id: testHeader}
 
             Rectangle {
                 id: textfieldBackground
@@ -49,6 +49,8 @@ Item {
                 TextField {
                     id: textfield
                     font.pointSize: 15
+                    Component.onCompleted: textfield.forceActiveFocus()
+                    focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
                     Material.accent: Material.Indigo
@@ -56,11 +58,25 @@ Item {
                     {
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
-                            //textfield.Material.background = Material.Green
+                            textfieldBackground.color = "green"
+                            readOnly = true
+                            //Mark as correct
+                            testHeader.cooldownTimer.running = true
+                        }
+                        else
+                        {
+                            textfieldBackground.color = "red"
+                            //Mark item as incorrect, add preview for it, and add another test for it in tests[]
                         }
                     }
                 }
             }
         }
+    }
+
+    Shortcut {
+        sequences: ["Enter", "Return"]
+        enabled: textfield.readOnly //Enable only when the textfield has become read only
+        onActivated: triggerNextItem()
     }
 }

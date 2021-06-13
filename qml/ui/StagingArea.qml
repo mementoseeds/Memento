@@ -34,18 +34,32 @@ Item {
     {
         if (testType !== "preview")
         {
+
+
             //Change 5 to user amount
 
             //Create array of dicts for amount of tests, the item to test on and its test type
             for (var i = 0; i < itemArray.length; i++)
             {
-                for (var o = 0; o < 5; o++)
+                var myMap = {}
+                myMap[itemArray[i]] = TestType.TYPING //Start all with multiple choice
+                tests.push(myMap)
+            }
+
+            var unorderedTests = []
+            for (i = 0; i < itemArray.length; i++)
+            {
+                for (var o = 0; o < 4; o++) //4 is amount of tests - 1
                 {
-                    var myMap = {}
+                    myMap = {}
                     myMap[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
-                    tests.push(myMap)
+                    unorderedTests.push(myMap)
                 }
             }
+
+            unorderedTests.sort(() => Math.random() - 0.5) //Shuffle unorderedTests
+            tests = tests.concat(unorderedTests)
+            delete unorderedTests
         }
     }
 
@@ -78,6 +92,8 @@ Item {
             itemIndex++
         }
     }
+
+    //Place progress indicator
 
     Loader {
         id: testLoader
