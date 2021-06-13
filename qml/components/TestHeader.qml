@@ -38,7 +38,7 @@ ColumnLayout {
         Label {
             id: attributes
             text: globalBackend.readItemAttributes(itemId)
-            font.pointSize: 10
+            font.pointSize: platformIsMobile ? 15 : 10
             anchors.centerIn: parent
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
@@ -47,7 +47,7 @@ ColumnLayout {
 
     Label {
         text: "Type the <b>" + testColumn + "</b> for the <b>" + promptColumn + "</b> above"
-        font.pointSize: 12
+        font.pointSize: platformIsMobile ? 15 : 12
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         horizontalAlignment: Text.AlignHCenter
@@ -59,7 +59,7 @@ ColumnLayout {
         Label {
             id: prompt
             text: columnData[1]
-            font.pointSize: 15
+            font.pointSize: platformIsMobile ? 20 : 15
             font.bold: true
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter

@@ -38,12 +38,28 @@ Item {
 
             TestHeader {}
 
-            TextField {
-                id: textfield
-                font.pointSize: 15
-                horizontalAlignment: TextInput.AlignHCenter
+            Rectangle {
+                id: textfieldBackground
                 Layout.fillWidth: true
-                Material.accent: Material.Indigo
+                height: textfield.contentHeight + 10
+                Layout.alignment: Qt.AlignCenter
+                color: "gray"
+                radius: 100
+
+                TextField {
+                    id: textfield
+                    font.pointSize: 15
+                    horizontalAlignment: TextInput.AlignHCenter
+                    width: parent.width
+                    Material.accent: Material.Indigo
+                    onAccepted:
+                    {
+                        if (globalBackend.checkAnswer(itemId, testColumn, text))
+                        {
+                            //textfield.Material.background = Material.Green
+                        }
+                    }
+                }
             }
         }
     }

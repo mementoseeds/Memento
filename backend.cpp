@@ -297,3 +297,25 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
     list.append(item["primary"].toString());
     return list;
 }
+
+bool Backend::checkAnswer(QString itemId, QString column, QString answer)
+{
+    bool result = false;
+
+    QJsonObject item = globalSeedbox[itemId].toObject()[column].toObject();
+    if (answer.compare(item["primary"].toString(), Qt::CaseInsensitive) == 0)
+        result = true;
+    else
+    {
+        foreach (QJsonValue val, item["alternative"].toArray())
+        {
+            if (val.toString().remove(QRegExp("^_")).compare(answer, Qt::CaseInsensitive) == 0)
+            {
+                result = true;
+                break;
+            }
+        }
+    }
+
+    return result;
+}
