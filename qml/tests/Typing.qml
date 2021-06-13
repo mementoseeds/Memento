@@ -36,40 +36,7 @@ Item {
             anchors.leftMargin: marginBase
             anchors.rightMargin: marginBase
 
-            Label {
-                id: prompt
-                text: globalBackend.readItemColumn(itemId, promptColumn)[1]
-                font.pointSize: 15
-                font.bold: true
-                Layout.fillWidth: true
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-            }
-
-            Rectangle {
-                width: attributes.contentWidth + 10
-                height: attributes.contentHeight + 5
-                Layout.alignment: Qt.AlignCenter
-                color: "gray"
-                radius: 100
-
-                Label {
-                    id: attributes
-                    text: globalBackend.readItemAttributes(itemId)
-                    font.pointSize: 10
-                    anchors.centerIn: parent
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    horizontalAlignment: Text.AlignHCenter
-                }
-            }
-
-            Label {
-                text: "Type the <b>" + testColumn + "</b> for the <b>" + promptColumn + "</b> above"
-                font.pointSize: 12
-                Layout.fillWidth: true
-                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                horizontalAlignment: Text.AlignHCenter
-            }
+            TestHeader {}
 
             TextField {
                 id: textfield

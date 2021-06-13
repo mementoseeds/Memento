@@ -22,5 +22,6 @@
         <file>assets/actions/go-previous.svg</file>
         <file alias="PassiveNotification.qml">qml/components/PassiveNotification.qml</file>
         <file alias="Typing.qml">qml/tests/Typing.qml</file>
+        <file alias="TestHeader.qml">qml/components/TestHeader.qml</file>
     </qresource>
 </RCC>
