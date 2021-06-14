@@ -19,6 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import Memento.Backend 1.0
 import QtQuick.Controls.Material 2.12
+import QtQuick.Dialogs 1.3
 
 ApplicationWindow {
 
@@ -125,6 +126,12 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 onClicked:
                 {
+                    if (rootStackView.currentItem.objectName === "StagingArea.qml")
+                    {
+                        confirmActionDialog.open()
+                        return
+                    }
+
                     if (platformIsMobile)
                     {
                         if (rootStackView.depth > 1)
@@ -207,4 +214,13 @@ ApplicationWindow {
     }
 
     PassiveNotification {id: passiveNotification}
+
+    MessageDialog {
+        id: confirmActionDialog
+        icon: StandardIcon.Question
+        title: "Are you sure you want to go back?"
+        text: "Unsaved progress will be lost"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: rootStackView.pop()
+    }
 }

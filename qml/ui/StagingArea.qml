@@ -20,6 +20,8 @@ import QtQuick.Controls 2.15
 import TestType 1.0
 
 Item {
+    objectName: "StagingArea.qml"
+
     property string courseDirectory: ""
     property var itemArray: []
     property string testType: ""

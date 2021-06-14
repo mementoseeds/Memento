@@ -8,8 +8,8 @@ import QtQuick.Shapes 1.15
 Item {
     id: control
 
-    implicitWidth: 200
-    implicitHeight: 200
+    implicitWidth: platformIsMobile ? 100 : 200
+    implicitHeight: implicitWidth
 
     enum DialType {
         FullDial,
@@ -108,6 +108,7 @@ Item {
         Label {
             text: showText
             anchors.centerIn: parent
+            font.pointSize: platformIsMobile ? 10 : 15
         }
     }
 }

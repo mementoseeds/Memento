@@ -54,9 +54,12 @@ Item {
                     focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
-                    Material.accent: Material.Indigo
+                    Material.accent: Material.Indigo                    
                     onAccepted:
                     {
+                        if (text.length === 0)
+                            return
+
                         testHeader.countdownTimer.running = false
 
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
