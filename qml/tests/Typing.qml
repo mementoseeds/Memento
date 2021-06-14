@@ -71,6 +71,21 @@ Item {
                     }
                 }
             }
+
+            Button {
+                text: "Continue"
+                icon.source: "assets/actions/go-next.svg"
+                enabled: textfield.text.length > 0
+                Layout.topMargin: marginBase
+                Layout.alignment: Qt.AlignHCenter
+                onClicked:
+                {
+                    if (textfield.readOnly)
+                        triggerNextItem()
+                    else
+                        textfield.accepted()
+                }
+            }
         }
     }
 
