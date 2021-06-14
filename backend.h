@@ -142,6 +142,10 @@ signals:
 private:
     static Backend *m_instance;
 
+    void correctAnswer(QString itemId);
+    void wrongAnswer(QString itemId);
+
+    //Global variables
     QJsonDocument globalSeedbox;
     QJsonDocument globalLevel;
     QJsonObject globalLevelSeeds;

@@ -74,9 +74,6 @@ Item {
                             textfieldBackground.color = "green"
                             readOnly = true
                             testHeader.cooldownTimer.running = true
-
-
-                            //Update item stats in C++
                         }
                         else
                         {
@@ -91,8 +88,6 @@ Item {
                             test = {}
                             test[itemId] = TestType.TYPING //randomize
                             tests.splice(itemIndex + 1, 0, test)
-
-                            //Mark item as incorrect, add preview for it, and add another test for it in tests[]
                         }
                     }
                 }

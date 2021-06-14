@@ -113,6 +113,7 @@ Item {
             {
                 console.debug("Reached end")
                 //Show results screen
+                globalBackend.debugFun()
                 rootStackView.pop()
             }
         }

@@ -22,7 +22,7 @@ Backend::Backend(QObject *parent) : QObject(parent) {}
 
 void Backend::debugFun()
 {
-    //Do stuff
+    qDebug() << globalLevelSeeds;
 }
 
 void Backend::setGlobalBackendInstance()
@@ -339,5 +339,26 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
         }
     }
 
+    if (result)
+        correctAnswer(itemId);
+    else
+        wrongAnswer(itemId);
+
     return result;
+}
+
+void Backend::correctAnswer(QString itemId)
+{
+    QJsonObject item = globalLevelSeeds[itemId].toObject();
+    item["successes"] = item["successes"].toInt() + 1;
+    item["streak"] = item["streak"].toInt() + 1;
+    globalLevelSeeds[itemId] = item;
+}
+
+void Backend::wrongAnswer(QString itemId)
+{
+    QJsonObject item = globalLevelSeeds[itemId].toObject();
+    item["failures"] = item["failures"].toInt() + 1;
+    item["streak"] = 0;
+    globalLevelSeeds[itemId] = item;
 }
