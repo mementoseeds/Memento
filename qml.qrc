@@ -23,5 +23,6 @@
         <file alias="PassiveNotification.qml">qml/components/PassiveNotification.qml</file>
         <file alias="Typing.qml">qml/tests/Typing.qml</file>
         <file alias="TestHeader.qml">qml/components/TestHeader.qml</file>
+        <file alias="RadialBar.qml">qml/components/RadialBar.qml</file>
     </qresource>
 </RCC>

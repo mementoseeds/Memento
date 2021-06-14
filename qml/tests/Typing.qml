@@ -57,6 +57,8 @@ Item {
                     Material.accent: Material.Indigo
                     onAccepted:
                     {
+                        testHeader.countdownTimer.running = false
+
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
                             textfieldBackground.color = "green"
@@ -107,5 +109,13 @@ Item {
         sequences: ["Enter", "Return"]
         enabled: textfield.readOnly //Enable only when the textfield has become read only
         onActivated: triggerNextItem()
+    }
+
+    Connections {
+        target: testHeader
+        function onCountdownReached()
+        {
+            textfield.accepted()
+        }
     }
 }

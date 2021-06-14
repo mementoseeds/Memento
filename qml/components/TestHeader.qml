@@ -20,8 +20,21 @@ import QtQuick.Controls 2.15
 
 ColumnLayout {
     property alias cooldownTimer: cooldownTimer
+    property alias countdownTimer: countdownTimer
+
+    signal countdownReached()
 
     spacing: 20
+
+    RadialBar {
+        id: radialBar
+        minValue: 0
+        maxValue: 100
+        value: maxValue
+        showText: "Countdown"
+        Layout.topMargin: 10
+        Layout.alignment: Qt.AlignCenter
+    }
 
     Loader {
         Layout.fillWidth: true
@@ -76,6 +89,28 @@ ColumnLayout {
             sourceSize.width: 200
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
+        }
+    }
+
+    Timer {
+        id: countdownTimer
+        property int maxSeconds: 10
+        property int currentSeconds: 0
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered:
+        {
+            currentSeconds++
+            if (currentSeconds <= maxSeconds)
+            {
+                radialBar.value = radialBar.maxValue - (Math.floor(currentSeconds / maxSeconds * 100))
+            }
+            else
+            {
+                running = false
+                countdownReached()
+            }
         }
     }
 
