@@ -42,13 +42,13 @@ Item {
             //Create array of dicts for amount of tests, the item to test on and its test type
             for (var i = 0; i < itemArray.length; i++)
             {
-                var myMap = {}
-                myMap[itemArray[i]] = TestType.PREVIEW
-                tests.push(myMap)
+                var test = {}
+                test[itemArray[i]] = TestType.PREVIEW
+                tests.push(test)
 
-                myMap = {}
-                myMap[itemArray[i]] = TestType.TYPING //Start all with multiple choice
-                tests.push(myMap)
+                test = {}
+                test[itemArray[i]] = TestType.TYPING //Start all with multiple choice
+                tests.push(test)
             }
 
             var unorderedTests = []
@@ -56,9 +56,9 @@ Item {
             {
                 for (var o = 0; o < 4; o++) //4 is amount of tests - 1
                 {
-                    myMap = {}
-                    myMap[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
-                    unorderedTests.push(myMap)
+                    test = {}
+                    test[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
+                    unorderedTests.push(test)
                 }
             }
 

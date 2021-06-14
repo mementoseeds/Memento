@@ -18,6 +18,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.12
+import TestType 1.0
 
 Item {
     property int marginBase: 10
@@ -60,12 +61,25 @@ Item {
                         {
                             textfieldBackground.color = "green"
                             readOnly = true
-                            //Mark as correct
                             testHeader.cooldownTimer.running = true
+
+
+                            //Update item stats in C++
                         }
                         else
                         {
                             textfieldBackground.color = "red"
+                            readOnly = true
+                            testHeader.cooldownTimer.running = true
+
+                            var test = {}
+                            test[itemId] = TestType.PREVIEW
+                            tests.splice(itemIndex, 0, test)
+
+                            test = {}
+                            test[itemId] = TestType.TYPING //randomize
+                            tests.splice(itemIndex + 1, 0, test)
+
                             //Mark item as incorrect, add preview for it, and add another test for it in tests[]
                         }
                     }

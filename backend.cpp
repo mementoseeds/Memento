@@ -316,6 +316,7 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
 bool Backend::checkAnswer(QString itemId, QString column, QString answer)
 {
     bool result = false;
+    answer = answer.trimmed();
 
     QJsonObject item = globalSeedbox[itemId].toObject()[column].toObject();
     if (answer.compare(item["primary"].toString(), Qt::CaseInsensitive) == 0)
