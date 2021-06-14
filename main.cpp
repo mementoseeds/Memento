@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 
     QQuickStyle::setStyle("Material");
 
-    Backend::registerTestTypeInQML();
+    qmlRegisterType<Backend>("TestType", 1, 0, "TestType");
 
     const QUrl url(QStringLiteral("qrc:/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

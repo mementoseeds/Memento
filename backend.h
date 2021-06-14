@@ -121,11 +121,6 @@ public:
     };
     Q_ENUMS(TestType)
 
-    static void registerTestTypeInQML()
-    {
-       qmlRegisterType<Backend>("TestType", 1, 0, "TestType");
-    }
-
 signals:
     void showPassiveNotification(QString text, uint duration = 2000);
 

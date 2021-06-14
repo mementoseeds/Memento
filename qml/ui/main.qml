@@ -30,7 +30,11 @@ ApplicationWindow {
     }
 
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
-    property color defaultMaterialAccept: "#3F51B5"
+
+    //Colors
+    property color defaultMaterialAccept: Material.color(Material.Indigo)
+    property color globalBlue: defaultMaterialAccept
+    property color globalGreen: Material.color(Material.Green)
 
     id: root
     visible: true
