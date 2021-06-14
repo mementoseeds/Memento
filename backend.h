@@ -144,6 +144,7 @@ private:
 
     QJsonDocument globalSeedbox;
     QJsonDocument globalLevel;
+    QJsonObject globalLevelSeeds;
     QVariantMap userSettings;
 };
 

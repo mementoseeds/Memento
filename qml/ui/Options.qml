@@ -29,6 +29,7 @@ Item {
     {
         userSettings["coursesLocation"] = coursesLocationTextField.text
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
+        userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -66,7 +67,7 @@ Item {
                 id: coursesLocationTextField
                 text: userSettings["coursesLocation"]
                 Layout.fillWidth: true
-                Material.accent: Material.Indigo
+                Material.accent: defaultMaterialAccept
             }
 
             Label {
@@ -78,7 +79,15 @@ Item {
                 id: countdownTimerSpinBox
                 from: 1
                 value: userSettings["countdownTimer"]
-                Material.accent: Material.Indigo
+                Material.accent: defaultMaterialAccept
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
+                id: autoAcceptAnswerCheckBox
+                text: "Auto accept answer on typing tests"
+                checked: userSettings["autoAcceptAnswer"]
+                Material.accent: defaultMaterialAccept
                 Layout.alignment: Qt.AlignCenter
             }
         }

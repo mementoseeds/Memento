@@ -54,7 +54,14 @@ Item {
                     focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
-                    Material.accent: Material.Indigo                    
+                    Material.accent: defaultMaterialAccept
+
+                    onTextChanged:
+                    {
+                        if (userSettings["autoAcceptAnswer"] && text.toLocaleLowerCase() === globalBackend.readItemColumn(itemId, testColumn)[1].toLocaleLowerCase())
+                            accepted()
+                    }
+
                     onAccepted:
                     {
                         if (text.length === 0)

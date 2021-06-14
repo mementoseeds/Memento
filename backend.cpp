@@ -132,6 +132,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
+    settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -139,6 +140,7 @@ QVariantMap Backend::getUserSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
+    userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     return userSettings;
 }
 
@@ -159,6 +161,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     QString levelContent = levelFile.readAll();
     levelFile.close();
     globalLevel = QJsonDocument::fromJson(levelContent.toUtf8());
+    globalLevelSeeds = globalLevel["seeds"].toObject();
     levelContent.clear();
     QJsonObject levelSeeds = globalLevel["seeds"].toObject();
 
@@ -198,6 +201,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
 void Backend::unloadGlobalLevel()
 {
     globalLevel = QJsonDocument();
+    globalLevelSeeds = QJsonObject();
 }
 
 void Backend::loadSeedbox(QString courseDirectory)
