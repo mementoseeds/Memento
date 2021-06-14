@@ -102,6 +102,8 @@ public:
 
     Q_INVOKABLE void readItem(QString itemId, QString testColumn, QString promptColumn);
 
+    Q_INVOKABLE QString readCourseTitle(QString courseDirectory);
+
     Q_INVOKABLE QString readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
 

@@ -289,6 +289,16 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     }
 }
 
+QString Backend::readCourseTitle(QString courseDirectory)
+{
+    QFile infoFile(courseDirectory + "/info.json");
+    infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
+    QString info = infoFile.readAll();
+    infoFile.close();
+    QJsonDocument courseInfo = QJsonDocument::fromJson(info.toUtf8());
+    return courseInfo["title"].toString();
+}
+
 QString Backend::readItemAttributes(QString itemId)
 {
     return globalSeedbox[itemId].toObject()["attributes"].toString();

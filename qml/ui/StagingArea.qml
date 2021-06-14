@@ -29,19 +29,24 @@ Item {
     property int itemIndex: 0
     property var tests: []
 
-    Component.onDestruction: globalBackend.unloadSeedbox()
+    Component.onDestruction:
+    {
+        globalBackend.unloadSeedbox()
+        restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
+    }
+
     Component.onCompleted:
     {
-        if (testType !== "preview")
+        if (testType === "plant")
         {
-
-
-            //Change 5 to user amount
-
             //Create array of dicts for amount of tests, the item to test on and its test type
             for (var i = 0; i < itemArray.length; i++)
             {
                 var myMap = {}
+                myMap[itemArray[i]] = TestType.PREVIEW
+                tests.push(myMap)
+
+                myMap = {}
                 myMap[itemArray[i]] = TestType.TYPING //Start all with multiple choice
                 tests.push(myMap)
             }
@@ -67,6 +72,8 @@ Item {
     {
         if (testType === "preview")
         {
+            replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex)
+
             if (itemIndex !== itemArray.length)
             {
                 testLoader.active = false
@@ -79,21 +86,35 @@ Item {
         }
         else if (testType === "plant")
         {
-            var itemId = Object.keys(tests[itemIndex]).toString()
-
-            testLoader.active = false
-            switch (tests[itemIndex][itemId])
+            if (itemIndex !== tests.length)
             {
-                case TestType.TYPING:
-                    testLoader.setSource("qrc:/Typing.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
-                    break
+                replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex)
+
+                var itemId = Object.keys(tests[itemIndex]).toString()
+                var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
+
+                testLoader.active = false
+                switch (tests[itemIndex][itemId])
+                {
+                    case TestType.PREVIEW:
+                        testLoader.setSource("qrc:/Preview.qml", variables)
+                        break
+
+                    case TestType.TYPING:
+                        testLoader.setSource("qrc:/Typing.qml", variables)
+                        break
+                }
+                testLoader.active = true
+                itemIndex++
             }
-            testLoader.active = true
-            itemIndex++
+            else
+            {
+                console.debug("Reached end")
+                //Show results screen
+                rootStackView.pop()
+            }
         }
     }
-
-    //Place progress indicator
 
     Loader {
         id: testLoader

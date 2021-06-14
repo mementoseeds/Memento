@@ -34,7 +34,7 @@ Item {
     property bool levelCompleted: false
 
     Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
-    Component.onDestruction: globalBackend.unloadGlobalLevel();
+    Component.onDestruction: globalBackend.unloadGlobalLevel()
 
     function getItemArray(total)
     {

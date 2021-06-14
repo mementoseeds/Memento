@@ -39,7 +39,7 @@ Item {
             }
 
             Shortcut {
-                sequence: "Right"
+                sequences: ["Right", "Return", "Enter"]
                 onActivated: forwardButton.clicked()
             }
 

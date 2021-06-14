@@ -45,6 +45,25 @@ ApplicationWindow {
         passiveNotification.show(text, duration)
     }
 
+    function replaceToolbar(text, amount, total, progress)
+    {
+        mainToolbarTitle.horizontalAlignment = Qt.AlignLeft
+        mainToolbarTitle.text = text + amount + " seeds"
+        mainToolbarTitle.Layout.fillWidth = false
+
+        toolbarProgressBar.visible = true
+        toolbarProgressBar.to = total
+        toolbarProgressBar.value = progress
+    }
+
+    function restoreToolbar(text)
+    {
+        mainToolbarTitle.horizontalAlignment = Qt.AlignHCenter
+        mainToolbarTitle.text = text
+        mainToolbarTitle.Layout.fillWidth = true
+        toolbarProgressBar.visible = false
+    }
+
     Item {
         id: signalSource
         visible: false
@@ -81,14 +100,25 @@ ApplicationWindow {
                     mainMenuBar.open()
                 }
             }
+
             Label {
                 id: mainToolbarTitle
                 text: "Course List"
                 elide: Label.ElideRight
                 horizontalAlignment: Qt.AlignHCenter
-                verticalAlignment: Qt.AlignVCenter
                 Layout.fillWidth: true
             }
+
+            ProgressBar {
+                id: toolbarProgressBar
+                visible: false
+                from: 0
+                to: 0
+                value: 0
+                indeterminate:  false
+                Layout.fillWidth: true
+            }
+
             ToolButton {
                 id: backButton
                 icon.source: "assets/actions/go-previous.svg"
