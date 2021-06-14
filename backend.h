@@ -62,6 +62,9 @@
 
 #endif
 
+//For reading and saving review dates
+#include <QDateTime>
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -144,6 +147,7 @@ private:
 
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
+    QString getWateringTime(int streak);
 
     //Global variables
     QJsonDocument globalSeedbox;
