@@ -25,6 +25,13 @@ Item {
 
     objectName: "Options.qml"
 
+    Component.onDestruction:
+    {
+        userSettings["coursesLocation"] = coursesLocationTextField.text
+        userSettings["countdownTimer"] = countdownTimerSpinBox.value
+        globalBackend.setUserSettings(userSettings)
+    }
+
     ScrollView {
         anchors.fill: parent
         contentWidth: root.width
@@ -34,6 +41,7 @@ Item {
             anchors.right: parent.right
             anchors.leftMargin: marginBase
             anchors.rightMargin: marginBase
+            spacing: marginBase
 
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
@@ -52,15 +60,6 @@ Item {
                             fileDialog.open()
                     }
                 }
-
-                Button {
-                    text: "Apply"
-                    onClicked:
-                    {
-                        userSettings["coursesLocation"] = coursesLocationTextField.text
-                        globalBackend.setUserSettings(userSettings)
-                    }
-                }
             }
 
             TextField {
@@ -68,6 +67,19 @@ Item {
                 text: userSettings["coursesLocation"]
                 Layout.fillWidth: true
                 Material.accent: Material.Indigo
+            }
+
+            Label {
+                text: "Test countdown timer"
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: countdownTimerSpinBox
+                from: 1
+                value: userSettings["countdownTimer"]
+                Material.accent: Material.Indigo
+                Layout.alignment: Qt.AlignCenter
             }
         }
 

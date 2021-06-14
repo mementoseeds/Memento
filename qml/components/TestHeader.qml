@@ -94,7 +94,7 @@ ColumnLayout {
 
     Timer {
         id: countdownTimer
-        property int maxSeconds: 10
+        property int maxSeconds: userSettings["countdownTimer"]
         property int currentSeconds: 0
         interval: 1000
         running: true

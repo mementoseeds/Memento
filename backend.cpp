@@ -131,12 +131,14 @@ void Backend::setUserSettings(QVariantMap userSettings)
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
+    settings.setValue("countdownTimer", userSettings["countdownTimer"]);
 }
 
 QVariantMap Backend::getUserSettings()
 {
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
+    userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     return userSettings;
 }
 
