@@ -8,7 +8,8 @@ CONFIG += c++11 qmltypes
 
 SOURCES += \
         backend.cpp \
-        main.cpp
+        main.cpp \
+        3rdparty/nlohmann/json.hpp
 
 RESOURCES += qml.qrc
 

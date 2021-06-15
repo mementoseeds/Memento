@@ -37,6 +37,10 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
+#include <3rdparty/nlohmann/json.hpp>
+using Json = nlohmann::ordered_json;
+using String = std::string;
+
 //For finding titles in media levels
 #include <QRegularExpression>
 
