@@ -170,7 +170,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
     QString seedboxContent = seedboxFile.readAll();
     seedboxFile.close();
-    QJsonDocument seedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
+    globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
     seedboxContent.clear();
 
     //Get testing direction
@@ -181,8 +181,8 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     {
         QJsonObject seed = levelSeeds[id].toObject();
 
-        QString test = seedbox[id][testColumn]["primary"].toString();
-        QString prompt = seedbox[id][promptColumn]["primary"].toString();
+        QString test = globalSeedbox[id][testColumn]["primary"].toString();
+        QString prompt = globalSeedbox[id][promptColumn]["primary"].toString();
 
         emit addLevelItem(
             id,
@@ -202,16 +202,6 @@ void Backend::unloadGlobalLevel()
 {
     globalLevel = QJsonDocument();
     globalLevelSeeds = QJsonObject();
-}
-
-void Backend::loadSeedbox(QString courseDirectory)
-{
-    QFile seedboxFile(courseDirectory + "/seedbox.json");
-    seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString seedboxContent = seedboxFile.readAll();
-    seedboxFile.close();
-    globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
-    seedboxContent.clear();
 }
 
 void Backend::unloadSeedbox()

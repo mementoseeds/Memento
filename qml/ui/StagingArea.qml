@@ -31,11 +31,7 @@ Item {
     property int itemIndex: 0
     property var tests: []
 
-    Component.onDestruction:
-    {
-        globalBackend.unloadSeedbox()
-        restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
-    }
+    Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
 
     Component.onCompleted:
     {
@@ -123,10 +119,6 @@ Item {
         id: testLoader
         anchors.fill: parent
         active: false
-        Component.onCompleted:
-        {
-            globalBackend.loadSeedbox(courseDirectory)
-            triggerNextItem()
-        }
+        Component.onCompleted: triggerNextItem()
     }
 }
