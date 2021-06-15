@@ -24,7 +24,7 @@ Item {
 
     property string courseDirectory: ""
     property var itemArray: []
-    property string testType: ""
+    property string actionType: ""
     property string testColumn: ""
     property string promptColumn: ""
 
@@ -39,7 +39,7 @@ Item {
 
     Component.onCompleted:
     {
-        if (testType === "plant")
+        if (actionType === "plant")
         {
             //Create array of dicts for amount of tests, the item to test on and its test type
             for (var i = 0; i < itemArray.length; i++)
@@ -72,7 +72,7 @@ Item {
 
     function triggerNextItem()
     {
-        if (testType === "preview")
+        if (actionType === "preview")
         {
             replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex)
 
@@ -86,7 +86,7 @@ Item {
             else
                 rootStackView.pop()
         }
-        else if (testType === "plant")
+        else if (actionType === "plant")
         {
             if (itemIndex !== tests.length)
             {

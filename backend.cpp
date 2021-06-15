@@ -352,14 +352,15 @@ void Backend::correctAnswer(QString itemId)
     QJsonObject item = globalLevelSeeds[itemId].toObject();
 
     int successes = item["successes"].toInt() + 1;
-    int streak = item["streak"].toInt() + 1;
-
     item["successes"] = successes;
-    item["streak"] = streak;
 
     if (successes >= 5)
     {
         item["planted"] = true;
+
+        int streak = item["streak"].toInt() + 1;
+        item["streak"] = streak;
+
         item["nextWatering"] = getWateringTime(streak);
     }
 
@@ -370,6 +371,7 @@ void Backend::wrongAnswer(QString itemId)
 {
     QJsonObject item = globalLevelSeeds[itemId].toObject();
     item["failures"] = item["failures"].toInt() + 1;
+    item["difficult"] = item["planted"].toBool();
     item["streak"] = 0;
     globalLevelSeeds[itemId] = item;
 }
@@ -379,25 +381,28 @@ QString Backend::getWateringTime(int streak)
     QDateTime currentTime = QDateTime::currentDateTime();
     uint newTime = 0;
 
-    if (streak >= 15)
+    if (streak <= 0)
+        streak = 1;
+
+    if (streak >= 11)
         newTime = 31104000;
-    else if (streak >= 14)
-        newTime = 23328000;
-    else if (streak >= 13)
-        newTime = 15552000;
-    else if (streak >= 12)
-        newTime = 8294400;
-    else if (streak >= 11)
-        newTime = 4147200;
     else if (streak >= 10)
-        newTime = 2073600;
+        newTime = 23328000;
     else if (streak >= 9)
-        newTime = 1036800;
+        newTime = 15552000;
     else if (streak >= 8)
-        newTime = 518400;
+        newTime = 8294400;
     else if (streak >= 7)
-        newTime = 86400;
+        newTime = 4147200;
     else if (streak >= 6)
+        newTime = 2073600;
+    else if (streak >= 5)
+        newTime = 1036800;
+    else if (streak >= 4)
+        newTime = 518400;
+    else if (streak >= 3)
+        newTime = 86400;
+    else if (streak >= 2)
         newTime = 43200;
     else
         newTime = 18000;

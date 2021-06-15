@@ -80,7 +80,7 @@ Item {
                         onActivated:
                         {
                             if (currentText === "Preview")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(levelEntryListModel.count), "testType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(levelEntryListModel.count), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                         }
                     }
 
@@ -91,7 +91,7 @@ Item {
                         {
                             if (text === "Plant")
                             {
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(5), "testType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
                             }
                         }
                     }

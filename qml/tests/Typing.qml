@@ -64,7 +64,7 @@ Item {
 
                     onAccepted:
                     {
-                        if (text.length === 0)
+                        if (text.length === 0 && testHeader.countdownTimer.running)
                             return
 
                         testHeader.countdownTimer.running = false
