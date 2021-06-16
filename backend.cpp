@@ -74,11 +74,11 @@ void Backend::getCourseList()
 
         emit addCourse(
             directory,
-            courseInfo["title"].get<String>().data(),
-            courseInfo["author"].get<String>().data(),
-            courseInfo["description"].get<String>().data(),
-            courseInfo["category"].get<String>().data(),
-            directory + "/" + courseInfo["icon"].get<String>().data(),
+            QString::fromStdString(courseInfo["title"].get<String>()),
+            QString::fromStdString(courseInfo["author"].get<String>()),
+            QString::fromStdString(courseInfo["description"].get<String>()),
+            QString::fromStdString(courseInfo["category"].get<String>()),
+            directory + "/" + QString::fromStdString(courseInfo["icon"].get<String>()),
             courseInfo["items"].get<int>(),
             courseInfo["planted"].get<int>(),
             courseInfo["water"].get<int>(),
@@ -106,11 +106,11 @@ void Backend::getCourseLevels(QString directory)
 
             emit addCourseLevel(
                 levelPath,
-                levelInfo["title"].get<String>().data(),
-                levelInfo["test"].get<String>().data(),
-                levelInfo["prompt"].get<String>().data(),
-                levelInfo["testType"].get<String>().data(),
-                levelInfo["promptType"].get<String>().data(),
+                QString::fromStdString(levelInfo["title"].get<String>()),
+                QString::fromStdString(levelInfo["test"].get<String>()),
+                QString::fromStdString(levelInfo["prompt"].get<String>()),
+                QString::fromStdString(levelInfo["testType"].get<String>()),
+                QString::fromStdString(levelInfo["promptType"].get<String>()),
                 true,
                 levelInfo["seeds"].size(),
                 levelInfo["completed"].get<bool>()
@@ -172,19 +172,19 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     String testColumn = globalLevel["test"].get<String>();
     String promptColumn = globalLevel["prompt"].get<String>();
 
-    for (auto item : globalLevelSeeds.items())
+    for (auto &item : globalLevelSeeds.items())
     {
         String id = item.key();
 
-        QString test = globalSeedbox[id][testColumn]["primary"].get<String>().data();
-        QString prompt = globalSeedbox[id][promptColumn]["primary"].get<String>().data();
+        QString test = QString::fromStdString(globalSeedbox[id][testColumn]["primary"].get<String>());
+        QString prompt = QString::fromStdString(globalSeedbox[id][promptColumn]["primary"].get<String>());
 
         emit addLevelItem(
             id.data(),
             test,
             prompt,
             globalLevelSeeds[id]["planted"].get<bool>(),
-            globalLevelSeeds[id]["nextWatering"].get<String>().data(),
+            QString::fromStdString(globalLevelSeeds[id]["nextWatering"].get<String>()),
             globalLevelSeeds[id]["ignored"].get<bool>(),
             globalLevelSeeds[id]["difficult"].get<bool>()
                     );
@@ -214,13 +214,13 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     {
         QStringList audioList;
         for (auto &val : audioArray)
-            audioList.append(val.get<String>().data());
+            audioList.append(QString::fromStdString(val.get<String>()));
 
         emit addItemDetails("audio", "Audio", audioList.join(":"));
     }
 
     //Add attributes
-    QString attributes = item["attributes"].get<String>().data();
+    QString attributes = QString::fromStdString(item["attributes"].get<String>());
     if (attributes.length() > 0)
     {
         emit addItemDetails("attributes", "Attributes", attributes);
@@ -235,10 +235,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     QStringList alternatives;
 
     // Add all test column info first
-    emit addItemDetails(testColumnObj["type"].get<String>().data(), testColumn, testColumnObj["primary"].get<String>().data());
+    emit addItemDetails(QString::fromStdString(testColumnObj["type"].get<String>()), testColumn, QString::fromStdString(testColumnObj["primary"].get<String>()));
     for (auto &val : testColumnObj["alternative"])
     {
-        QString string = val.get<String>().data();
+        QString string = QString::fromStdString(val.get<String>());
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
@@ -248,10 +248,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     emit addItemSeparator();
 
     // Add all prompt column info second
-    emit addItemDetails(promptColumnObj["type"].get<String>().data(), promptColumn, promptColumnObj["primary"].get<String>().data());
+    emit addItemDetails(QString::fromStdString(promptColumnObj["type"].get<String>()), promptColumn, QString::fromStdString(promptColumnObj["primary"].get<String>()));
     for (auto &val : promptColumnObj["alternative"])
     {
-        QString string = val.get<String>().data();
+        QString string = QString::fromStdString(val.get<String>());
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
@@ -268,11 +268,11 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (item[column].is_object() && column.compare(stdTestColumn) != 0 && column.compare(stdPromptColumn) != 0)
         {
             Json columnData = item[column];
-            emit addItemDetails(columnData["type"].get<String>().data(), column.data(), columnData["primary"].get<String>().data());
+            emit addItemDetails(QString::fromStdString(columnData["type"].get<String>()), column.data(), QString::fromStdString(columnData["primary"].get<String>()));
 
             for (auto &val : columnData["alternative"])
             {
-                QString string = val.get<String>().data();
+                QString string = QString::fromStdString(val.get<String>());
                 if (!string.startsWith("_"))
                     alternatives.append(string);
             }
@@ -290,20 +290,20 @@ QString Backend::readCourseTitle(QString courseDirectory)
     Json courseInfo;
     infoFile >> courseInfo;
     infoFile.close();
-    return courseInfo["title"].get<String>().data();
+    return QString::fromStdString(courseInfo["title"].get<String>());
 }
 
 QString Backend::readItemAttributes(QString itemId)
 {
-    return globalSeedbox[itemId.toStdString()]["attributes"].get<String>().data();
+    return QString::fromStdString(globalSeedbox[itemId.toStdString()]["attributes"].get<String>());
 }
 
 QVariantList Backend::readItemColumn(QString itemId, QString column)
 {
     QVariantList list;
     Json item = globalSeedbox[itemId.toStdString()][column.toStdString()];
-    list.append(item["type"].get<String>().data());
-    list.append(item["primary"].get<String>().data());
+    list.append(QString::fromStdString(item["type"].get<String>()));
+    list.append(QString::fromStdString(item["primary"].get<String>()));
     return list;
 }
 
@@ -313,7 +313,7 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
     answer = answer.trimmed();
 
     Json item = globalSeedbox[itemId.toStdString()][column.toStdString()];
-    if (answer.compare(item["primary"].get<String>().data(), Qt::CaseInsensitive) == 0)
+    if (answer.compare(QString::fromStdString(item["primary"].get<String>()), Qt::CaseInsensitive) == 0)
         result = true;
     else
     {

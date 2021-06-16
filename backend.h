@@ -32,14 +32,9 @@
 //For reading courses dir
 #include <QDir>
 
-//For reading Jsons
-//#include <QJsonDocument>
-//#include <QJsonObject>
-//#include <QJsonArray>
-
+//For reading and writing Jsons
 #include <3rdparty/nlohmann/json.hpp>
 #include <fstream>
-#include <iostream>
 using Json = nlohmann::ordered_json;
 using String = std::string;
 
