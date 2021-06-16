@@ -23,6 +23,7 @@ Item {
     objectName: "StagingArea.qml"
 
     property string courseDirectory: ""
+    property string levelPath: ""
     property var itemArray: []
     property string actionType: ""
     property string testColumn: ""
@@ -107,7 +108,7 @@ Item {
             }
             else
             {
-                console.debug("Reached end")
+                console.debug(levelPath)
                 //Show results screen
                 globalBackend.debugFun()
                 rootStackView.pop()

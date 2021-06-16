@@ -66,6 +66,9 @@ using String = std::string;
 //For reading and saving review dates
 #include <QDateTime>
 
+//For selecting random Json items
+#include <QRandomGenerator>
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -111,6 +114,7 @@ public:
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
 
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
+    Q_INVOKABLE void saveLevel(QString levelPath);
 
     enum TestType
     {
@@ -144,11 +148,17 @@ private:
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
 
+    const Json& getRandom(const Json &json);
+
     //Global variables
     Json globalSeedbox;
     Json globalLevel;
     Json globalLevelSeeds;
+    int globalSeedsAmount;
     QVariantMap userSettings;
+
+    //Constants
+    const int jsonIndent = 4;
 };
 
 #endif // BACKEND_H

@@ -15,6 +15,7 @@
  */
 
 #include "backend.h"
+#include <iostream>
 
 Backend *Backend::m_instance = nullptr;
 
@@ -120,7 +121,7 @@ void Backend::getCourseLevels(QString directory)
         {
             String info;
             std::getline(infoFile, info);
-            QString levelTitle = QRegularExpression("\\(.*\\)$").match(info.data()).captured().replace(QRegularExpression("^\\(|\\)$"), "");
+            QString levelTitle = QRegularExpression("\\(.*\\)$").match(QString::fromStdString(info)).captured().replace(QRegularExpression("^\\(|\\)$"), "");
 
             emit addCourseLevel(levelPath, levelTitle, QString(), QString(), QString(), QString(), false, 0, false);
         }
@@ -150,9 +151,7 @@ QString Backend::readMediaLevel(QString levelPath)
 {
     QFile mediaFile(levelPath);
     mediaFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString content = mediaFile.readAll();
-    mediaFile.close();
-    return content;
+    return mediaFile.readAll();
 }
 
 void Backend::getLevelItems(QString courseDirectory, QString levelPath)
@@ -162,6 +161,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     levelFile >> globalLevel;
     levelFile.close();
     globalLevelSeeds = globalLevel["seeds"];
+    globalSeedsAmount = globalLevelSeeds.size();
 
     //Open the seedbox
     std::ifstream seedboxFile(courseDirectory.toStdString() + "/seedbox.json");
@@ -180,7 +180,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
         QString prompt = QString::fromStdString(globalSeedbox[id][promptColumn]["primary"].get<String>());
 
         emit addLevelItem(
-            id.data(),
+            QString::fromStdString(id),
             test,
             prompt,
             globalLevelSeeds[id]["planted"].get<bool>(),
@@ -268,7 +268,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (item[column].is_object() && column.compare(stdTestColumn) != 0 && column.compare(stdPromptColumn) != 0)
         {
             Json columnData = item[column];
-            emit addItemDetails(QString::fromStdString(columnData["type"].get<String>()), column.data(), QString::fromStdString(columnData["primary"].get<String>()));
+            emit addItemDetails(QString::fromStdString(columnData["type"].get<String>()), QString::fromStdString(column), QString::fromStdString(columnData["primary"].get<String>()));
 
             for (auto &val : columnData["alternative"])
             {
@@ -400,4 +400,29 @@ String Backend::getWateringTime(int streak)
         newTime = 18000;
 
     return currentTime.addSecs(newTime).toString().toStdString();
+}
+
+void Backend::saveLevel(QString levelPath)
+{
+    int completedSeeds = 0;
+    for (auto &item : globalLevelSeeds.items())
+    {
+        if (globalLevelSeeds[item.key()]["planted"].get<bool>())
+            completedSeeds++;
+    }
+    globalLevel["completed"] = (completedSeeds == globalSeedsAmount);
+
+    globalLevel["seeds"] = globalLevelSeeds;
+
+    std::ofstream level(levelPath.toStdString());
+    level << globalLevel.dump(jsonIndent) << std::endl;
+    level.close();
+}
+
+const Json& Backend::getRandom(const Json &json)
+{
+    auto it = json.cbegin();
+    int random = QRandomGenerator::global()->generate() % json.size();
+    std::advance(it, random);
+    return *it;
 }

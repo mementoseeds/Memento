@@ -91,7 +91,7 @@ Item {
                         {
                             if (text === "Plant")
                             {
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": getItemArray(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
                             }
                         }
                     }
