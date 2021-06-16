@@ -108,10 +108,9 @@ Item {
             }
             else
             {
-                console.debug(levelPath)
                 //Show results screen
                 globalBackend.debugFun()
-                rootStackView.pop()
+                rootStackView.replace("qrc:/EndingResults.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray, "testColumn": testColumn, "promptColumn": promptColumn})
             }
         }
     }

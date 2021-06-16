@@ -148,7 +148,7 @@ private:
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
 
-    const Json& getRandom(const Json &json);
+    const Json getRandom(const Json json);
 
     //Global variables
     Json globalSeedbox;

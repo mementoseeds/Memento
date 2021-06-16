@@ -168,6 +168,11 @@ ApplicationWindow {
                         rootStackView.push("qrc:/Options.qml")
                 }
             }
+
+            Action {
+                text: "Debug"
+                onTriggered: rootStackView.push("qrc:/EndingResults.qml")
+            }
         }
     }
 

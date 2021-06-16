@@ -419,10 +419,10 @@ void Backend::saveLevel(QString levelPath)
     level.close();
 }
 
-const Json& Backend::getRandom(const Json &json)
+const Json Backend::getRandom(const Json json)
 {
     auto it = json.cbegin();
     int random = QRandomGenerator::global()->generate() % json.size();
     std::advance(it, random);
-    return *it;
+    return it.key();
 }

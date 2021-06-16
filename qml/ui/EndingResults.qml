@@ -19,8 +19,69 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
+    property int marginBase: 10
 
-    Label {
-        text: "Results"
+    property string courseDirectory: ""
+    property string levelPath: ""
+    property var itemArray: []
+    property string testColumn: ""
+    property string promptColumn: ""
+
+    Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
+
+    ListView {
+        anchors.fill: parent
+        spacing: 20
+        ScrollBar.vertical: ScrollBar {width: 10}
+
+        header: ColumnLayout {
+            width: parent.width
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Label {
+                    text: "Correct answers"
+                    Layout.alignment: Qt.AlignLeft
+                }
+
+                Label {
+                    text: "input"
+                    Layout.alignment: Qt.AlignRight
+                }
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Label {
+                    text: "Speed"
+                    Layout.alignment: Qt.AlignLeft
+                }
+
+                Label {
+                    text: "input"
+                    Layout.alignment: Qt.AlignRight
+                }
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Label {
+                    text: "Accuracy"
+                    Layout.alignment: Qt.AlignLeft
+                }
+
+                Label {
+                    text: "input"
+                    Layout.alignment: Qt.AlignRight
+                }
+            }
+        }
+
+        model: ListModel {id: resultsListView}
+
+        delegate: LevelEntry {inResults: true}
     }
 }
