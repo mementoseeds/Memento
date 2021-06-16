@@ -33,11 +33,13 @@
 #include <QDir>
 
 //For reading Jsons
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QJsonArray>
+//#include <QJsonDocument>
+//#include <QJsonObject>
+//#include <QJsonArray>
 
 #include <3rdparty/nlohmann/json.hpp>
+#include <fstream>
+#include <iostream>
 using Json = nlohmann::ordered_json;
 using String = std::string;
 
@@ -145,12 +147,12 @@ private:
 
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
-    QString getWateringTime(int streak);
+    String getWateringTime(int streak);
 
     //Global variables
-    QJsonDocument globalSeedbox;
-    QJsonDocument globalLevel;
-    QJsonObject globalLevelSeeds;
+    Json globalSeedbox;
+    Json globalLevel;
+    Json globalLevelSeeds;
     QVariantMap userSettings;
 };
 

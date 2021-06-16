@@ -22,7 +22,9 @@ Backend::Backend(QObject *parent) : QObject(parent) {}
 
 void Backend::debugFun()
 {
-    qDebug() << globalLevelSeeds;
+    //toStdString() = QString --> std::string
+    //QString::fromStdString(std::string) = std::string --> QString
+    //qDebug() << globalLevelSeeds;
 }
 
 void Backend::setGlobalBackendInstance()
@@ -60,29 +62,29 @@ void Backend::getCourseList()
     foreach (QString dir, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         QString directory = coursesDir.absolutePath() + "/" + dir;
-        QFile infoFile(directory + "/info.json");
+        std::ifstream infoFile(directory.toStdString() + "/info.json");
 
-        if (!infoFile.exists())
+        if (infoFile.fail())
             continue;
 
-        infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
-        QString info = infoFile.readAll();
+        Json courseInfo;
+        infoFile >> courseInfo;
         infoFile.close();
-        QJsonDocument courseInfo = QJsonDocument::fromJson(info.toUtf8());
+
 
         emit addCourse(
             directory,
-            courseInfo["title"].toString(),
-            courseInfo["author"].toString(),
-            courseInfo["description"].toString(),
-            courseInfo["category"].toString(),
-            directory + "/" + courseInfo["icon"].toString(),
-            courseInfo["items"].toInt(),
-            courseInfo["planted"].toInt(),
-            courseInfo["water"].toInt(),
-            courseInfo["difficult"].toInt(),
-            courseInfo["ignored"].toInt(),
-            courseInfo["completed"].toBool()
+            courseInfo["title"].get<String>().data(),
+            courseInfo["author"].get<String>().data(),
+            courseInfo["description"].get<String>().data(),
+            courseInfo["category"].get<String>().data(),
+            directory + "/" + courseInfo["icon"].get<String>().data(),
+            courseInfo["items"].get<int>(),
+            courseInfo["planted"].get<int>(),
+            courseInfo["water"].get<int>(),
+            courseInfo["difficult"].get<int>(),
+            courseInfo["ignored"].get<int>(),
+            courseInfo["completed"].get<bool>()
                     );
     }
 
@@ -95,30 +97,30 @@ void Backend::getCourseLevels(QString directory)
     foreach (QString lvl, levelsDir.entryList(QDir::Files))
     {
         QString levelPath = levelsDir.absolutePath() + "/" + lvl;
-        QFile infoFile(levelPath);
-        infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
+        std::ifstream infoFile(levelPath.toStdString());
 
         if (levelPath.endsWith(".json"))
         {
-            QString info = infoFile.readAll();
-            QJsonDocument levelInfo = QJsonDocument::fromJson(info.toUtf8());
+            Json levelInfo;
+            infoFile >> levelInfo;
 
             emit addCourseLevel(
                 levelPath,
-                levelInfo["title"].toString(),
-                levelInfo["test"].toString(),
-                levelInfo["prompt"].toString(),
-                levelInfo["testType"].toString(),
-                levelInfo["promptType"].toString(),
+                levelInfo["title"].get<String>().data(),
+                levelInfo["test"].get<String>().data(),
+                levelInfo["prompt"].get<String>().data(),
+                levelInfo["testType"].get<String>().data(),
+                levelInfo["promptType"].get<String>().data(),
                 true,
-                levelInfo["seeds"].toObject().count(),
-                levelInfo["completed"].toBool()
+                levelInfo["seeds"].size(),
+                levelInfo["completed"].get<bool>()
                         );
         }
         else if (levelPath.endsWith(".md"))
         {
-            QString info = infoFile.readLine();
-            QString levelTitle = QRegularExpression("\\(.*\\)$").match(info).captured().replace(QRegularExpression("^\\(|\\)$"), "");
+            String info;
+            std::getline(infoFile, info);
+            QString levelTitle = QRegularExpression("\\(.*\\)$").match(info.data()).captured().replace(QRegularExpression("^\\(|\\)$"), "");
 
             emit addCourseLevel(levelPath, levelTitle, QString(), QString(), QString(), QString(), false, 0, false);
         }
@@ -156,42 +158,35 @@ QString Backend::readMediaLevel(QString levelPath)
 void Backend::getLevelItems(QString courseDirectory, QString levelPath)
 {
     //Open the level
-    QFile levelFile(levelPath);
-    levelFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString levelContent = levelFile.readAll();
+    std::ifstream levelFile(levelPath.toStdString());
+    levelFile >> globalLevel;
     levelFile.close();
-    globalLevel = QJsonDocument::fromJson(levelContent.toUtf8());
-    globalLevelSeeds = globalLevel["seeds"].toObject();
-    levelContent.clear();
-    QJsonObject levelSeeds = globalLevel["seeds"].toObject();
+    globalLevelSeeds = globalLevel["seeds"];
 
     //Open the seedbox
-    QFile seedboxFile(courseDirectory + "/seedbox.json");
-    seedboxFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString seedboxContent = seedboxFile.readAll();
+    std::ifstream seedboxFile(courseDirectory.toStdString() + "/seedbox.json");
+    seedboxFile >> globalSeedbox;
     seedboxFile.close();
-    globalSeedbox = QJsonDocument::fromJson(seedboxContent.toUtf8());
-    seedboxContent.clear();
 
     //Get testing direction
-    QString testColumn = globalLevel["test"].toString();
-    QString promptColumn = globalLevel["prompt"].toString();
+    String testColumn = globalLevel["test"].get<String>();
+    String promptColumn = globalLevel["prompt"].get<String>();
 
-    foreach (QString id, levelSeeds.keys())
+    for (auto item : globalLevelSeeds.items())
     {
-        QJsonObject seed = levelSeeds[id].toObject();
+        String id = item.key();
 
-        QString test = globalSeedbox[id][testColumn]["primary"].toString();
-        QString prompt = globalSeedbox[id][promptColumn]["primary"].toString();
+        QString test = globalSeedbox[id][testColumn]["primary"].get<String>().data();
+        QString prompt = globalSeedbox[id][promptColumn]["primary"].get<String>().data();
 
         emit addLevelItem(
-            id,
+            id.data(),
             test,
             prompt,
-            seed["planted"].toBool(),
-            seed["nextWatering"].toString(),
-            seed["ignored"].toBool(),
-            seed["difficult"].toBool()
+            globalLevelSeeds[id]["planted"].get<bool>(),
+            globalLevelSeeds[id]["nextWatering"].get<String>().data(),
+            globalLevelSeeds[id]["ignored"].get<bool>(),
+            globalLevelSeeds[id]["difficult"].get<bool>()
                     );
     }
 
@@ -200,48 +195,50 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
 
 void Backend::unloadGlobalLevel()
 {
-    globalLevel = QJsonDocument();
-    globalLevelSeeds = QJsonObject();
+    globalLevel.clear();
+    globalLevelSeeds.clear();
 }
 
 void Backend::unloadSeedbox()
 {
-    globalSeedbox = QJsonDocument();
+    globalSeedbox.clear();
 }
 
 void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
-    QJsonObject item = globalSeedbox[itemId].toObject();
+    Json item = globalSeedbox[itemId.toStdString()];
 
     //Add audio
-    QJsonArray audioArray = item["audio"].toArray();
-    if (audioArray.count() > 0)
+    Json audioArray = item["audio"];
+    if (audioArray.size() > 0)
     {
         QStringList audioList;
-        foreach (QJsonValue val, audioArray)
-            audioList.append(val.toString());
+        for (auto &val : audioArray)
+            audioList.append(val.get<String>().data());
 
         emit addItemDetails("audio", "Audio", audioList.join(":"));
     }
 
     //Add attributes
-    QString attributes = item["attributes"].toString();
+    QString attributes = item["attributes"].get<String>().data();
     if (attributes.length() > 0)
     {
         emit addItemDetails("attributes", "Attributes", attributes);
         emit addItemSeparator();
     }
 
-    QJsonObject testColumnObj = item[testColumn].toObject();
-    QJsonObject promptColumnObj = item[promptColumn].toObject();
+    String stdTestColumn = testColumn.toStdString();
+    String stdPromptColumn = promptColumn.toStdString();
+    Json testColumnObj = item[stdTestColumn];
+    Json promptColumnObj = item[stdPromptColumn];
 
     QStringList alternatives;
 
     // Add all test column info first
-    emit addItemDetails(testColumnObj["type"].toString(), testColumn, testColumnObj["primary"].toString());
-    foreach (QJsonValue val, testColumnObj["alternative"].toArray())
+    emit addItemDetails(testColumnObj["type"].get<String>().data(), testColumn, testColumnObj["primary"].get<String>().data());
+    for (auto &val : testColumnObj["alternative"])
     {
-        QString string = val.toString();
+        QString string = val.get<String>().data();
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
@@ -251,10 +248,10 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     emit addItemSeparator();
 
     // Add all prompt column info second
-    emit addItemDetails(promptColumnObj["type"].toString(), promptColumn, promptColumnObj["primary"].toString());
-    foreach (QJsonValue val, promptColumnObj["alternative"].toArray())
+    emit addItemDetails(promptColumnObj["type"].get<String>().data(), promptColumn, promptColumnObj["primary"].get<String>().data());
+    for (auto &val : promptColumnObj["alternative"])
     {
-        QString string = val.toString();
+        QString string = val.get<String>().data();
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
@@ -264,16 +261,18 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     emit addItemSeparator();
 
     // Add all remaining column info last
-    foreach (QString column, item.keys())
+    for (auto &entry : item.items())
     {
-        if (item[column].isObject() && column.compare(testColumn) != 0 && column.compare(promptColumn) != 0)
-        {
-            QJsonObject columnData = item[column].toObject();
-            emit addItemDetails(columnData["type"].toString(), column, columnData["primary"].toString());
+        String column = entry.key();
 
-            foreach (QJsonValue val, columnData["alternative"].toArray())
+        if (item[column].is_object() && column.compare(stdTestColumn) != 0 && column.compare(stdPromptColumn) != 0)
+        {
+            Json columnData = item[column];
+            emit addItemDetails(columnData["type"].get<String>().data(), column.data(), columnData["primary"].get<String>().data());
+
+            for (auto &val : columnData["alternative"])
             {
-                QString string = val.toString();
+                QString string = val.get<String>().data();
                 if (!string.startsWith("_"))
                     alternatives.append(string);
             }
@@ -287,25 +286,24 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 
 QString Backend::readCourseTitle(QString courseDirectory)
 {
-    QFile infoFile(courseDirectory + "/info.json");
-    infoFile.open(QIODevice::ReadOnly | QIODevice::Text);
-    QString info = infoFile.readAll();
+    std::ifstream infoFile(courseDirectory.toStdString() + "/info.json");
+    Json courseInfo;
+    infoFile >> courseInfo;
     infoFile.close();
-    QJsonDocument courseInfo = QJsonDocument::fromJson(info.toUtf8());
-    return courseInfo["title"].toString();
+    return courseInfo["title"].get<String>().data();
 }
 
 QString Backend::readItemAttributes(QString itemId)
 {
-    return globalSeedbox[itemId].toObject()["attributes"].toString();
+    return globalSeedbox[itemId.toStdString()]["attributes"].get<String>().data();
 }
 
 QVariantList Backend::readItemColumn(QString itemId, QString column)
 {
     QVariantList list;
-    QJsonObject item = globalSeedbox[itemId].toObject()[column].toObject();
-    list.append(item["type"].toString());
-    list.append(item["primary"].toString());
+    Json item = globalSeedbox[itemId.toStdString()][column.toStdString()];
+    list.append(item["type"].get<String>().data());
+    list.append(item["primary"].get<String>().data());
     return list;
 }
 
@@ -314,14 +312,14 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
     bool result = false;
     answer = answer.trimmed();
 
-    QJsonObject item = globalSeedbox[itemId].toObject()[column].toObject();
-    if (answer.compare(item["primary"].toString(), Qt::CaseInsensitive) == 0)
+    Json item = globalSeedbox[itemId.toStdString()][column.toStdString()];
+    if (answer.compare(item["primary"].get<String>().data(), Qt::CaseInsensitive) == 0)
         result = true;
     else
     {
-        foreach (QJsonValue val, item["alternative"].toArray())
+        for (auto &val : item["alternative"])
         {
-            if (val.toString().remove(QRegExp("^_")).compare(answer, Qt::CaseInsensitive) == 0)
+            if (answer.compare(QString::fromStdString(val.get<String>()).remove(QRegExp("^_")), Qt::CaseInsensitive) == 0)
             {
                 result = true;
                 break;
@@ -339,34 +337,38 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
 
 void Backend::correctAnswer(QString itemId)
 {
-    QJsonObject item = globalLevelSeeds[itemId].toObject();
+    String id = itemId.toStdString();
 
-    int successes = item["successes"].toInt() + 1;
+    Json item = globalLevelSeeds[id];
+
+    int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
     if (successes >= 5)
     {
         item["planted"] = true;
 
-        int streak = item["streak"].toInt() + 1;
+        int streak = item["streak"].get<int>() + 1;
         item["streak"] = streak;
 
         item["nextWatering"] = getWateringTime(streak);
     }
 
-    globalLevelSeeds[itemId] = item;
+    globalLevelSeeds[id] = item;
 }
 
 void Backend::wrongAnswer(QString itemId)
 {
-    QJsonObject item = globalLevelSeeds[itemId].toObject();
-    item["failures"] = item["failures"].toInt() + 1;
-    item["difficult"] = item["planted"].toBool();
+    String id = itemId.toStdString();
+
+    Json item = globalLevelSeeds[id];
+    item["failures"] = item["failures"].get<int>() + 1;
+    item["difficult"] = item["planted"].get<bool>();
     item["streak"] = 0;
-    globalLevelSeeds[itemId] = item;
+    globalLevelSeeds[id] = item;
 }
 
-QString Backend::getWateringTime(int streak)
+String Backend::getWateringTime(int streak)
 {
     QDateTime currentTime = QDateTime::currentDateTime();
     uint newTime = 0;
@@ -397,5 +399,5 @@ QString Backend::getWateringTime(int streak)
     else
         newTime = 18000;
 
-    return currentTime.addSecs(newTime).toString();
+    return currentTime.addSecs(newTime).toString().toStdString();
 }
