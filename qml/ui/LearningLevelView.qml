@@ -86,16 +86,21 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Reset"]
+                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
                             if (currentText === "Preview")
                                 rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(levelEntryListModel.count), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                            else if (currentText === "Plant")
+                                plantWaterButton.clicked()
+                            else if (currentText === "Reset")
+                                console.debug("Reset")
                         }
                     }
 
                     Button {
+                        id: plantWaterButton
                         text: levelCompleted ? "Water" : "Plant"
                         Layout.alignment: Qt.AlignRight
                         onClicked:
