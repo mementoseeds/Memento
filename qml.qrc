@@ -24,6 +24,7 @@
         <file alias="Typing.qml">qml/tests/Typing.qml</file>
         <file alias="TestHeader.qml">qml/components/TestHeader.qml</file>
         <file alias="RadialBar.qml">qml/components/RadialBar.qml</file>
-        <file alias="EndingResults.qml">qml/ui/EndingResults.qml</file>
+        <file alias="ResultEntry.qml">qml/components/ResultEntry.qml</file>
+        <file alias="ResultSummary.qml">qml/ui/ResultSummary.qml</file>
     </qresource>
 </RCC>

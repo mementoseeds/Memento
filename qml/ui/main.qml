@@ -35,6 +35,7 @@ ApplicationWindow {
     property color defaultMaterialAccept: Material.color(Material.Indigo)
     property color globalBlue: defaultMaterialAccept
     property color globalGreen: Material.color(Material.Green)
+    property color globalRed: Material.color(Material.Red)
 
     id: root
     visible: true
@@ -171,7 +172,7 @@ ApplicationWindow {
 
             Action {
                 text: "Debug"
-                onTriggered: rootStackView.push("qrc:/EndingResults.qml")
+                onTriggered: console.debug("debug")
             }
         }
     }

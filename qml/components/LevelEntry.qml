@@ -21,8 +21,6 @@ import QtQuick.Controls 2.15
 Item {
     property int marginBase: 10
 
-    property bool inResults: false
-
     width: root.width - marginBase * 2
     x: marginBase
     height: levelEntryDelegate.childrenRect.height + 10

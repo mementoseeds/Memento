@@ -116,6 +116,8 @@ public:
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
     Q_INVOKABLE void saveLevel(QString levelPath);
 
+    Q_INVOKABLE void getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray);
+
     enum TestType
     {
         PREVIEW,
@@ -141,6 +143,8 @@ signals:
 
     void addItemDetails(QString type, QString name, QString content);
     void addItemSeparator();
+
+    void addItemResults(QString testData, QString testDataType, QString promptData, QString promptDataType, int successes, int failures, int streak);
 private:
     static Backend *m_instance;
 

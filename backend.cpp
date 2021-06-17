@@ -426,3 +426,23 @@ const Json Backend::getRandom(const Json json)
     std::advance(it, random);
     return it.key();
 }
+
+void Backend::getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray)
+{
+    String test = testColumn.toStdString();
+    String prompt = promptColumn.toStdString();
+    foreach (QVariant itemId, itemArray)
+    {
+        String id = itemId.toString().toStdString();
+
+        emit addItemResults(
+            QString::fromStdString(globalSeedbox[id][test]["primary"].get<String>()),
+            QString::fromStdString(globalSeedbox[id][test]["type"].get<String>()),
+            QString::fromStdString(globalSeedbox[id][prompt]["primary"].get<String>()),
+            QString::fromStdString(globalSeedbox[id][prompt]["type"].get<String>()),
+            globalLevelSeeds[id]["successes"].get<int>(),
+            globalLevelSeeds[id]["failures"].get<int>(),
+            globalLevelSeeds[id]["streak"].get<int>()
+                    );
+    }
+}

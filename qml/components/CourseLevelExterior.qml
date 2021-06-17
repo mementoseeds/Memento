@@ -96,7 +96,7 @@ Item {
 
                 Label {
                     id: itemAmountIndicator
-                    text: isLearning ? (itemAmount + " items" + (levelCompleted ? " (Completed)" : "")) : "Media level"
+                    text: isLearning ? (itemAmount + " items") : "Media level"
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.verticalCenter: parent.verticalCenter

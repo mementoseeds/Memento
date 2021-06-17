@@ -108,9 +108,8 @@ Item {
             }
             else
             {
-                //Show results screen
-                globalBackend.debugFun()
-                rootStackView.replace("qrc:/EndingResults.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray, "testColumn": testColumn, "promptColumn": promptColumn})
+                globalBackend.saveLevel(levelPath)
+                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray, "testColumn": testColumn, "promptColumn": promptColumn})
             }
         }
     }

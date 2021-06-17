@@ -52,6 +52,16 @@ Item {
         return items
     }
 
+    function countPlanted()
+    {
+        var planted = 0
+        for (var i = 0; i < levelEntryListModel.count; i++)
+            if (levelEntryListModel.get(i).planted)
+                planted++
+
+        return planted
+    }
+
     ListView {
         anchors.fill: parent
         spacing: 20
@@ -69,6 +79,7 @@ Item {
                     levelHeaderNumber: levelNumber
                     levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
                     levelHeaderItemAmount: itemAmount
+                    levelHeaderCompletedItemAmount: countPlanted()
                 }
 
                 RowLayout {
