@@ -61,10 +61,15 @@ Item {
                 var item = levelEntryListModel.get(i)
                 if (!item.planted && !item.ignored)
                     items.push(item.id)
+                else
+                    total++
             }
         }
 
-        return items
+        if (items.length > 0)
+            return items
+        else
+            showPassiveNotification("No items to learn on this level")
     }
 
     function countPlanted()

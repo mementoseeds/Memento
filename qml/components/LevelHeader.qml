@@ -69,7 +69,7 @@ RowLayout {
 
         Label {
             visible: headerIsLearning
-            text: levelProgressBar.value / levelProgressBar.to * 100 + "%"
+            text: Math.floor(levelProgressBar.value / levelProgressBar.to * 100) + "%"
             Layout.alignment: Qt.AlignHCenter
         }
     }
