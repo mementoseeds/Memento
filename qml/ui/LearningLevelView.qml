@@ -36,6 +36,14 @@ Item {
     Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
     Component.onDestruction: globalBackend.unloadGlobalLevel()
 
+    function getAllItems()
+    {
+        var items = []
+        for (var i = 0; i < levelEntryListModel.count; i++)
+            items.push(levelEntryListModel.get(i).id)
+        return items
+    }
+
     function getItemArray(total)
     {
         var items = []
@@ -44,7 +52,7 @@ Item {
             if ((i + 1) <= levelEntryListModel.count)
             {
                 var item = levelEntryListModel.get(i)
-                if (!item.planted)
+                if (!item.planted && !item.ignored)
                     items.push(item.id)
             }
         }
@@ -91,7 +99,7 @@ Item {
                         onActivated:
                         {
                             if (currentText === "Preview")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getItemArray(levelEntryListModel.count), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getAllItems(), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
                             else if (currentText === "Plant")
                                 plantWaterButton.clicked()
                             else if (currentText === "Reset")
