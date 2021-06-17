@@ -124,6 +124,8 @@ public:
     Q_INVOKABLE void setStartTime();
     Q_INVOKABLE QString getStopTime();
 
+    Q_INVOKABLE void resetCurrentLevel(QString levelPath);
+
     enum TestType
     {
         PREVIEW,

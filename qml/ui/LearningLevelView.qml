@@ -18,6 +18,7 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import TestType 1.0
+import QtQuick.Dialogs 1.3
 
 Item {
     property int marginBase: 10
@@ -103,7 +104,7 @@ Item {
                             else if (currentText === "Plant")
                                 plantWaterButton.clicked()
                             else if (currentText === "Reset")
-                                console.debug("Reset")
+                                confirmLevelReset.visible = true
                         }
                     }
 
@@ -171,5 +172,14 @@ Item {
                 "ignored": ignored
                                        })
         }
+    }
+
+    MessageDialog {
+        id: confirmLevelReset
+        icon: StandardIcon.Question
+        title: "Reset level?"
+        text: "Are you sure you want to reset this level?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes: globalBackend.resetCurrentLevel(levelPath)
     }
 }

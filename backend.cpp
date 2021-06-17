@@ -461,3 +461,23 @@ QString Backend::getStopTime()
     else
         return QString::number(duration) + "s";
 }
+
+void Backend::resetCurrentLevel(QString levelPath)
+{
+    globalLevel["completed"] = false;
+    for (auto &item : globalLevel["seeds"].items())
+    {
+        String id = item.key();
+        globalLevel["seeds"][id]["planted"] = false;
+        globalLevel["seeds"][id]["nextWatering"] = "";
+        globalLevel["seeds"][id]["ignored"] = false;
+        globalLevel["seeds"][id]["difficult"] = false;
+        globalLevel["seeds"][id]["successes"] = 0;
+        globalLevel["seeds"][id]["failures"] = 0;
+        globalLevel["seeds"][id]["streak"] = 0;
+    }
+
+    std::ofstream level(levelPath.toStdString());
+    level << globalLevel.dump(jsonIndent) << std::endl;
+    level.close();
+}
