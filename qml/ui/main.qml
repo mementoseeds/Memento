@@ -71,6 +71,13 @@ ApplicationWindow {
         toolbarProgressBar.visible = false
     }
 
+    function findPageIndex(name)
+    {
+        for (var i = 0; i < rootStackView.depth; i++)
+            if (rootStackView.get(i).objectName === name)
+                return i
+    }
+
     Item {
         id: signalSource
         visible: false

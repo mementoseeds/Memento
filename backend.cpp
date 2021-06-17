@@ -307,6 +307,11 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
     return list;
 }
 
+bool Backend::getLevelCompleted()
+{
+    return globalLevel["completed"].get<bool>();
+}
+
 bool Backend::checkAnswer(QString itemId, QString column, QString answer)
 {
     bool result = false;

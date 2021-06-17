@@ -116,6 +116,8 @@ public:
     Q_INVOKABLE QString readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
 
+    Q_INVOKABLE bool getLevelCompleted();
+
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
     Q_INVOKABLE void saveLevel(QString levelPath);
 

@@ -21,6 +21,8 @@ import TestType 1.0
 import QtQuick.Dialogs 1.3
 
 Item {
+    id: learningLevelView
+    objectName: "LearningLevelView.qml"
     property int marginBase: 10
 
     property string courseDirectory: ""
@@ -34,8 +36,12 @@ Item {
     property int itemAmount: 0
     property bool levelCompleted: false
 
-    Component.onCompleted: globalBackend.getLevelItems(courseDirectory, levelPath)
     Component.onDestruction: globalBackend.unloadGlobalLevel()
+    Component.onCompleted:
+    {
+        globalBackend.getLevelItems(courseDirectory, levelPath)
+        levelCompleted = globalBackend.getLevelCompleted()
+    }
 
     function getAllItems()
     {
@@ -71,6 +77,19 @@ Item {
         return planted
     }
 
+    function reloadLevel()
+    {
+        rootStackView.replace("qrc:/LearningLevelView.qml", {
+            "courseDirectory": courseDirectory,
+            "levelPath": levelPath,
+            "levelNumber": levelNumber,
+            "levelTitle": levelTitle,
+            "testColumn": testColumn,
+            "promptColumn": promptColumn,
+            "testColumnType": testColumnType,
+            "promptColumnType": promptColumnType})
+    }
+
     ListView {
         anchors.fill: parent
         spacing: 20
@@ -95,7 +114,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Reset"]
+                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Reset", "Debug"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -105,6 +124,8 @@ Item {
                                 plantWaterButton.clicked()
                             else if (currentText === "Reset")
                                 confirmLevelReset.visible = true
+                            else if (currentText === "Debug")
+                                console.debug(findPageIndex(learningLevelView.objectName))
                         }
                     }
 

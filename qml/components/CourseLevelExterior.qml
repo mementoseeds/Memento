@@ -123,8 +123,7 @@ Item {
                     "promptColumn": promptColumn,
                     "testColumnType": testColumnType,
                     "promptColumnType": promptColumnType,
-                    "itemAmount": itemAmount,
-                    "levelCompleted": levelCompleted})
+                    "itemAmount": itemAmount})
 
             else if (levelPath.endsWith(".md"))
                 rootStackView.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})

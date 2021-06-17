@@ -19,6 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
+    objectName: "CourseInterior.qml"
     property int marginBase: 10
 
     property string directory: ""
