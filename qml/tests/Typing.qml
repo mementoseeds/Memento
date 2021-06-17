@@ -71,12 +71,15 @@ Item {
 
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
+                            correctAnswerCounter++
                             textfieldBackground.color = "green"
                             readOnly = true
                             testHeader.cooldownTimer.running = true
                         }
                         else
                         {
+                            correctAnswerCounter--
+                            wrongAnswerCounter++
                             textfieldBackground.color = "red"
                             readOnly = true
                             testHeader.cooldownTimer.running = true

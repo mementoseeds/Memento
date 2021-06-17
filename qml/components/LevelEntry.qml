@@ -56,7 +56,7 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: marginBase
             width: parent.width / 3
-            text: ignored ? "ignored" : (planted ? "nextWater" : "ready")
+            text: ignored ? "ignored" : (planted ? nextWatering : "ready")
             font.pointSize: 8
             horizontalAlignment: Text.AlignRight
         }

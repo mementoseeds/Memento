@@ -31,6 +31,8 @@ Item {
 
     property int itemIndex: 0
     property var tests: []
+    property int correctAnswerCounter: 0
+    property int wrongAnswerCounter: 0
 
     Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
 
@@ -108,8 +110,10 @@ Item {
             }
             else
             {
-                globalBackend.saveLevel(levelPath)
-                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray, "testColumn": testColumn, "promptColumn": promptColumn})
+                //globalBackend.saveLevel(levelPath)
+                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
+                    "testColumn": testColumn, "promptColumn": promptColumn, "correctAnswerCounter": correctAnswerCounter,
+                    "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
             }
         }
     }
@@ -118,6 +122,10 @@ Item {
         id: testLoader
         anchors.fill: parent
         active: false
-        Component.onCompleted: triggerNextItem()
+        Component.onCompleted:
+        {
+            globalBackend.setStartTime()
+            triggerNextItem()
+        }
     }
 }

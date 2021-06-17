@@ -26,6 +26,8 @@ Item {
     property var itemArray: []
     property string testColumn: ""
     property string promptColumn: ""
+    property int correctAnswerCounter: 0
+    property int totalTests: 0
 
     Component.onCompleted: globalBackend.getLevelResults(testColumn, promptColumn, itemArray)
 
@@ -37,16 +39,27 @@ Item {
         header: ColumnLayout {
             width: parent.width
 
+            Label {
+                text: "Session complete!"
+                font.pointSize: 15
+                font.bold: true
+                Layout.alignment: Qt.AlignCenter
+            }
+
             RowLayout {
                 Layout.alignment: Qt.AlignCenter
 
                 Label {
-                    text: "Correct answers"
+                    text: "Correct answers:"
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignLeft
                 }
 
                 Label {
-                    text: "input"
+                    text: correctAnswerCounter + " of " + totalTests
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -55,12 +68,16 @@ Item {
                 Layout.alignment: Qt.AlignCenter
 
                 Label {
-                    text: "Speed"
+                    text: "Speed:"
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignLeft
                 }
 
                 Label {
-                    text: "input"
+                    text: globalBackend.getStopTime()
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -69,12 +86,16 @@ Item {
                 Layout.alignment: Qt.AlignCenter
 
                 Label {
-                    text: "Accuracy"
+                    text: "Accuracy:"
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignLeft
                 }
 
                 Label {
-                    text: "percent"
+                    text: Math.floor(correctAnswerCounter / totalTests * 100) + "%"
+                    font.pointSize: 12
+                    font.bold: true
                     Layout.alignment: Qt.AlignRight
                 }
             }
@@ -82,8 +103,6 @@ Item {
             RowLayout {
                 Layout.preferredWidth: parent.width
                 Layout.topMargin: marginBase
-                Layout.leftMargin: marginBase
-                Layout.rightMargin: marginBase
 
                 Label {
                     text: testColumn
@@ -91,6 +110,8 @@ Item {
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     horizontalAlignment: Text.AlignLeft
+                    Layout.leftMargin: marginBase
+                    Layout.rightMargin: marginBase * -1
                     Layout.preferredWidth: parent.Layout.preferredWidth / 3
                 }
 

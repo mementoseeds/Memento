@@ -22,7 +22,7 @@ Item {
     property int marginBase: 10
 
     width: root.width
-    height: resultEntry.height + marginBase * 2
+    height: resultEntry.height
 
     ColumnLayout {
         id: resultEntry

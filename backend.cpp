@@ -446,3 +446,18 @@ void Backend::getLevelResults(QString  testColumn, QString  promptColumn, QVaria
                     );
     }
 }
+
+void Backend::setStartTime()
+{
+    elapsedTimer.start();
+}
+
+QString Backend::getStopTime()
+{
+    uint duration = elapsedTimer.elapsed() / 1000;
+
+    if (duration >= 60)
+        return QString::number(duration / 60) + "m : " + QString::number(duration % 60) + "s";
+    else
+        return QString::number(duration) + "s";
+}

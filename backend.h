@@ -69,6 +69,9 @@ using String = std::string;
 //For selecting random Json items
 #include <QRandomGenerator>
 
+//For tracking learning duration
+#include <QElapsedTimer>
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -118,6 +121,9 @@ public:
 
     Q_INVOKABLE void getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray);
 
+    Q_INVOKABLE void setStartTime();
+    Q_INVOKABLE QString getStopTime();
+
     enum TestType
     {
         PREVIEW,
@@ -159,7 +165,10 @@ private:
     Json globalLevel;
     Json globalLevelSeeds;
     int globalSeedsAmount;
+
     QVariantMap userSettings;
+
+    QElapsedTimer elapsedTimer;
 
     //Constants
     const int jsonIndent = 4;
