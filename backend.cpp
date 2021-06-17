@@ -193,12 +193,6 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     emit finishedAddingLevel();
 }
 
-void Backend::unloadGlobalLevel()
-{
-    globalLevel.clear();
-    globalLevelSeeds.clear();
-}
-
 void Backend::unloadSeedbox()
 {
     globalSeedbox.clear();

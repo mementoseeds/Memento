@@ -37,7 +37,6 @@ Item {
 
     property bool levelCompleted: false
 
-    Component.onDestruction: globalBackend.unloadGlobalLevel()
     Component.onCompleted:
     {
         globalBackend.getLevelItems(courseDirectory, levelPath)
