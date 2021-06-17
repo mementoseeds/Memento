@@ -81,6 +81,7 @@ ApplicationWindow {
     Item {
         id: signalSource
         visible: false
+        signal reloadLearningLevel()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
     }

@@ -34,6 +34,7 @@ Item {
     property string testColumnType: ""
     property string promptColumnType: ""
     property int itemAmount: 0
+
     property bool levelCompleted: false
 
     Component.onDestruction: globalBackend.unloadGlobalLevel()
@@ -79,7 +80,7 @@ Item {
 
     function reloadLevel()
     {
-        rootStackView.replace("qrc:/LearningLevelView.qml", {
+        rootStackView.replace(findPageIndex(learningLevelView.objectName), "qrc:/LearningLevelView.qml", {
             "courseDirectory": courseDirectory,
             "levelPath": levelPath,
             "levelNumber": levelNumber,
@@ -87,7 +88,8 @@ Item {
             "testColumn": testColumn,
             "promptColumn": promptColumn,
             "testColumnType": testColumnType,
-            "promptColumnType": promptColumnType})
+            "promptColumnType": promptColumnType,
+            "itemAmount": itemAmount})
     }
 
     ListView {
@@ -125,7 +127,7 @@ Item {
                             else if (currentText === "Reset")
                                 confirmLevelReset.visible = true
                             else if (currentText === "Debug")
-                                console.debug(findPageIndex(learningLevelView.objectName))
+                                reloadLevel()
                         }
                     }
 
@@ -192,6 +194,14 @@ Item {
                 "nextWatering": nextWatering,
                 "ignored": ignored
                                        })
+        }
+    }
+
+    Connections {
+        target: signalSource
+        function onReloadLearningLevel()
+        {
+            reloadLevel()
         }
     }
 
