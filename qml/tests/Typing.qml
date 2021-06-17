@@ -78,7 +78,6 @@ Item {
                         }
                         else
                         {
-                            correctAnswerCounter--
                             wrongAnswerCounter++
                             textfieldBackground.color = "red"
                             readOnly = true

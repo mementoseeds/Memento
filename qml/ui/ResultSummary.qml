@@ -31,7 +31,11 @@ Item {
     property int totalTests: 0
 
     Component.onCompleted: globalBackend.getLevelResults(testColumn, promptColumn, itemArray)
-    Component.onDestruction: signalSource.reloadLearningLevel()
+    Component.onDestruction:
+    {
+        signalSource.reloadLearningLevel()
+        signalSource.refreshCourseLevels()
+    }
 
     ListView {
         anchors.fill: parent

@@ -115,7 +115,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Reset", "Debug"]
+                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Refresh", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -125,7 +125,7 @@ Item {
                                 plantWaterButton.clicked()
                             else if (currentText === "Reset")
                                 confirmLevelReset.visible = true
-                            else if (currentText === "Debug")
+                            else if (currentText === "Refresh")
                                 reloadLevel()
                         }
                     }
@@ -210,6 +210,10 @@ Item {
         title: "Reset level?"
         text: "Are you sure you want to reset this level?"
         standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: globalBackend.resetCurrentLevel(levelPath)
+        onYes:
+        {
+            globalBackend.resetCurrentLevel(levelPath)
+            reloadLevel()
+        }
     }
 }

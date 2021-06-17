@@ -113,8 +113,8 @@ Item {
                     Layout.bottomMargin: 40
 
                     ComboBox {
-                        model: ["Reset"]
-                        onActivated: showPassiveNotification("hello")
+                        model: ["Debug"]
+                        onActivated: signalSource.refreshCourseLevels()
                     }
 
                     Label {
@@ -154,6 +154,12 @@ Item {
 
     Connections {
         target: signalSource
+        function onRefreshCourseLevels()
+        {
+            courseLevelsListModel.clear()
+            globalBackend.getCourseLevels(directory)
+        }
+
         function onOpenPreviousLevel(currentIndex)
         {
             if (currentIndex !== 0)
