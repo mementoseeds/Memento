@@ -120,7 +120,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Refresh", "Reset"]
+                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Refresh", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -132,6 +132,16 @@ Item {
                                 confirmLevelReset.visible = true
                             else if (currentText === "Refresh")
                                 reloadLevel()
+                            else if (currentText === "Auto learn")
+                            {
+                                if (!levelCompleted)
+                                {
+                                    globalBackend.autoLearn(getItemArray(5), levelPath)
+                                    signalSource.refreshCourseLevels()
+                                    reloadLevel()
+                                }
+                                else showPassiveNotification("No items to auto learn")
+                            }
                         }
                     }
 
@@ -218,6 +228,7 @@ Item {
         onYes:
         {
             globalBackend.resetCurrentLevel(levelPath)
+            signalSource.refreshCourseLevels()
             reloadLevel()
         }
     }

@@ -127,6 +127,8 @@ public:
 
     Q_INVOKABLE void resetCurrentLevel(QString levelPath);
 
+    Q_INVOKABLE void autoLearn(QVariantList itemArray, QString levelPath);
+
     enum TestType
     {
         PREVIEW,

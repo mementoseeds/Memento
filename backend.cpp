@@ -480,3 +480,21 @@ void Backend::resetCurrentLevel(QString levelPath)
     level << globalLevel.dump(jsonIndent) << std::endl;
     level.close();
 }
+
+void Backend::autoLearn(QVariantList itemArray, QString levelPath)
+{
+    foreach (QVariant item, itemArray)
+    {
+        String id = item.toString().toStdString();
+
+        globalLevelSeeds[id]["planted"] = true;
+        globalLevelSeeds[id]["nextWatering"] = getWateringTime(1);
+        globalLevelSeeds[id]["ignored"] = false;
+        globalLevelSeeds[id]["difficult"] = false;
+        globalLevelSeeds[id]["successes"] = 5;
+        globalLevelSeeds[id]["failures"] = 0;
+        globalLevelSeeds[id]["streak"] = 1;
+    }
+
+    saveLevel(levelPath);
+}
