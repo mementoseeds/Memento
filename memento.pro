@@ -9,10 +9,11 @@ CONFIG += c++11 qmltypes
 SOURCES += \
         backend.cpp \
         main.cpp \
-        3rdparty/nlohmann/json.hpp
+        worker.cpp
 
 HEADERS += \
     backend.hpp \
+    3rdparty/nlohmann/json.hpp \
     controller.hpp \
     worker.hpp
 

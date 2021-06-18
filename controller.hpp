@@ -33,7 +33,9 @@ public:
         worker->moveToThread(&workerThread);
 
         connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
-        connect(this, &Controller::requestWork, worker, &Worker::doWork);
+
+        //Courses refresh
+        connect(this, &Controller::requestCourseRefresh, worker, &Worker::doCourseRefresh);
         connect(worker, &Worker::refreshFinished, this, &Controller::workFinished);
 
         workerThread.start();
@@ -47,11 +49,12 @@ public:
             workerThread.wait();
         }
     }
+
 public slots:
 
 signals:
+    void requestCourseRefresh(QVariantList courses);
     void workFinished();
-    void requestWork(QVariantList courses);
 };
 
 

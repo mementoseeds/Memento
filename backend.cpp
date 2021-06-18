@@ -521,7 +521,7 @@ void Backend::refreshCourses(QVariantList courses)
     //Pass this operation to another thread
     Controller *threadController = new Controller;
     connect(threadController, &Controller::workFinished, this, &Backend::finishedRefreshingCourses);
-    emit threadController->requestWork(courses);
+    emit threadController->requestCourseRefresh(courses);
 }
 
 QString Backend::getReviewTime(QString date)
