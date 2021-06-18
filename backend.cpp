@@ -136,6 +136,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
+    settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -144,6 +145,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
+    userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     return userSettings;
 }
 

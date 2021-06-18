@@ -30,6 +30,7 @@ Item {
         userSettings["coursesLocation"] = coursesLocationTextField.text
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
+        userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -45,7 +46,7 @@ Item {
             spacing: marginBase
 
             RowLayout {
-                Layout.alignment: Qt.AlignCenter
+                //Layout.alignment: Qt.AlignCenter
 
                 Label {
                     text: "Courses location"
@@ -72,7 +73,7 @@ Item {
 
             Label {
                 text: "Test countdown timer"
-                Layout.alignment: Qt.AlignCenter
+                //Layout.alignment: Qt.AlignCenter
             }
 
             SpinBox {
@@ -80,7 +81,7 @@ Item {
                 from: 1
                 value: userSettings["countdownTimer"]
                 Material.accent: defaultMaterialAccept
-                Layout.alignment: Qt.AlignCenter
+                //Layout.alignment: Qt.AlignCenter
             }
 
             CheckBox {
@@ -88,7 +89,15 @@ Item {
                 text: "Auto accept answer on typing tests"
                 checked: userSettings["autoAcceptAnswer"]
                 Material.accent: defaultMaterialAccept
-                Layout.alignment: Qt.AlignCenter
+                //Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
+                id: autoRefreshCourses
+                text: "Auto refresh courses on startup"
+                checked: userSettings["autoRefreshCourses"]
+                Material.accent: defaultMaterialAccept
+                //Layout.alignment: Qt.AlignCenter
             }
         }
 

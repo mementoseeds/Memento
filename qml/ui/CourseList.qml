@@ -35,7 +35,13 @@ Item {
         reloadCourseList()
     }
 
-    Component.onCompleted: globalBackend.getCourseList()
+    Component.onCompleted:
+    {
+        globalBackend.getCourseList()
+
+        if (userSettings["autoRefreshCourses"])
+            reloadAll()
+    }
 
     Label {
         id: courseListEmptyHeading
