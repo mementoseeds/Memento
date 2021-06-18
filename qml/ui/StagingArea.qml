@@ -116,68 +116,46 @@ Item {
             }
             else
                 rootStackView.pop()
+
+            return
         }
+
         else if (actionType === "plant")
         {
-            if (itemIndex !== tests.length)
-            {
-                replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex, actionType)
-
-                var itemId = Object.keys(tests[itemIndex]).toString()
-                var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
-
-                testLoader.active = false
-                switch (tests[itemIndex][itemId])
-                {
-                    case TestType.PREVIEW:
-                        testLoader.setSource("qrc:/Preview.qml", variables)
-                        break
-
-                    case TestType.TYPING:
-                        testLoader.setSource("qrc:/Typing.qml", variables)
-                        break
-                }
-                testLoader.active = true
-                itemIndex++
-            }
-            else
-            {
-                globalBackend.saveLevel(levelPath)
-                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
-                    "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
-                    "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
-            }
+            replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex, actionType)
         }
+
         else if (actionType === "water")
         {
-            if (itemIndex !== tests.length)
+            replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+        }
+
+
+        if (itemIndex !== tests.length)
+        {
+            var itemId = Object.keys(tests[itemIndex]).toString()
+            var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
+
+            testLoader.active = false
+            switch (tests[itemIndex][itemId])
             {
-                replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+                case TestType.PREVIEW:
+                    testLoader.setSource("qrc:/Preview.qml", variables)
+                    break
 
-                itemId = Object.keys(tests[itemIndex]).toString()
-                variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
-
-                testLoader.active = false
-                switch (tests[itemIndex][itemId])
-                {
-                    case TestType.PREVIEW:
-                        testLoader.setSource("qrc:/Preview.qml", variables)
-                        break
-
-                    case TestType.TYPING:
-                        testLoader.setSource("qrc:/Typing.qml", variables)
-                        break
-                }
-                testLoader.active = true
-                itemIndex++
+                case TestType.TYPING:
+                    testLoader.setSource("qrc:/Typing.qml", variables)
+                    break
             }
-            else
-            {
-                globalBackend.saveLevel(levelPath)
-                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
-                    "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
-                    "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
-            }
+            testLoader.active = true
+            itemIndex++
+        }
+        else
+        {
+            globalBackend.saveLevel(levelPath)
+            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
+                "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
+                "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }
     }
 
