@@ -37,7 +37,7 @@ Item {
     property int itemAmount: 0
 
     property bool levelCompleted: false
-
+    property int plantedItems: countPlanted()
     property bool manualReview: false
 
     Component.onCompleted:
@@ -45,6 +45,16 @@ Item {
         globalBackend.getLevelItems(courseDirectory, levelPath)
 
         levelCompleted = globalBackend.getLevelCompleted()
+    }
+
+    function countPlanted()
+    {
+        var planted = 0
+        for (var i = 0; i < levelEntryListModel.count; i++)
+            if (levelEntryListModel.get(i).planted)
+                planted++
+
+        return planted
     }
 
     function getAllItems()
@@ -91,7 +101,11 @@ Item {
         if (items.length === 0)
         {
             for (i = 0; i < levelEntryListModel.count; i++)
-                items.push(levelEntryListModel.get(i).id)
+            {
+                item = levelEntryListModel.get(i)
+                if (item.planted && !item.ignored)
+                    items.push(levelEntryListModel.get(i).id)
+            }
 
             manualReview = true
             return items
@@ -100,14 +114,22 @@ Item {
             return items
     }
 
-    function countPlanted()
+    function plantAction()
     {
-        var planted = 0
-        for (var i = 0; i < levelEntryListModel.count; i++)
-            if (levelEntryListModel.get(i).planted)
-                planted++
+        if (!levelCompleted)
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
+                "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+        else
+            showPassiveNotification("This level is already completed")
+    }
 
-        return planted
+    function waterAction()
+    {
+        if (plantedItems !== 0)
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
+                "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})
+        else
+            showPassiveNotification("There are no items to water")
     }
 
     function reloadLevel()
@@ -141,34 +163,44 @@ Item {
                     levelHeaderNumber: levelNumber
                     levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
                     levelHeaderItemAmount: itemAmount
-                    levelHeaderCompletedItemAmount: countPlanted()
+                    levelHeaderCompletedItemAmount: plantedItems
                 }
 
                 RowLayout {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", levelCompleted ? "Water" : "Plant", "Refresh", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Refresh", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
-                            if (currentText === "Preview")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getAllItems(), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
-                            else if (currentText === "Plant")
-                                plantWaterButton.clicked()
-                            else if (currentText === "Reset")
-                                confirmLevelReset.visible = true
-                            else if (currentText === "Refresh")
-                                reloadLevel()
-                            else if (currentText === "Auto learn")
+                            switch (currentText)
                             {
-                                if (!levelCompleted)
-                                {
-                                    globalBackend.autoLearn(getPlantingItems(5), levelPath)
-                                    signalSource.refreshCourseLevels()
+                                case "Preview":
+                                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getAllItems(), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                    break
+                                case "Plant":
+                                    plantAction()
+                                    break
+                                case "Water":
+                                    waterAction()
+                                    break
+                                case "Reset":
+                                    confirmLevelReset.visible = true
+                                    break
+                                case "Refresh":
                                     reloadLevel()
-                                }
-                                else showPassiveNotification("No items to auto learn")
+                                    break
+                                case "Auto learn":
+                                    if (!levelCompleted)
+                                    {
+                                        globalBackend.autoLearn(getPlantingItems(5), levelPath)
+                                        signalSource.refreshCourseLevels()
+                                        reloadLevel()
+                                    }
+                                    else showPassiveNotification("No items to auto learn")
+
+                                    break
                             }
                         }
                     }
@@ -182,12 +214,9 @@ Item {
                         onClicked:
                         {
                             if (text === "Plant")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-                                    "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
-
+                                plantAction()
                             else if (text === "Water")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-                                    "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})
+                                waterAction()
                         }
                     }
                 }
