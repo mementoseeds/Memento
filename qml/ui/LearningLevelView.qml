@@ -52,7 +52,7 @@ Item {
         return items
     }
 
-    function getItemArray(total)
+    function getPlantingItems(total)
     {
         var items = []
         for (var i = 0; i < total; i++)
@@ -71,6 +71,11 @@ Item {
             return items
         else
             showPassiveNotification("No items to learn on this level")
+    }
+
+    function getWateringItems(total)
+    {
+        //TODO
     }
 
     function countPlanted()
@@ -137,7 +142,7 @@ Item {
                             {
                                 if (!levelCompleted)
                                 {
-                                    globalBackend.autoLearn(getItemArray(5), levelPath)
+                                    globalBackend.autoLearn(getPlantingItems(5), levelPath)
                                     signalSource.refreshCourseLevels()
                                     reloadLevel()
                                 }
@@ -155,9 +160,9 @@ Item {
                         onClicked:
                         {
                             if (text === "Plant")
-                            {
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": getItemArray(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
-                            }
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                            else if (text === "Water")
+                                console.debug("finish me")
                         }
                     }
                 }
