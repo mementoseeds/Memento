@@ -309,6 +309,12 @@ bool Backend::getLevelCompleted()
     return globalLevel["completed"].get<bool>();
 }
 
+void Backend::setManualReview(bool manualReview)
+{
+    this->manualReview = manualReview;
+    streakUnlocked = !manualReview;
+}
+
 bool Backend::checkAnswer(QString itemId, QString column, QString answer)
 {
     bool result = false;
@@ -346,8 +352,10 @@ void Backend::correctAnswer(QString itemId)
     int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
-    if (successes >= 5)
+    if (successes >= 5 && streakUnlocked)
     {
+        streakUnlocked = !manualReview;
+
         item["planted"] = true;
 
         int streak = item["streak"].get<int>() + 1;
@@ -367,6 +375,8 @@ void Backend::wrongAnswer(QString itemId)
     item["failures"] = item["failures"].get<int>() + 1;
     item["difficult"] = item["planted"].get<bool>();
     item["streak"] = 0;
+
+    streakUnlocked = true;
 
     globalLevelSeeds[id] = item;
 }

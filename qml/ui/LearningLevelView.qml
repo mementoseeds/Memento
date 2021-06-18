@@ -182,7 +182,9 @@ Item {
                         onClicked:
                         {
                             if (text === "Plant")
-                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
+                                    "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+
                             else if (text === "Water")
                                 rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
                                     "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})

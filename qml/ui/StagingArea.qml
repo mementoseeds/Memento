@@ -40,6 +40,8 @@ Item {
 
     Component.onCompleted:
     {
+        globalBackend.setManualReview(manualReview)
+
         if (actionType === "plant")
         {
             //Create array of dicts for amount of tests, the item to test on and its test type

@@ -122,7 +122,9 @@ public:
 
     Q_INVOKABLE bool getLevelCompleted();
 
+    Q_INVOKABLE void setManualReview(bool manualReview);
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
+
     Q_INVOKABLE void saveLevel(QString levelPath);
 
     Q_INVOKABLE void getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray);
@@ -169,6 +171,7 @@ signals:
 private:
     static Backend *m_instance;
 
+    //Methods
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
@@ -181,6 +184,9 @@ private:
     Json globalLevel;
     Json globalLevelSeeds;
     int globalSeedsAmount;
+
+    bool manualReview = false;
+    bool streakUnlocked = true;
 
     QVariantMap userSettings;
 
