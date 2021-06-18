@@ -18,7 +18,7 @@
 #ifndef WORKER_H
 #define WORKER_H
 
-#include "backend.h"
+#include "backend.hpp"
 
 class Worker : public QObject
 {

@@ -18,7 +18,7 @@
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 
-#include "backend.h"
+#include "backend.hpp"
 
 class Controller : public QObject
 {

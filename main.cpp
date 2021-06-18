@@ -16,7 +16,7 @@
 
 #include <QApplication>
 #include <QQmlApplicationEngine>
-#include "backend.h"
+#include "backend.hpp"
 
 #ifdef Q_OS_ANDROID
 static void sendCoursePath(JNIEnv *env, jobject thiz, jstring path)

@@ -12,9 +12,9 @@ SOURCES += \
         3rdparty/nlohmann/json.hpp
 
 HEADERS += \
-    backend.h \
-    controller.h \
-    worker.h
+    backend.hpp \
+    controller.hpp \
+    worker.hpp
 
 RESOURCES += qml.qrc
 

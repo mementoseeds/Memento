@@ -75,7 +75,7 @@ using String = std::string;
 
 
 #include <QThread>
-#include "worker.h"
+#include "worker.hpp"
 
 class Backend : public QObject
 {

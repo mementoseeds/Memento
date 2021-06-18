@@ -14,7 +14,7 @@
  *    along with Memento.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "backend.h"
+#include "backend.hpp"
 #include <iostream>
 
 Backend *Backend::m_instance = nullptr;
