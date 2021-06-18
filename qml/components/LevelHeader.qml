@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
 
 RowLayout {
     width: parent.width
@@ -63,6 +64,7 @@ RowLayout {
             to: headerIsLearning ? levelHeaderItemAmount : 100
             value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
             indeterminate:  false
+            Material.accent: levelCompleted ? globalBlue : globalGreen
             Layout.preferredWidth: parent.width
             Layout.alignment: Qt.AlignCenter
         }

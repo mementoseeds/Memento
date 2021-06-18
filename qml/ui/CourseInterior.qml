@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
 
 Item {
     objectName: "CourseInterior.qml"
@@ -124,6 +125,9 @@ Item {
 
                     Button {
                         text: completed ? "Water" : "Plant"
+                        icon.source: completed ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                        Material.background: completed ? globalBlue : globalGreen
+                        onClicked: showPassiveNotification("Todo")
                     }
                 }
             }

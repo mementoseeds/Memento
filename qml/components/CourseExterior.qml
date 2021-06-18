@@ -17,6 +17,7 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
 
 Item {
     property int marginBase: 10
@@ -67,6 +68,7 @@ Item {
                 to: items
                 value: planted
                 indeterminate:  false
+                Material.accent: completed ? globalBlue : globalGreen
                 Layout.alignment: Qt.AlignCenter
                 Layout.preferredWidth: parent.width / 1.1
             }
@@ -81,11 +83,15 @@ Item {
 
                 Button {
                     text: completed ? "Water" : "Plant"
+                    icon.source: completed ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                    Material.background: completed ? globalBlue : globalGreen
                     onClicked: showPassiveNotification("Todo")
                 }
 
                 Button {
                     text: "Refresh"
+                    Material.background: globalOrange
+                    icon.source: "assets/actions/refresh.svg"
                     onClicked:
                     {
                         globalBackend.refreshCourse(directory)

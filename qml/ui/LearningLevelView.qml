@@ -19,6 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import TestType 1.0
 import QtQuick.Dialogs 1.3
+import QtQuick.Controls.Material 2.12
 
 Item {
     id: learningLevelView
@@ -148,6 +149,8 @@ Item {
                     Button {
                         id: plantWaterButton
                         text: levelCompleted ? "Water" : "Plant"
+                        icon.source: levelCompleted ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                        Material.background: levelCompleted ? globalBlue : globalGreen
                         Layout.alignment: Qt.AlignRight
                         onClicked:
                         {

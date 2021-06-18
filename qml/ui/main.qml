@@ -36,6 +36,7 @@ ApplicationWindow {
     property color globalBlue: defaultMaterialAccept
     property color globalGreen: Material.color(Material.Green)
     property color globalRed: Material.color(Material.Red)
+    property color globalOrange: Material.color(Material.DeepOrange, Material.Shade400)
 
     id: root
     visible: true
