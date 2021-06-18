@@ -163,6 +163,9 @@ signals:
     void addItemSeparator();
 
     void addItemResults(QString testData, QString testDataType, QString promptData, QString promptDataType, int successes, int failures, int streak);
+
+    void finishedRefreshingCourses();
+
 private:
     static Backend *m_instance;
 

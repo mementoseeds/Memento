@@ -23,15 +23,99 @@
 class Worker : public QObject
 {
     Q_OBJECT
+
 public slots:
     void doWork(QVariantList courses)
     {
-        qDebug() << courses;
+        foreach (QVariant course, courses)
+        {
+            QString coursePath = course.toString();
 
-        emit resultReady();
+            QDir courseDir(coursePath + "/levels");
+
+            bool completed = true;
+            unsigned int totalItems = 0;
+            unsigned int planted = 0;
+            unsigned int water = 0;
+            unsigned int difficult = 0;
+            unsigned int ignored = 0;
+
+            std::vector<String> review;
+
+            foreach (QString lvl, courseDir.entryList({"*.json"}, QDir::Files))
+            {
+                QString levelPath = coursePath + "/levels/" + lvl;
+                std::ifstream levelFile(levelPath.toStdString());
+                Json level;
+                levelFile >> level;
+                levelFile.close();
+
+                if (!level["completed"].get<bool>())
+                    completed = false;
+
+                totalItems += level["seeds"].size();
+
+                for (auto &item : level["seeds"].items())
+                {
+                    String id = item.key();
+
+                    bool itemPlanted = level["seeds"][id]["planted"].get<bool>();
+
+                    planted += (int)itemPlanted;
+
+                    if (itemPlanted)
+                    {
+                        QDateTime nextWatering = QDateTime::fromString(QString::fromStdString(level["seeds"][id]["nextWatering"].get<String>()));
+
+                        if (QDateTime::currentDateTime() > nextWatering)
+                        {
+                            water++;
+                            review.push_back(id);
+                        }
+                    }
+
+                    difficult += (int)level["seeds"][id]["difficult"].get<bool>();
+
+                    ignored += (int)level["seeds"][id]["ignored"].get<bool>();
+                }
+            }
+
+            std::ofstream reviewFile(QString(coursePath + "/review.json").toStdString());
+            Json reviewJson = review;
+            reviewFile << reviewJson.dump(jsonIndent) << std::endl;
+            reviewFile.close();
+
+            String infoPath = QString(coursePath + "/info.json").toStdString();
+            Json info;
+            //Open a mini scope to prevent infoFile naming conflict
+            {
+                std::ifstream infoFile(infoPath);
+                infoFile >> info;
+                infoFile.close();
+
+                info["items"] = totalItems;
+                info["planted"] = planted;
+                info["water"] = water;
+                info["difficult"] = difficult;
+                info["ignored"] = ignored;
+                info["completed"] = completed;
+            }
+
+            std::ofstream infoFile(infoPath);
+            infoFile << info.dump(jsonIndent) << std::endl;
+            infoFile.close();
+        }
+
+        emit refreshFinished();
     }
+
+private:
+
+    //Constants
+    const int jsonIndent = 4;
+
 signals:
-    void resultReady();
+    void refreshFinished();
 };
 
 #endif // WORKER_H

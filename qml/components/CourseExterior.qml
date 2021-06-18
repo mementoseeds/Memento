@@ -92,11 +92,7 @@ Item {
                     text: "Refresh"
                     Material.background: globalOrange
                     icon.source: "assets/actions/refresh.svg"
-                    onClicked:
-                    {
-                        globalBackend.refreshCourses([directory])
-                        reloadCourseList()
-                    }
+                    onClicked: globalBackend.refreshCourses([directory])
                 }
             }
         }

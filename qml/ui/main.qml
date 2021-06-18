@@ -22,6 +22,13 @@ import QtQuick.Controls.Material 2.12
 import QtQuick.Dialogs 1.3
 
 ApplicationWindow {
+    id: root
+    visible: true
+    width: !platformIsMobile ? 1500 : undefined
+    height: !platformIsMobile ? 1000 : undefined
+    title: "Memento"
+    color: "#333333"
+    Material.theme: Material.Dark
 
     Component.onCompleted:
     {
@@ -29,6 +36,7 @@ ApplicationWindow {
         globalBackend.setGlobalBackendInstance()
     }
 
+    property var userSettings: globalBackend.getUserSettings()
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
 
     //Colors
@@ -40,15 +48,15 @@ ApplicationWindow {
     property color defaultToolbarColor: Material.color(Material.Teal)
     property var testColor: {"plant": globalGreen, "water": globalBlue}
 
-    id: root
-    visible: true
-    width: !platformIsMobile ? 1500 : undefined
-    height: !platformIsMobile ? 1000 : undefined
-    title: "Memento"
-    color: "#333333"
-    Material.theme: Material.Dark
-
-    property var userSettings: globalBackend.getUserSettings()
+    Item {
+        id: signalSource
+        visible: false
+        signal reloadLearningLevel()
+        signal refreshCourseLevels()
+        signal refreshAllCourses()
+        signal openPreviousLevel(int currentIndex)
+        signal openNextLevel(int currentIndex)
+    }
 
     function showPassiveNotification(text, duration)
     {
@@ -97,16 +105,6 @@ ApplicationWindow {
                 return i
     }
 
-    Item {
-        id: signalSource
-        visible: false
-        signal reloadLearningLevel()
-        signal refreshCourseLevels()
-        signal refreshAllCourses()
-        signal openPreviousLevel(int currentIndex)
-        signal openNextLevel(int currentIndex)
-    }
-
     Backend {
         id: globalBackend
     }
@@ -131,6 +129,7 @@ ApplicationWindow {
 
         RowLayout {
             anchors.fill: parent
+
             ToolButton {
                 icon.source: "assets/actions/open-menu-symbolic.svg"
                 display: AbstractButton.IconOnly

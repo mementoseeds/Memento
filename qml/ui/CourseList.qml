@@ -27,14 +27,13 @@ Item {
         globalBackend.getCourseList()
     }
 
-    function reloadAll()
+    function refreshCourses()
     {
         var courses = []
         for (var i = 0; i < courseListModel.count; i++)
             courses.push(courseListModel.get(i).directory)
 
         globalBackend.refreshCourses(courses)
-        reloadCourseList()
     }
 
     Component.onCompleted:
@@ -42,7 +41,7 @@ Item {
         globalBackend.getCourseList()
 
         if (userSettings["autoRefreshCourses"])
-            reloadAll()
+            refreshCourses()
     }
 
     Label {
@@ -91,13 +90,18 @@ Item {
             if (courseListModel.count === 0)
                 courseListEmptyHeading.visible = true
         }
+
+        function onFinishedRefreshingCourses()
+        {
+            reloadCourseList()
+        }
     }
 
     Connections {
         target: signalSource
         function onRefreshAllCourses()
         {
-            reloadAll()
+            refreshCourses()
         }
     }
 }
