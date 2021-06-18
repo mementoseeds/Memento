@@ -94,7 +94,7 @@ Item {
                     icon.source: "assets/actions/refresh.svg"
                     onClicked:
                     {
-                        globalBackend.refreshCourse(directory)
+                        globalBackend.refreshCourses([directory])
                         reloadCourseList()
                     }
                 }

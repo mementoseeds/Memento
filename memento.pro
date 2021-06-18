@@ -11,6 +11,11 @@ SOURCES += \
         main.cpp \
         3rdparty/nlohmann/json.hpp
 
+HEADERS += \
+    backend.h \
+    controller.h \
+    worker.h
+
 RESOURCES += qml.qrc
 
 # C++ Backend
@@ -19,9 +24,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 # Set name
 TARGET = Memento
-
-HEADERS += \
-    backend.h
 
 android {
 

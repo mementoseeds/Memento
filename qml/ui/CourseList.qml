@@ -29,9 +29,11 @@ Item {
 
     function reloadAll()
     {
+        var courses = []
         for (var i = 0; i < courseListModel.count; i++)
-            globalBackend.refreshCourse(courseListModel.get(i).directory)
+            courses.push(courseListModel.get(i).directory)
 
+        globalBackend.refreshCourses(courses)
         reloadCourseList()
     }
 

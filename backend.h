@@ -14,6 +14,7 @@
  *    along with Memento.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
 #ifndef BACKEND_H
 #define BACKEND_H
 
@@ -72,6 +73,10 @@ using String = std::string;
 //For tracking learning duration
 #include <QElapsedTimer>
 
+
+#include <QThread>
+#include "worker.h"
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -129,7 +134,7 @@ public:
 
     Q_INVOKABLE void autoLearn(QVariantList itemArray, QString levelPath);
 
-    Q_INVOKABLE void refreshCourse(QString coursePath);
+    Q_INVOKABLE void refreshCourses(QVariantList courses);
 
     enum TestType
     {
