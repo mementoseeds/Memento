@@ -32,11 +32,13 @@ ApplicationWindow {
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
 
     //Colors
-    property color defaultMaterialAccept: Material.color(Material.Indigo)
-    property color globalBlue: defaultMaterialAccept
+    property color defaultMaterialAccept: globalBlue
+    property color globalBlue: Material.color(Material.Indigo)
     property color globalGreen: Material.color(Material.Green)
     property color globalRed: Material.color(Material.Red)
     property color globalOrange: Material.color(Material.DeepOrange, Material.Shade400)
+    property color defaultToolbarColor: Material.color(Material.Teal)
+    property var testColor: {"plant": globalGreen, "water": globalBlue}
 
     id: root
     visible: true
@@ -53,7 +55,7 @@ ApplicationWindow {
         passiveNotification.show(text, duration)
     }
 
-    function replaceToolbar(text, amount, total, progress)
+    function replaceToolbar(text, amount, total, progress, actionType)
     {
         mainToolbarTitle.horizontalAlignment = Qt.AlignLeft
         mainToolbarTitle.text = text + amount + " seeds"
@@ -62,6 +64,21 @@ ApplicationWindow {
         toolbarProgressBar.visible = true
         toolbarProgressBar.to = total
         toolbarProgressBar.value = progress
+
+        switch (actionType)
+        {
+            case "preview":
+                toolbarProgressBar.Material.accent = "#00FFE7"
+                break
+            case "plant":
+                toolbarBackground.color = globalGreen
+                toolbarProgressBar.Material.accent = "#00FB0A"
+                break
+            case "water":
+                toolbarBackground.color = globalBlue
+                toolbarProgressBar.Material.accent = "#0027FF"
+                break
+        }
     }
 
     function restoreToolbar(text)
@@ -70,6 +87,7 @@ ApplicationWindow {
         mainToolbarTitle.text = text
         mainToolbarTitle.Layout.fillWidth = true
         toolbarProgressBar.visible = false
+        toolbarBackground.color = defaultToolbarColor
     }
 
     function findPageIndex(name)
@@ -106,6 +124,11 @@ ApplicationWindow {
     }
 
     header: ToolBar {
+        background: Rectangle {
+            id: toolbarBackground
+            color: defaultToolbarColor
+        }
+
         RowLayout {
             anchors.fill: parent
             ToolButton {

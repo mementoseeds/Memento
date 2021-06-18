@@ -54,7 +54,7 @@ Item {
                     focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
-                    Material.accent: defaultMaterialAccept
+                    Material.accent: testColor[actionType]
 
                     onTextChanged:
                     {

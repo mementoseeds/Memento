@@ -40,8 +40,8 @@ RowLayout {
 
         Image {
             source: levelHeaderIcon
-            sourceSize.width: levelCompleted ? 100 : 80
-            sourceSize.height: 100
+            sourceSize.width: 80
+            sourceSize.height: levelCompleted ? 80 : 100
             Layout.alignment: Qt.AlignHCenter
         }
     }

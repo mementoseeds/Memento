@@ -73,7 +73,7 @@ Item {
     {
         if (actionType === "preview")
         {
-            replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex)
+            replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex, actionType)
 
             if (itemIndex !== itemArray.length)
             {
@@ -89,7 +89,7 @@ Item {
         {
             if (itemIndex !== tests.length)
             {
-                replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex)
+                replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex, actionType)
 
                 var itemId = Object.keys(tests[itemIndex]).toString()
                 var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}

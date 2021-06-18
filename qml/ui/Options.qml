@@ -46,7 +46,7 @@ Item {
             spacing: marginBase
 
             RowLayout {
-                //Layout.alignment: Qt.AlignCenter
+                Layout.alignment: Qt.AlignCenter
 
                 Label {
                     text: "Courses location"
@@ -68,36 +68,36 @@ Item {
                 id: coursesLocationTextField
                 text: userSettings["coursesLocation"]
                 Layout.fillWidth: true
-                Material.accent: defaultMaterialAccept
+                Material.accent: globalGreen
             }
 
             Label {
                 text: "Test countdown timer"
-                //Layout.alignment: Qt.AlignCenter
+                Layout.alignment: Qt.AlignCenter
             }
 
             SpinBox {
                 id: countdownTimerSpinBox
                 from: 1
                 value: userSettings["countdownTimer"]
-                Material.accent: defaultMaterialAccept
-                //Layout.alignment: Qt.AlignCenter
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
             }
 
             CheckBox {
                 id: autoAcceptAnswerCheckBox
                 text: "Auto accept answer on typing tests"
                 checked: userSettings["autoAcceptAnswer"]
-                Material.accent: defaultMaterialAccept
-                //Layout.alignment: Qt.AlignCenter
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
             }
 
             CheckBox {
                 id: autoRefreshCourses
                 text: "Auto refresh courses on startup"
                 checked: userSettings["autoRefreshCourses"]
-                Material.accent: defaultMaterialAccept
-                //Layout.alignment: Qt.AlignCenter
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
             }
         }
 
