@@ -20,6 +20,7 @@ import QtQuick.Controls 2.15
 import TestType 1.0
 
 Item {
+    id: stagingArea
     objectName: "StagingArea.qml"
 
     property string courseDirectory: ""
@@ -71,6 +72,23 @@ Item {
 
     function triggerNextItem()
     {
+        if (actionType !== "preview")
+        {
+            //Random chance to switch test and prompt columns
+            if (Math.random() < 0.5)
+            {
+                var tempColumn = stagingArea.testColumn
+                var testColumn = stagingArea.promptColumn
+                var promptColumn = tempColumn
+                delete tempColumn
+            }
+            else
+            {
+                testColumn = stagingArea.testColumn
+                promptColumn = stagingArea.promptColumn
+            }
+        }
+
         if (actionType === "preview")
         {
             replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex, actionType)
@@ -78,7 +96,7 @@ Item {
             if (itemIndex !== itemArray.length)
             {
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[itemIndex], "testColumn": testColumn, "promptColumn": promptColumn})
+                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[itemIndex], "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn})
                 testLoader.active = true
                 itemIndex++
             }
@@ -112,7 +130,7 @@ Item {
             {
                 globalBackend.saveLevel(levelPath)
                 rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
-                    "testColumn": testColumn, "promptColumn": promptColumn, "correctAnswerCounter": correctAnswerCounter,
+                    "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
                     "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
             }
         }
