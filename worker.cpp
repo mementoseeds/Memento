@@ -74,6 +74,7 @@ void Worker::doCourseRefresh(QVariantList courses)
             }
 
             reviewJson[lvl.toStdString()] = review;
+            review.clear();
         }
 
         std::ofstream reviewFile(QString(coursePath + "/review.json").toStdString());

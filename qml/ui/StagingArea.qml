@@ -29,6 +29,7 @@ Item {
     property string actionType: ""
     property string testColumn: ""
     property string promptColumn: ""
+    property bool manualReview: false
 
     property int itemIndex: 0
     property var tests: []
@@ -67,6 +68,17 @@ Item {
             unorderedTests.sort(() => Math.random() - 0.5) //Shuffle unorderedTests
             tests = tests.concat(unorderedTests)
             delete unorderedTests
+        }
+        else if (actionType === "water")
+        {
+            for (i = 0; i < itemArray.length; i++)
+            {
+                test = {}
+                test[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
+                tests.push(test)
+            }
+
+            tests.sort(() => Math.random() - 0.5)
         }
     }
 
@@ -111,6 +123,37 @@ Item {
 
                 var itemId = Object.keys(tests[itemIndex]).toString()
                 var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
+
+                testLoader.active = false
+                switch (tests[itemIndex][itemId])
+                {
+                    case TestType.PREVIEW:
+                        testLoader.setSource("qrc:/Preview.qml", variables)
+                        break
+
+                    case TestType.TYPING:
+                        testLoader.setSource("qrc:/Typing.qml", variables)
+                        break
+                }
+                testLoader.active = true
+                itemIndex++
+            }
+            else
+            {
+                globalBackend.saveLevel(levelPath)
+                rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
+                    "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
+                    "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
+            }
+        }
+        else if (actionType === "water")
+        {
+            if (itemIndex !== tests.length)
+            {
+                replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+
+                itemId = Object.keys(tests[itemIndex]).toString()
+                variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
 
                 testLoader.active = false
                 switch (tests[itemIndex][itemId])

@@ -84,7 +84,7 @@ ApplicationWindow {
                 break
             case "water":
                 toolbarBackground.color = globalBlue
-                toolbarProgressBar.Material.accent = "#0027FF"
+                toolbarProgressBar.Material.accent = "#00BCD4"
                 break
         }
     }

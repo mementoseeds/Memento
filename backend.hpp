@@ -73,7 +73,7 @@ using String = std::string;
 //For tracking learning duration
 #include <QElapsedTimer>
 
-
+//For offloading expensive tasks to another thread
 #include <QThread>
 #include "worker.hpp"
 
@@ -136,8 +136,6 @@ public:
 
     Q_INVOKABLE void refreshCourses(QVariantList courses);
 
-    Q_INVOKABLE QString getReviewTime(QString date);
-
     enum TestType
     {
         PREVIEW,
@@ -158,7 +156,7 @@ signals:
     void finishedAddingCourses();
 
     void addCourseLevel(QString levelPath, QString levelTitle, QString testColumn, QString promptColumn, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
-    void addLevelItem(QString id, QString test, QString prompt, bool planted, QString nextWatering, bool ignored, bool difficult);
+    void addLevelItem(QString id, QString test, QString prompt, bool planted, QString progress, bool ignored, bool difficult);
     void finishedAddingLevel();
 
     void addItemDetails(QString type, QString name, QString content);
@@ -176,6 +174,7 @@ private:
     String getWateringTime(int streak);
     QString parseTime(uint seconds);
     const Json getRandom(const Json json);
+    QString getReviewTime(QString date);
 
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!
     Json globalSeedbox;

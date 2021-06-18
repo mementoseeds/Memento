@@ -38,9 +38,12 @@ Item {
 
     property bool levelCompleted: false
 
+    property bool manualReview: false
+
     Component.onCompleted:
     {
         globalBackend.getLevelItems(courseDirectory, levelPath)
+
         levelCompleted = globalBackend.getLevelCompleted()
     }
 
@@ -67,15 +70,34 @@ Item {
             }
         }
 
-        if (items.length > 0)
-            return items
-        else
-            showPassiveNotification("No items to learn on this level")
+        return items
     }
 
     function getWateringItems(total)
     {
-        //TODO
+        var items = []
+        for (var i = 0; i < total; i++)
+        {
+            if ((i + 1) <= levelEntryListModel.count)
+            {
+                var item = levelEntryListModel.get(i)
+                if (item.progress === "Now")
+                    items.push(item.id)
+                else
+                    total++
+            }
+        }
+
+        if (items.length === 0)
+        {
+            for (i = 0; i < levelEntryListModel.count; i++)
+                items.push(levelEntryListModel.get(i).id)
+
+            manualReview = true
+            return items
+        }
+        else
+            return items
     }
 
     function countPlanted()
@@ -162,7 +184,8 @@ Item {
                             if (text === "Plant")
                                 rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
                             else if (text === "Water")
-                                console.debug("finish me")
+                                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
+                                    "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})
                         }
                     }
                 }
@@ -206,14 +229,14 @@ Item {
 
     Connections {
         target: globalBackend
-        function onAddLevelItem(id, test, prompt, planted, nextWatering, ignored, difficult)
+        function onAddLevelItem(id, test, prompt, planted, progress, ignored, difficult)
         {
             levelEntryListModel.append({
                 "id": id,
                 "test": test,
                 "prompt": prompt,
                 "planted": planted,
-                "nextWatering": nextWatering,
+                "progress": ignored ? "ignored" : (planted ? progress : "Unplanted"),
                 "ignored": ignored
                                        })
         }

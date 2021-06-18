@@ -187,7 +187,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
             test,
             prompt,
             globalLevelSeeds[id]["planted"].get<bool>(),
-            QString::fromStdString(globalLevelSeeds[id]["nextWatering"].get<String>()),
+            getReviewTime(QString::fromStdString(globalLevelSeeds[id]["nextWatering"].get<String>())),
             globalLevelSeeds[id]["ignored"].get<bool>(),
             globalLevelSeeds[id]["difficult"].get<bool>()
                     );
@@ -367,6 +367,7 @@ void Backend::wrongAnswer(QString itemId)
     item["failures"] = item["failures"].get<int>() + 1;
     item["difficult"] = item["planted"].get<bool>();
     item["streak"] = 0;
+
     globalLevelSeeds[id] = item;
 }
 
