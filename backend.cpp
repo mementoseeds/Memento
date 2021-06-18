@@ -63,7 +63,7 @@ void Backend::getCourseList()
     foreach (QString dir, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
         QString directory = coursesDir.absolutePath() + "/" + dir;
-        std::ifstream infoFile(directory.toStdString() + "/info.json");
+        std::ifstream infoFile(QString(directory + "/info.json").toStdString());
 
         if (infoFile.fail())
             continue;
@@ -164,7 +164,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     globalSeedsAmount = globalLevelSeeds.size();
 
     //Open the seedbox
-    std::ifstream seedboxFile(courseDirectory.toStdString() + "/seedbox.json");
+    std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
     seedboxFile >> globalSeedbox;
     seedboxFile.close();
 
@@ -280,7 +280,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 
 QString Backend::readCourseTitle(QString courseDirectory)
 {
-    std::ifstream infoFile(courseDirectory.toStdString() + "/info.json");
+    std::ifstream infoFile(QString(courseDirectory + "/info.json").toStdString());
     Json courseInfo;
     infoFile >> courseInfo;
     infoFile.close();
@@ -497,4 +497,81 @@ void Backend::autoLearn(QVariantList itemArray, QString levelPath)
     }
 
     saveLevel(levelPath);
+}
+
+void Backend::refreshCourse(QString coursePath)
+{
+    QDir courseDir(coursePath + "/levels");
+
+    bool completed = true;
+    unsigned int totalItems = 0;
+    unsigned int planted = 0;
+    unsigned int water = 0;
+    unsigned int difficult = 0;
+    unsigned int ignored = 0;
+
+    std::vector<String> review;
+
+    foreach (QString lvl, courseDir.entryList({"*.json"}, QDir::Files))
+    {
+        QString levelPath = coursePath + "/levels/" + lvl;
+        std::ifstream levelFile(levelPath.toStdString());
+        Json level;
+        levelFile >> level;
+        levelFile.close();
+
+        if (!level["completed"].get<bool>())
+            completed = false;
+
+        totalItems += level["seeds"].size();
+
+        for (auto &item : level["seeds"].items())
+        {
+            String id = item.key();
+
+            bool itemPlanted = level["seeds"][id]["planted"].get<bool>();
+
+            planted += (int)itemPlanted;
+
+            if (itemPlanted)
+            {
+                QDateTime nextWatering = QDateTime::fromString(QString::fromStdString(level["seeds"][id]["nextWatering"].get<String>()));
+
+                if (QDateTime::currentDateTime() > nextWatering)
+                {
+                    water++;
+                    review.push_back(id);
+                }
+            }
+
+            difficult += (int)level["seeds"][id]["difficult"].get<bool>();
+
+            ignored += (int)level["seeds"][id]["ignored"].get<bool>();
+        }
+    }
+
+    std::ofstream reviewFile(QString(coursePath + "/review.json").toStdString());
+    Json reviewJson = review;
+    reviewFile << reviewJson.dump(jsonIndent) << std::endl;
+    reviewFile.close();
+
+    String infoPath = QString(coursePath + "/info.json").toStdString();
+    Json info;
+    //Open a mini scope to prevent infoFile naming conflict
+    {
+        std::ifstream infoFile(infoPath);
+        infoFile >> info;
+        infoFile.close();
+
+        info["items"] = totalItems;
+        info["planted"] = planted;
+        info["water"] = water;
+        info["difficult"] = difficult;
+        info["ignored"] = ignored;
+        info["completed"] = completed;
+    }
+
+    std::ofstream infoFile(infoPath);
+    infoFile << info.dump(jsonIndent) << std::endl;
+    infoFile.close();
 }

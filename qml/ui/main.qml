@@ -83,6 +83,7 @@ ApplicationWindow {
         visible: false
         signal reloadLearningLevel()
         signal refreshCourseLevels()
+        signal refreshAllCourses()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
     }
@@ -180,8 +181,11 @@ ApplicationWindow {
             }
 
             Action {
-                text: "Debug"
-                onTriggered: console.debug("debug")
+                text: "&Refresh courses"
+                icon.source: "assets/actions/refresh.svg"
+                shortcut: "Alt+r"
+                enabled: rootStackView.depth === 1
+                onTriggered: signalSource.refreshAllCourses()
             }
         }
     }
@@ -241,6 +245,10 @@ ApplicationWindow {
         title: "Are you sure you want to go back?"
         text: "Unsaved progress will be lost"
         standardButtons: StandardButton.Yes | StandardButton.No
-        onYes: rootStackView.pop()
+        onYes:
+        {
+            rootStackView.pop(StackView.Immediate)
+            signalSource.reloadLearningLevel()
+        }
     }
 }

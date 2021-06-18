@@ -48,6 +48,7 @@ Item {
                 text: title
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.topMargin: marginBase
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignCenter
             }
@@ -71,8 +72,26 @@ Item {
             }
 
             Label {
-                text: courseProgressBar.value / courseProgressBar.to * 100 + "%"
+                text: Math.floor(courseProgressBar.value / courseProgressBar.to * 100) + "%"
                 Layout.alignment: Qt.AlignCenter
+            }
+
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Button {
+                    text: completed ? "Water" : "Plant"
+                    onClicked: showPassiveNotification("Todo")
+                }
+
+                Button {
+                    text: "Refresh"
+                    onClicked:
+                    {
+                        globalBackend.refreshCourse(directory)
+                        reloadCourseList()
+                    }
+                }
             }
         }
     }

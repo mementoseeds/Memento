@@ -21,15 +21,21 @@ import QtQuick.Controls 2.15
 Item {
     objectName: "CourseList.qml"
 
-    function refreshAll()
+    function reloadCourseList()
     {
+        courseListModel.clear()
         globalBackend.getCourseList()
     }
 
-    Component.onCompleted:
+    function reloadAll()
     {
-        refreshAll()
+        for (var i = 0; i < courseListModel.count; i++)
+            globalBackend.refreshCourse(courseListModel.get(i).directory)
+
+        reloadCourseList()
     }
+
+    Component.onCompleted: globalBackend.getCourseList()
 
     Label {
         id: courseListEmptyHeading
@@ -76,6 +82,14 @@ Item {
         {
             if (courseListModel.count === 0)
                 courseListEmptyHeading.visible = true
+        }
+    }
+
+    Connections {
+        target: signalSource
+        function onRefreshAllCourses()
+        {
+            reloadAll()
         }
     }
 }

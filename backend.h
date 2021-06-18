@@ -129,6 +129,8 @@ public:
 
     Q_INVOKABLE void autoLearn(QVariantList itemArray, QString levelPath);
 
+    Q_INVOKABLE void refreshCourse(QString coursePath);
+
     enum TestType
     {
         PREVIEW,
@@ -162,10 +164,9 @@ private:
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
-
     const Json getRandom(const Json json);
 
-    //Global variables
+    //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!
     Json globalSeedbox;
     Json globalLevel;
     Json globalLevelSeeds;
