@@ -136,6 +136,8 @@ public:
 
     Q_INVOKABLE void refreshCourses(QVariantList courses);
 
+    Q_INVOKABLE QString getReviewTime(QString date);
+
     enum TestType
     {
         PREVIEW,
@@ -172,6 +174,7 @@ private:
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
+    QString parseTime(uint seconds);
     const Json getRandom(const Json json);
 
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!

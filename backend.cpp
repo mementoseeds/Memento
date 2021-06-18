@@ -457,11 +457,25 @@ void Backend::setStartTime()
 QString Backend::getStopTime()
 {
     uint duration = elapsedTimer.elapsed() / 1000;
+    return parseTime(duration);
+}
 
-    if (duration >= 60)
-        return QString::number(duration / 60) + "m : " + QString::number(duration % 60) + "s";
+QString Backend::parseTime(uint seconds)
+{
+    if (seconds >= 2629746)
+        return QString::number(seconds / 2629746) + " months";
+    else if (seconds >= 604800)
+        return QString::number(seconds / 604800) + " weeks";
+    else if (seconds >= 86400)
+        return QString::number(seconds / 86400) + " days";
+    else if (seconds >= 3600)
+        return QString::number(seconds / 3600) + " hours";
+    else if (seconds >= 60)
+        return QString::number(seconds / 60) + " minutes : " + QString::number(seconds % 60) + " seconds";
     else
-        return QString::number(duration) + "s";
+        return QString::number(seconds) + " seconds";
+
+    return "Unknown";
 }
 
 void Backend::resetCurrentLevel(QString levelPath)
@@ -508,4 +522,15 @@ void Backend::refreshCourses(QVariantList courses)
     Controller *threadController = new Controller;
     connect(threadController, &Controller::workFinished, this, &Backend::finishedRefreshingCourses);
     emit threadController->requestWork(courses);
+}
+
+QString Backend::getReviewTime(QString date)
+{
+    QDateTime now = QDateTime::currentDateTime();
+    QDateTime reviewTime = QDateTime::fromString(date);
+
+    if (reviewTime > now)
+        return "In " + parseTime(now.secsTo(reviewTime));
+    else
+        return "Now";
 }
