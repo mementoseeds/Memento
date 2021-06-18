@@ -25,6 +25,7 @@ class Worker : public QObject
     Q_OBJECT
 
 public slots:
+
     void doWork(QVariantList courses)
     {
         foreach (QVariant course, courses)
@@ -40,6 +41,7 @@ public slots:
             unsigned int difficult = 0;
             unsigned int ignored = 0;
 
+            Json reviewJson;
             std::vector<String> review;
 
             foreach (QString lvl, courseDir.entryList({"*.json"}, QDir::Files))
@@ -78,10 +80,11 @@ public slots:
 
                     ignored += (int)level["seeds"][id]["ignored"].get<bool>();
                 }
+
+                reviewJson[lvl.toStdString()] = review;
             }
 
             std::ofstream reviewFile(QString(coursePath + "/review.json").toStdString());
-            Json reviewJson = review;
             reviewFile << reviewJson.dump(jsonIndent) << std::endl;
             reviewFile.close();
 
