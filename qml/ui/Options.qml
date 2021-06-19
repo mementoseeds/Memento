@@ -32,6 +32,7 @@ Item {
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
+        userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked}
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -107,6 +108,46 @@ Item {
                 checked: userSettings["enableTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
+            }
+
+            Column {
+                Layout.alignment: Qt.AlignCenter
+
+                ButtonGroup {
+                    id: enabledTestsGroup
+                    exclusive: false
+                    checkState: parentBox.checkState
+                    onCheckStateChanged:
+                    {
+                        if (checkState === Qt.Unchecked)
+                            enabledMultipleChoice.checked = true
+                    }
+                }
+
+                CheckBox {
+                    id: parentBox
+                    text: qsTr("Enabled tests")
+                    checkState: enabledTestsGroup.checkState
+                    Material.accent: globalGreen
+                }
+
+                CheckBox {
+                    id: enabledMultipleChoice
+                    checked: userSettings["enabledTests"]["enabledMultipleChoice"]
+                    text: qsTr("Multiple Choice")
+                    leftPadding: indicator.width
+                    ButtonGroup.group: enabledTestsGroup
+                    Material.accent: globalGreen
+                }
+
+                CheckBox {
+                    id: enabledTyping
+                    checked: userSettings["enabledTests"]["enabledTyping"]
+                    text: qsTr("Typing")
+                    leftPadding: indicator.width
+                    ButtonGroup.group: enabledTestsGroup
+                    Material.accent: globalGreen
+                }
             }
         }
 

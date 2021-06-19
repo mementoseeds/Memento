@@ -40,7 +40,11 @@ Item {
 
     function getRandomTest()
     {
-        return Math.floor(Math.random() * 2) + 1
+        var testType = Math.floor(Math.random() * 2) + 1
+        if ((testType === 1 && !userSettings["enabledTests"]["enabledMultipleChoice"]) || (testType === 2 && !userSettings["enabledTests"]["enabledTyping"]))
+            return getRandomTest()
+        else
+            return testType
     }
 
     function manuallyChangeTest(test, variables)
@@ -98,23 +102,6 @@ Item {
 
     function triggerNextItem()
     {
-        if (actionType !== "preview")
-        {
-            //Random chance to switch test and prompt columns
-            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"])
-            {
-                var tempColumn = stagingArea.testColumn
-                var testColumn = stagingArea.promptColumn
-                var promptColumn = tempColumn
-                delete tempColumn
-            }
-            else
-            {
-                testColumn = stagingArea.testColumn
-                promptColumn = stagingArea.promptColumn
-            }
-        }
-
         if (actionType === "preview")
         {
             replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex, actionType)
@@ -140,10 +127,24 @@ Item {
             replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
         }
 
-
         if (itemIndex !== tests.length)
         {
             var itemId = Object.keys(tests[itemIndex]).toString()
+
+            //Random chance to switch test and prompt columns if the next test is multiple choice
+            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && tests[itemIndex][itemId] === TestType.MULTIPLECHOICE)
+            {
+                var tempColumn = stagingArea.testColumn
+                var testColumn = stagingArea.promptColumn
+                var promptColumn = tempColumn
+                delete tempColumn
+            }
+            else
+            {
+                testColumn = stagingArea.testColumn
+                promptColumn = stagingArea.promptColumn
+            }
+
             var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
 
             testLoader.active = false

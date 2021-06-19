@@ -139,6 +139,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
+    settings.setValue("enabledTests", userSettings["enabledTests"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -149,6 +150,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", true).toBool());
+    userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
     return userSettings;
 }
 
