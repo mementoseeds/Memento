@@ -136,8 +136,9 @@ void Backend::setUserSettings(QVariantMap userSettings)
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
-    settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
+    settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
+    settings.setValue("allowTestPromptSwitch", userSettings["allowTestPromptSwitch"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -145,8 +146,9 @@ QVariantMap Backend::getUserSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
-    userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
+    userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
+    userSettings.insert("allowTestPromptSwitch", settings.value("allowTestPromptSwitch", true).toBool());
     return userSettings;
 }
 

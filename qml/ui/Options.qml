@@ -29,8 +29,9 @@ Item {
     {
         userSettings["coursesLocation"] = coursesLocationTextField.text
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
-        userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
+        userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
+        userSettings["allowTestPromptSwitch"] = allowTestPromptSwitch.checked
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -85,6 +86,14 @@ Item {
             }
 
             CheckBox {
+                id: autoRefreshCourses
+                text: "Auto refresh courses on startup"
+                checked: userSettings["autoRefreshCourses"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
                 id: autoAcceptAnswerCheckBox
                 text: "Auto accept answer on typing tests"
                 checked: userSettings["autoAcceptAnswer"]
@@ -93,9 +102,9 @@ Item {
             }
 
             CheckBox {
-                id: autoRefreshCourses
-                text: "Auto refresh courses on startup"
-                checked: userSettings["autoRefreshCourses"]
+                id: allowTestPromptSwitch
+                text: "Allow randomly switching test and prompt on tests"
+                checked: userSettings["allowTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

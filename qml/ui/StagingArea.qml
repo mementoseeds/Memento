@@ -89,7 +89,7 @@ Item {
         if (actionType !== "preview")
         {
             //Random chance to switch test and prompt columns
-            if (Math.random() < 0.5)
+            if (Math.random() < 0.5 && userSettings["allowTestPromptSwitch"])
             {
                 var tempColumn = stagingArea.testColumn
                 var testColumn = stagingArea.promptColumn
