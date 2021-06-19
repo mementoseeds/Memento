@@ -200,6 +200,11 @@ Item {
             width: root.width / 3 - flowLayout.spacing - flowLayout.Layout.margins
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: parent.clicked()
+            }
         }
     }
 
