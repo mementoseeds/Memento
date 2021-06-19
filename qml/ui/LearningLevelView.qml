@@ -210,7 +210,7 @@ Item {
                     Button {
                         id: plantWaterButton
                         text: levelCompleted ? "Water" : "Plant"
-                        icon.source: levelCompleted ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                        icon.source: levelCompleted ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: levelCompleted ? globalBlue : globalGreen
                         Layout.alignment: Qt.AlignRight
                         onClicked:

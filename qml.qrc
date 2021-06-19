@@ -27,8 +27,9 @@
         <file alias="ResultEntry.qml">qml/components/ResultEntry.qml</file>
         <file alias="ResultSummary.qml">qml/ui/ResultSummary.qml</file>
         <file>assets/actions/refresh.svg</file>
-        <file>assets/actions/plant.svg</file>
-        <file>assets/actions/water.svg</file>
+        <file>assets/icons/plant.svg</file>
+        <file>assets/icons/water.svg</file>
         <file>assets/icons-font/Icons.ttf</file>
+        <file>assets/icons/difficult.svg</file>
     </qresource>
 </RCC>

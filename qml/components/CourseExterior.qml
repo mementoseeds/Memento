@@ -55,7 +55,8 @@ Item {
             }
 
             Label {
-                text: planted + " / " + items + " | " + water + " water " + difficult + " difficult"
+                text: planted + " / " + items + " " + plantIcon + " | " + water + " " + waterIcon + " " + difficult + " " + difficultIcon
+                font.family: "Icons"
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
@@ -83,7 +84,7 @@ Item {
 
                 Button {
                     text: completed ? "Water" : "Plant"
-                    icon.source: completed ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                    icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                     Material.background: completed ? globalBlue : globalGreen
                     onClicked: showPassiveNotification("Todo")
                 }

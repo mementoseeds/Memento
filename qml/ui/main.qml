@@ -49,8 +49,9 @@ ApplicationWindow {
     property var testColor: {"plant": globalGreen, "water": globalBlue}
 
     //Icon font
-    property string plantIcon: "\ue900"
-    property string waterIcon: "\ue901"
+    property string difficultIcon: "\ue900"
+    property string plantIcon: "\ue901"
+    property string waterIcon: "\ue902"
 
     FontLoader {
         source: "assets/icons-font/Icons.ttf"

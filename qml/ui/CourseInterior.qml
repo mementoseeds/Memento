@@ -125,7 +125,7 @@ Item {
 
                     Button {
                         text: completed ? "Water" : "Plant"
-                        icon.source: completed ? "assets/actions/water.svg" : "assets/actions/plant.svg"
+                        icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: completed ? globalBlue : globalGreen
                         onClicked: showPassiveNotification("Todo")
                     }
