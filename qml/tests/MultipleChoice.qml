@@ -61,6 +61,7 @@ Item {
             TestHeader {id: testHeader}
 
             Flow {
+                id: flowLayout
                 Layout.fillWidth: true
                 Layout.margins: marginBase
                 spacing: 50
@@ -71,41 +72,48 @@ Item {
 
                     Button {
                         id: choiceButton
-                        text: (!platformIsMobile ? (index + 1) + "<br>" : "") + "<span style=font-size:20pt>" + modelData + "</span>"
-                        width: 250
-                        height: buttonContentItem.contentHeight + 100
+                        text: modelData//(!platformIsMobile ? (index + 1) + "<br>" : "") + "<span style=font-size:20pt>" + modelData + "</span>"
+                        width: root.width / 2 - flowLayout.spacing
+                        height: (root.height - testHeader.testHeaderHeight) / numberChoices
                         font.capitalization: Font.MixedCase
-                        font.pointSize: 10
+                        font.pointSize: 40
                         Material.background: Material.color(Material.BlueGrey, Material.Shade600)
 
                         contentItem: Text {
                             id: buttonContentItem
                             text: parent.text
                             font: parent.font
+                            fontSizeMode: Text.Fit
+                            minimumPointSize: 10
                             opacity: enabled ? 1.0 : 0.3
                             color: "white"
-                            textFormat: Text.RichText
+                            textFormat: Text.StyledText
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            wrapMode: Text.WordWrap
                         }
 
                         onClicked:
                         {
-                            testHeader.countdownTimer.running = false
-
-                            if (globalBackend.checkAnswer(itemId, testColumn, modelData))
+                            if (testHeader.countdownTimer.running)
                             {
-                                choiceButton.Material.background = globalGreen
-                                correctAnswer()
+                                testHeader.countdownTimer.running = false
+
+                                if (globalBackend.checkAnswer(itemId, testColumn, modelData))
+                                {
+                                    choiceButton.Material.background = globalGreen
+                                    correctAnswer()
+                                }
+                                else
+                                {
+                                    choiceButton.Material.background = globalRed
+                                    wrongAnswer()
+                                }
+
+                                testHeader.cooldownTimer.running = true
                             }
                             else
-                            {
-                                choiceButton.Material.background = globalRed
-                                wrongAnswer()
-                            }
-
-                            testHeader.cooldownTimer.running = true
+                                triggerNextItem()
                         }
                     }
                 }

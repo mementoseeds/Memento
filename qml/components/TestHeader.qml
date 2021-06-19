@@ -23,6 +23,7 @@ ColumnLayout {
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
     property alias testAudio: audio
+    property int testHeaderHeight: 0
 
     signal countdownReached()
 
@@ -52,6 +53,7 @@ ColumnLayout {
     }
 
     Rectangle {
+        id: attributesBackground
         width: attributes.contentWidth + 10
         height: attributes.contentHeight + 5
         Layout.alignment: Qt.AlignCenter
@@ -70,6 +72,7 @@ ColumnLayout {
     }
 
     Label {
+        id: instructions
         text: "Type the <b>" + testColumn + "</b> for the <b>" + promptColumn + "</b> above"
         font.pointSize: platformIsMobile ? 15 : 12
         Layout.fillWidth: true
@@ -81,12 +84,13 @@ ColumnLayout {
         id: textComponent
 
         Label {
-            id: prompt
             text: columnData[1]
-            font.pointSize: platformIsMobile ? 20 : 15
+            font.pointSize: 20
             font.bold: true
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
+
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
         }
     }
 
@@ -98,6 +102,8 @@ ColumnLayout {
             sourceSize.width: 200
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
+
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
         }
     }
 
