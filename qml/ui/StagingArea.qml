@@ -43,6 +43,13 @@ Item {
         return Math.floor(Math.random() * 2) + 1
     }
 
+    function manuallyChangeTest(test, variables)
+    {
+        testLoader.active = false
+        testLoader.setSource(test, variables)
+        testLoader.active = true
+    }
+
     Component.onCompleted:
     {
         globalBackend.setManualReview(manualReview)

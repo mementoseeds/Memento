@@ -223,6 +223,9 @@ Item {
                     choices.itemAt(i).children[1].item.Material.background = globalGreen
             }
 
+            if (itemData[0] === "image")
+                setToolbarColor(globalRed)
+
             wrongAnswer()
             testHeader.cooldownTimer.running = true
         }

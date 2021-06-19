@@ -21,11 +21,20 @@ import QtQuick.Controls.Material 2.12
 import TestType 1.0
 
 Item {
+    property string testType: "Typing"
     property int marginBase: 10
 
     property string itemId: ""
     property string testColumn: ""
     property string promptColumn: ""
+
+    property var itemData: globalBackend.readItemColumn(itemId, testColumn)
+
+    Component.onCompleted:
+    {
+        if (itemData[0] === "image")
+            manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
+    }
 
     ScrollView {
         anchors.fill: parent
@@ -58,7 +67,7 @@ Item {
 
                     onTextChanged:
                     {
-                        if (userSettings["autoAcceptAnswer"] && text.toLocaleLowerCase() === globalBackend.readItemColumn(itemId, testColumn)[1].toLocaleLowerCase())
+                        if (userSettings["autoAcceptAnswer"] && text.toLocaleLowerCase() === itemData[1].toLocaleLowerCase())
                             accepted()
                     }
 
