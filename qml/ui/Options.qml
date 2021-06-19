@@ -31,7 +31,7 @@ Item {
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
-        userSettings["allowTestPromptSwitch"] = allowTestPromptSwitch.checked
+        userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -102,9 +102,9 @@ Item {
             }
 
             CheckBox {
-                id: allowTestPromptSwitch
-                text: "Allow switching test and prompt"
-                checked: userSettings["allowTestPromptSwitch"]
+                id: enableTestPromptSwitch
+                text: "Enable switching test and prompt"
+                checked: userSettings["enableTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }
