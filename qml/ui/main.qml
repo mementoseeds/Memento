@@ -48,6 +48,14 @@ ApplicationWindow {
     property color defaultToolbarColor: Material.color(Material.Teal)
     property var testColor: {"plant": globalGreen, "water": globalBlue}
 
+    //Icon font
+    property string plantIcon: "\ue900"
+    property string waterIcon: "\ue901"
+
+    FontLoader {
+        source: "assets/icons-font/Icons.ttf"
+    }
+
     Item {
         id: signalSource
         visible: false

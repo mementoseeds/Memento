@@ -40,6 +40,8 @@ Item {
     property int plantedItems: countPlanted()
     property bool manualReview: false
 
+    property int iconSize: platformIsMobile ? 20 : 15
+
     Component.onCompleted:
     {
         globalBackend.getLevelItems(courseDirectory, levelPath)
@@ -267,7 +269,8 @@ Item {
                 "test": test,
                 "prompt": prompt,
                 "planted": planted,
-                "progress": ignored ? "ignored" : (planted ? progress : "Unplanted"),
+                "progress": ignored ? "ignored" : (planted ? progress + " <span style=font-size:" + iconSize + "pt style=color:" + globalBlue + ">" + waterIcon + "</span>"
+                                                           : "<span style=font-size:" + iconSize + "pt style=color:" + globalGreen + ">" + plantIcon + "</span>"),
                 "ignored": ignored
                                        })
         }

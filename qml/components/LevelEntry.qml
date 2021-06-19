@@ -57,7 +57,9 @@ Item {
             anchors.rightMargin: marginBase
             width: parent.width / 3
             text: progress
-            font.pointSize: 8
+            font.pointSize: 10
+            font.family: "Icons"
+            textFormat: Text.RichText
             horizontalAlignment: Text.AlignRight
         }
     }

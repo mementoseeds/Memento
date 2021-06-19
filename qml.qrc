@@ -29,5 +29,6 @@
         <file>assets/actions/refresh.svg</file>
         <file>assets/actions/plant.svg</file>
         <file>assets/actions/water.svg</file>
+        <file>assets/icons-font/Icons.ttf</file>
     </qresource>
 </RCC>

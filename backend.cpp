@@ -541,7 +541,7 @@ QString Backend::getReviewTime(QString date)
     QDateTime reviewTime = QDateTime::fromString(date);
 
     if (reviewTime > now)
-        return "In " + parseTime(now.secsTo(reviewTime));
+        return parseTime(now.secsTo(reviewTime));
     else
         return "Now";
 }

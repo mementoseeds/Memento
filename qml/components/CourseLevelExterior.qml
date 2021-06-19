@@ -70,7 +70,7 @@ Item {
             }
 
             Label {
-                text: isLearning ? (levelCompleted ? "🗸" : "Ready to learn") : "Ready to read"
+                text: isLearning ? (levelCompleted ? "Completed" : "Ready to learn") : "Ready to read"
                 font.bold: levelCompleted
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
