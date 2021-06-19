@@ -72,7 +72,7 @@ Item {
 
                     Rectangle {
                         height: childrenRect.height + choiceIndex.contentHeight
-                        width: choiceButton.width
+                        width: choicesLoader.width
                         color: "transparent"
 
                         Label {
@@ -84,54 +84,65 @@ Item {
                             z: 1
                         }
 
-                        Button {
-                            id: choiceButton
-                            text: modelData
-                            width: root.width / 2 - flowLayout.spacing
-                            height: (root.height - testHeader.testHeaderHeight) / numberChoices - choiceIndex.contentHeight
-                            font.capitalization: Font.MixedCase
-                            font.pointSize: 40
-                            Material.background: Material.color(Material.BlueGrey, Material.Shade600)
-
-                            contentItem: Text {
-                                id: buttonContentItem
-                                text: parent.text
-                                font: parent.font
-                                fontSizeMode: Text.Fit
-                                minimumPointSize: 10
-                                opacity: enabled ? 1.0 : 0.3
-                                color: "white"
-                                textFormat: Text.StyledText
-                                horizontalAlignment: Text.AlignHCenter
-                                verticalAlignment: Text.AlignVCenter
-                                wrapMode: Text.WordWrap
-                            }
-
-                            onClicked:
-                            {
-                                if (testHeader.countdownTimer.running)
-                                {
-                                    testHeader.countdownTimer.running = false
-
-                                    if (globalBackend.checkAnswer(itemId, testColumn, modelData))
-                                    {
-                                        choiceButton.Material.background = globalGreen
-                                        correctAnswer()
-                                    }
-                                    else
-                                    {
-                                        choiceButton.Material.background = globalRed
-                                        wrongAnswer()
-                                    }
-
-                                    testHeader.cooldownTimer.running = true
-                                }
-                                else
-                                    triggerNextItem()
-                            }
+                        Loader {
+                            id: choicesLoader
+                            property string textData: modelData
+                            property string buttonHeight: (root.height - testHeader.testHeaderHeight) / numberChoices - choiceIndex.contentHeight
+                            sourceComponent: buttonComponent
                         }
                     }
                 }
+            }
+        }
+    }
+
+    Component {
+        id: buttonComponent
+
+        Button {
+            id: choiceButton
+            text: textData
+            width: root.width / 2 - flowLayout.spacing
+            height: buttonHeight
+            font.capitalization: Font.MixedCase
+            font.pointSize: 40
+            Material.background: Material.color(Material.BlueGrey, Material.Shade600)
+
+            contentItem: Text {
+                id: buttonContentItem
+                text: parent.text
+                font: parent.font
+                fontSizeMode: Text.Fit
+                minimumPointSize: 10
+                opacity: enabled ? 1.0 : 0.3
+                color: "white"
+                textFormat: Text.StyledText
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+
+            onClicked:
+            {
+                if (testHeader.countdownTimer.running)
+                {
+                    testHeader.countdownTimer.running = false
+
+                    if (globalBackend.checkAnswer(itemId, testColumn, textData))
+                    {
+                        choiceButton.Material.background = globalGreen
+                        correctAnswer()
+                    }
+                    else
+                    {
+                        choiceButton.Material.background = globalRed
+                        wrongAnswer()
+                    }
+
+                    testHeader.cooldownTimer.running = true
+                }
+                else
+                    triggerNextItem()
             }
         }
     }
@@ -167,55 +178,55 @@ Item {
         property int choiceShortcut: 1
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 2
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 3
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 4
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 5
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 6
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 7
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 
     Shortcut {
         property int choiceShortcut: 8
         sequence: choiceShortcut.toString()
         enabled: choiceShortcut <= numberChoices && testHeader.countdownTimer.running
-        onActivated: choices.itemAt(choiceShortcut - 1).children[1].clicked()
+        onActivated: choices.itemAt(choiceShortcut - 1).children[1].item.clicked()
     }
 }
