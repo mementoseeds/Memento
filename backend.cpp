@@ -151,6 +151,15 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", true).toBool());
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
+
+    QVariantMap testCheck = userSettings["enabledTests"].toMap();
+
+    if (!testCheck["enabledMultipleChoice"].toBool() && !testCheck["enabledTyping"].toBool())
+    {
+        testCheck["enabledMultipleChoice"] = testCheck["enabledTyping"] = true;
+        userSettings["enabledTests"] = testCheck;
+    }
+
     return userSettings;
 }
 
