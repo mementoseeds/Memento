@@ -69,14 +69,13 @@ Item {
 
                         testHeader.countdownTimer.running = false
 
-                        testHeader.testAudio.play()
-
                         readOnly = true
 
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
                             correctAnswerCounter++
                             textfieldBackground.color = "green"
+                            testHeader.testAudio.play()
                         }
                         else
                         {

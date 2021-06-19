@@ -198,29 +198,27 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     emit finishedAddingLevel();
 }
 
-void Backend::unloadSeedbox()
-{
-    globalSeedbox.clear();
-}
-
 void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
     Json item = globalSeedbox[itemId.toStdString()];
 
     //Add audio
     Json audioArray = item["audio"];
-    if (audioArray.size() > 0)
+
+    if (!audioArray.empty())
     {
         QStringList audioList;
         for (auto &val : audioArray)
-            audioList.append(QString::fromStdString(val.get<String>()));
+            if (!val.is_null())
+                audioList.append(QString::fromStdString(val.get<String>()));
 
-        emit addItemDetails("audio", "Audio", audioList.join(":"));
+        if (!audioList.isEmpty())
+            emit addItemDetails("audio", "Audio", audioList.join(":"));
     }
 
     //Add attributes
     QString attributes = QString::fromStdString(item["attributes"].get<String>());
-    if (attributes.length() > 0)
+    if (!attributes.isEmpty())
     {
         emit addItemDetails("attributes", "Attributes", attributes);
         emit addItemSeparator();
@@ -241,7 +239,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
-    if (alternatives.length() > 0)
+    if (!alternatives.isEmpty())
         emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
     alternatives.clear();
     emit addItemSeparator();
@@ -254,7 +252,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         if (!string.startsWith("_"))
             alternatives.append(string);
     }
-    if (alternatives.length() > 0)
+    if (!alternatives.isEmpty())
         emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
     alternatives.clear();
     emit addItemSeparator();
@@ -275,7 +273,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
                 if (!string.startsWith("_"))
                     alternatives.append(string);
             }
-            if (alternatives.length() > 0)
+            if (!alternatives.isEmpty())
                 emit addItemDetails("alternative", "Alternatives", alternatives.join(", "));
             alternatives.clear();
             emit addItemSeparator();
@@ -308,7 +306,7 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
 
 QString Backend::readItemAudio(QString itemId)
 {
-    QString itemAudio = "null";
+    QString itemAudio = "";
     Json audio = globalSeedbox[itemId.toStdString()]["audio"][0];
     if (audio.is_string())
         itemAudio = QString::fromStdString(audio.get<String>());
@@ -578,7 +576,14 @@ QVariantList Backend::getRandomValues(QString itemId, QString column, int count)
             String key = getRandom(globalSeedbox, true);
 
             if (globalSeedbox[key][itemColumn].is_object())
+            {
                 value = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>());
+                if (list.contains(value))
+                {
+                    value.clear();
+                    continue;
+                }
+            }
             else
                 continue;
         }

@@ -32,6 +32,7 @@ Item {
     function correctAnswer()
     {
         correctAnswerCounter++
+        testHeader.testAudio.play()
     }
 
     function wrongAnswer()
@@ -70,11 +71,11 @@ Item {
 
                     Button {
                         id: choiceButton
-                        text: (index + 1) + "\n" + modelData
-                        width: 100
-                        height: buttonContentItem.contentHeight + 50
+                        text: (!platformIsMobile ? (index + 1) + "<br>" : "") + "<span style=font-size:20pt>" + modelData + "</span>"
+                        width: 250
+                        height: buttonContentItem.contentHeight + 100
                         font.capitalization: Font.MixedCase
-                        font.pointSize: 12
+                        font.pointSize: 10
                         Material.background: Material.color(Material.BlueGrey, Material.Shade600)
 
                         contentItem: Text {
@@ -83,6 +84,7 @@ Item {
                             font: parent.font
                             opacity: enabled ? 1.0 : 0.3
                             color: "white"
+                            textFormat: Text.RichText
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -115,16 +117,20 @@ Item {
         target: testHeader
         function onCountdownReached()
         {
+            //Just for updating statistics
+            globalBackend.checkAnswer(itemId, testColumn, "")
+
+            var answer = globalBackend.readItemColumn(itemId, testColumn)[1]
             for (var i = 0; i < choices.model.length; i++)
             {
-                if (choices.model[i] !== globalBackend.readItemColumn(itemId, testColumn)[1])
+                if (choices.model[i] !== answer)
                     choices.itemAt(i).Material.background = globalRed
                 else
                     choices.itemAt(i).Material.background = globalGreen
-
-                wrongAnswer()
-                testHeader.cooldownTimer.running = true
             }
+
+            wrongAnswer()
+            testHeader.cooldownTimer.running = true
         }
     }
 

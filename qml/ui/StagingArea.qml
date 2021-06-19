@@ -52,7 +52,7 @@ Item {
                 tests.push(test)
 
                 test = {}
-                test[itemArray[i]] = TestType.TYPING //Start all with multiple choice
+                test[itemArray[i]] = TestType.MULTIPLECHOICE //Start all with multiple choice
                 tests.push(test)
             }
 
@@ -62,7 +62,7 @@ Item {
                 for (var o = 0; o < 4; o++) //4 is amount of tests - 1
                 {
                     test = {}
-                    test[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
+                    test[itemArray[i]] = TestType.MULTIPLECHOICE //Math.floor(Math.random() * testTypes)
                     unorderedTests.push(test)
                 }
             }
@@ -119,12 +119,10 @@ Item {
 
             return
         }
-
         else if (actionType === "plant")
         {
             replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex, actionType)
         }
-
         else if (actionType === "water")
         {
             replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
@@ -156,7 +154,7 @@ Item {
         }
         else
         {
-            //globalBackend.saveLevel(levelPath)
+            globalBackend.saveLevel(levelPath)
             rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
                 "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
                 "totalTests": (correctAnswerCounter + wrongAnswerCounter)})

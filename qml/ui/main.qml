@@ -205,6 +205,7 @@ ApplicationWindow {
                 text: "&Options"
                 icon.source: "assets/actions/configure.svg"
                 shortcut: "Ctrl+p"
+                enabled: rootStackView.currentItem.objectName !== "StagingArea.qml"
                 onTriggered:
                 {
                     if (rootStackView.currentItem.objectName !== "Options.qml")
@@ -218,6 +219,11 @@ ApplicationWindow {
                 shortcut: "Alt+r"
                 enabled: rootStackView.depth === 1
                 onTriggered: signalSource.refreshAllCourses()
+            }
+
+            Action {
+                text: "debug"
+                onTriggered: console.debug(rootStackView.currentItem.objectName)
             }
         }
     }

@@ -111,8 +111,6 @@ public:
 
     Q_INVOKABLE void getLevelItems(QString courseDirectory, QString levelPath);
 
-    Q_INVOKABLE void unloadSeedbox();
-
     Q_INVOKABLE void readItem(QString itemId, QString testColumn, QString promptColumn);
 
     Q_INVOKABLE QString readCourseTitle(QString courseDirectory);

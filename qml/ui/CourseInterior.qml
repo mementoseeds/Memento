@@ -37,11 +37,7 @@ Item {
     property bool completed: false
 
     Component.onCompleted: globalBackend.getCourseLevels(directory)
-    Component.onDestruction:
-    {
-        mainToolbarTitle.text = root.title
-        globalBackend.unloadSeedbox()
-    }
+    Component.onDestruction: mainToolbarTitle.text = root.title
 
     GridView {
         anchors.fill: parent
