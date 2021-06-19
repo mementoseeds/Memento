@@ -17,10 +17,12 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 
 ColumnLayout {
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
+    property alias testAudio: audio
 
     signal countdownReached()
 
@@ -34,6 +36,13 @@ ColumnLayout {
         showText: "Countdown"
         Layout.topMargin: 10
         Layout.alignment: Qt.AlignCenter
+    }
+
+    Audio {
+        id: audio
+        source: Qt.resolvedUrl("file://" + courseDirectory + "/" + globalBackend.readItemAudio(itemId))
+        autoPlay: false
+        audioRole: Audio.GameRole
     }
 
     Loader {

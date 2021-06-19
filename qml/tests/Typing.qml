@@ -69,6 +69,8 @@ Item {
 
                         testHeader.countdownTimer.running = false
 
+                        testHeader.testAudio.play()
+
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
                             correctAnswerCounter++

@@ -306,6 +306,16 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
     return list;
 }
 
+QString Backend::readItemAudio(QString itemId)
+{
+    QString itemAudio = "null";
+    Json audio = globalSeedbox[itemId.toStdString()]["audio"][0];
+    if (audio.is_string())
+        itemAudio = QString::fromStdString(audio.get<String>());
+
+    return itemAudio;
+}
+
 bool Backend::getLevelCompleted()
 {
     return globalLevel["completed"].get<bool>();
