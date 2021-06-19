@@ -93,7 +93,7 @@ Item {
             if ((i + 1) <= levelEntryListModel.count)
             {
                 var item = levelEntryListModel.get(i)
-                if (item.progress === "Now")
+                if (item.progress.startsWith("Now"))
                     items.push(item.id)
                 else
                     total++
