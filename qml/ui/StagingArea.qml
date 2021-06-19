@@ -76,7 +76,7 @@ Item {
             for (i = 0; i < itemArray.length; i++)
             {
                 test = {}
-                test[itemArray[i]] = TestType.TYPING //Math.floor(Math.random() * testTypes)
+                test[itemArray[i]] = TestType.MULTIPLECHOICE //Math.floor(Math.random() * testTypes)
                 tests.push(test)
             }
 
@@ -143,6 +143,10 @@ Item {
                     testLoader.setSource("qrc:/Preview.qml", variables)
                     break
 
+                case TestType.MULTIPLECHOICE:
+                    testLoader.setSource("qrc:/MultipleChoice.qml", variables)
+                    break
+
                 case TestType.TYPING:
                     testLoader.setSource("qrc:/Typing.qml", variables)
                     break
@@ -152,7 +156,7 @@ Item {
         }
         else
         {
-            globalBackend.saveLevel(levelPath)
+            //globalBackend.saveLevel(levelPath)
             rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
                 "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
                 "totalTests": (correctAnswerCounter + wrongAnswerCounter)})

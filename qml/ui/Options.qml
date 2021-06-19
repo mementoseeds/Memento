@@ -103,7 +103,7 @@ Item {
 
             CheckBox {
                 id: allowTestPromptSwitch
-                text: "Allow randomly switching test and prompt on tests"
+                text: "Allow switching test and prompt"
                 checked: userSettings["allowTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter

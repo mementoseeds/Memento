@@ -71,19 +71,17 @@ Item {
 
                         testHeader.testAudio.play()
 
+                        readOnly = true
+
                         if (globalBackend.checkAnswer(itemId, testColumn, text))
                         {
                             correctAnswerCounter++
                             textfieldBackground.color = "green"
-                            readOnly = true
-                            testHeader.cooldownTimer.running = true
                         }
                         else
                         {
                             wrongAnswerCounter++
                             textfieldBackground.color = "red"
-                            readOnly = true
-                            testHeader.cooldownTimer.running = true
 
                             var test = {}
                             test[itemId] = TestType.PREVIEW
@@ -93,6 +91,8 @@ Item {
                             test[itemId] = TestType.TYPING //randomize
                             tests.splice(itemIndex + 1, 0, test)
                         }
+
+                        testHeader.cooldownTimer.running = true
                     }
                 }
             }

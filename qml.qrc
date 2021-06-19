@@ -31,5 +31,6 @@
         <file>assets/icons/water.svg</file>
         <file>assets/icons-font/Icons.ttf</file>
         <file>assets/icons/difficult.svg</file>
+        <file alias="MultipleChoice.qml">qml/tests/MultipleChoice.qml</file>
     </qresource>
 </RCC>

@@ -444,12 +444,15 @@ void Backend::saveLevel(QString levelPath)
     level.close();
 }
 
-const Json Backend::getRandom(const Json json)
+const Json Backend::getRandom(const Json json, bool returnKey)
 {
     auto it = json.cbegin();
     int random = QRandomGenerator::global()->generate() % json.size();
     std::advance(it, random);
-    return it.key();
+    if (returnKey)
+        return it.key();
+    else
+        return *it;
 }
 
 void Backend::getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray)
@@ -556,4 +559,32 @@ QString Backend::getReviewTime(QString date)
         return parseTime(now.secsTo(reviewTime));
     else
         return "Now";
+}
+
+QVariantList Backend::getRandomValues(QString itemId, QString column, int count)
+{
+    QVariantList list;
+    String itemColumn = column.toStdString();
+
+    //Get correct answer
+    list.append(QString::fromStdString(globalSeedbox[itemId.toStdString()][itemColumn]["primary"].get<String>()));
+
+    for (int i = 0; i < count - 1; i++)
+    {
+        QString value;
+
+        while (value.isEmpty())
+        {
+            String key = getRandom(globalSeedbox, true);
+
+            if (globalSeedbox[key][itemColumn].is_object())
+                value = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>());
+            else
+                continue;
+        }
+
+        list.append(value);
+    }
+
+    return list;
 }
