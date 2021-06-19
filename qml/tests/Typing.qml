@@ -87,7 +87,7 @@ Item {
                             tests.splice(itemIndex, 0, test)
 
                             test = {}
-                            test[itemId] = TestType.TYPING //randomize
+                            test[itemId] = getRandomTest()
                             tests.splice(itemIndex + 1, 0, test)
                         }
 

@@ -38,6 +38,11 @@ Item {
 
     Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
 
+    function getRandomTest()
+    {
+        return Math.floor(Math.random() * 2) + 1
+    }
+
     Component.onCompleted:
     {
         globalBackend.setManualReview(manualReview)
@@ -62,7 +67,7 @@ Item {
                 for (var o = 0; o < 4; o++) //4 is amount of tests - 1
                 {
                     test = {}
-                    test[itemArray[i]] = TestType.MULTIPLECHOICE //Math.floor(Math.random() * testTypes)
+                    test[itemArray[i]] = getRandomTest()
                     unorderedTests.push(test)
                 }
             }
@@ -76,7 +81,7 @@ Item {
             for (i = 0; i < itemArray.length; i++)
             {
                 test = {}
-                test[itemArray[i]] = TestType.MULTIPLECHOICE //Math.floor(Math.random() * testTypes)
+                test[itemArray[i]] = getRandomTest()
                 tests.push(test)
             }
 
