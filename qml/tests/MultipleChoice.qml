@@ -21,6 +21,7 @@ import QtQuick.Controls.Material 2.12
 import TestType 1.0
 
 Item {
+    property string testType: "MultipleChoice"
     property int marginBase: 10
 
     property string itemId: ""
@@ -28,16 +29,19 @@ Item {
     property string promptColumn: ""
 
     property int numberChoices: Math.floor(Math.random() * 5) + 4
+    property var itemData: globalBackend.readItemColumn(itemId, testColumn)
 
     function correctAnswer()
     {
         correctAnswerCounter++
+        testHeader.radialBarText = "Success"
         testHeader.testAudio.play()
     }
 
     function wrongAnswer()
     {
         wrongAnswerCounter++
+        testHeader.radialBarText = "Fail"
 
         var test = {}
         test[itemId] = TestType.PREVIEW
@@ -64,11 +68,11 @@ Item {
                 id: flowLayout
                 Layout.fillWidth: true
                 Layout.margins: marginBase
-                spacing: 50
+                spacing: 20
 
                 Repeater {
                     id: choices
-                    model: globalBackend.getRandomValues(itemId, testColumn, numberChoices).sort(() => Math.random() - 0.5) //choiceList.sort(() => Math.random() - 0.5)
+                    model: globalBackend.getRandomValues(itemId, testColumn, numberChoices).sort(() => Math.random() - 0.5)
 
                     Rectangle {
                         height: childrenRect.height + choiceIndex.contentHeight
@@ -77,7 +81,24 @@ Item {
 
                         Label {
                             id: choiceIndex
-                            anchors {top: parent.top; left: parent.left; topMargin: marginBase; leftMargin: marginBase}
+                            Component.onCompleted:
+                            {
+                                if (itemData[0] === "text")
+                                {
+                                    anchors.top = parent.top
+                                    anchors.left = parent.left
+                                    anchors.topMargin = marginBase
+                                    anchors.leftMargin = marginBase
+                                }
+                                else if (itemData[0] === "image")
+                                {
+                                    anchors.top = parent.top
+                                    anchors.topMargin = marginBase * -4
+                                    anchors.horizontalCenter = parent.horizontalCenter
+                                    flowLayout.Layout.topMargin = marginBase * 4
+                                }
+                            }
+
                             text: index + 1
                             font.pointSize: 15
                             visible: !platformIsMobile
@@ -86,9 +107,9 @@ Item {
 
                         Loader {
                             id: choicesLoader
-                            property string textData: modelData
-                            property string buttonHeight: (root.height - testHeader.testHeaderHeight) / numberChoices - choiceIndex.contentHeight
-                            sourceComponent: buttonComponent
+                            property string choiceData: modelData
+                            property int buttonHeight: (root.height - testHeader.testHeaderHeight) / numberChoices - choiceIndex.contentHeight
+                            sourceComponent: itemData[0] === "text" ? buttonComponent : imageComponent
                         }
                     }
                 }
@@ -101,8 +122,8 @@ Item {
 
         Button {
             id: choiceButton
-            text: textData
-            width: root.width / 2 - flowLayout.spacing
+            text: choiceData
+            width: root.width / 2 - flowLayout.spacing - flowLayout.Layout.margins
             height: buttonHeight
             font.capitalization: Font.MixedCase
             font.pointSize: 40
@@ -128,7 +149,7 @@ Item {
                 {
                     testHeader.countdownTimer.running = false
 
-                    if (globalBackend.checkAnswer(itemId, testColumn, textData))
+                    if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
                     {
                         choiceButton.Material.background = globalGreen
                         correctAnswer()
@@ -147,6 +168,41 @@ Item {
         }
     }
 
+    Component {
+        id: imageComponent
+
+        Image {
+            function clicked()
+            {
+                if (testHeader.countdownTimer.running)
+                {
+                    testHeader.countdownTimer.running = false
+
+                    if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
+                    {
+                        setToolbarColor(Material.color(Material.Green, Material.ShadeA700))
+                        correctAnswer()
+                    }
+
+                    else
+                    {
+                        setToolbarColor(globalRed)
+                        wrongAnswer()
+                    }
+
+                    testHeader.cooldownTimer.running = true
+                }
+                else
+                    triggerNextItem()
+            }
+
+            source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + choiceData)
+            width: root.width / 3 - flowLayout.spacing - flowLayout.Layout.margins
+            fillMode: Image.PreserveAspectFit
+            Layout.alignment: Qt.AlignCenter
+        }
+    }
+
     Connections {
         target: testHeader
         function onCountdownReached()
@@ -154,13 +210,12 @@ Item {
             //Just for updating statistics
             globalBackend.checkAnswer(itemId, testColumn, "")
 
-            var answer = globalBackend.readItemColumn(itemId, testColumn)[1]
             for (var i = 0; i < choices.model.length; i++)
             {
-                if (choices.model[i] !== answer)
-                    choices.itemAt(i).Material.background = globalRed
+                if (choices.model[i] !== itemData[1])
+                    choices.itemAt(i).children[1].item.Material.background = globalRed
                 else
-                    choices.itemAt(i).Material.background = globalGreen
+                    choices.itemAt(i).children[1].item.Material.background = globalGreen
             }
 
             wrongAnswer()

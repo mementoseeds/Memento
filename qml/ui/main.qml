@@ -107,6 +107,11 @@ ApplicationWindow {
         toolbarBackground.color = defaultToolbarColor
     }
 
+    function setToolbarColor(color)
+    {
+        toolbarBackground.color = color
+    }
+
     function findPageIndex(name)
     {
         for (var i = 0; i < rootStackView.depth; i++)

@@ -23,6 +23,7 @@ ColumnLayout {
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
     property alias testAudio: audio
+    property alias radialBarText: radialBar.showText
     property int testHeaderHeight: 0
 
     signal countdownReached()
@@ -73,7 +74,7 @@ ColumnLayout {
 
     Label {
         id: instructions
-        text: "Type the <b>" + testColumn + "</b> for the <b>" + promptColumn + "</b> above"
+        text: (testType === "MultipleChoice" ? "Choose " : "Type ") + "the <b>" + testColumn + "</b> for the <b>" + promptColumn + "</b> above"
         font.pointSize: platformIsMobile ? 15 : 12
         Layout.fillWidth: true
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -99,7 +100,7 @@ ColumnLayout {
 
         Image {
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnData[1])
-            sourceSize.width: 200
+            sourceSize.width: platformIsMobile ? 100 : 150
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
