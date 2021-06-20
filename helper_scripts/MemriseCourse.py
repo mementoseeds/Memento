@@ -82,6 +82,12 @@ class MemriseCourse():
         poolId = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + randomThingId).json()["thing"]["pool_id"]
         self.pool = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(poolId)).json()
 
+        # Find which columns to show after tests
+        self.showAfterTests = []
+        for column in self.pool["pool"]["columns"]:
+            if self.pool["pool"]["columns"][column]["show_after_tests"]:
+                self.showAfterTests.append(self.pool["pool"]["columns"][column]["label"])
+
     def scrapeLevels(self, start, stop):
         print()
 
@@ -162,6 +168,7 @@ class MemriseCourse():
             "category": self.category,
             "icon": "assets/images/icon.jpg",
             "items": self.itemCount,
+            "showAfterTests": self.showAfterTests,
             "planted": 0,
             "water": 0,
             "difficult": 0,
