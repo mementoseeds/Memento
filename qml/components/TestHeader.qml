@@ -150,14 +150,14 @@ ColumnLayout {
     Component {
         id: audioComponent
 
-        Image {
-            source: "assets/icons/playaudio.svg"
-            sourceSize.width: platformIsMobile ? 50 : 100
-            sourceSize.height: platformIsMobile ? 50 : 100
-            fillMode: Image.PreserveAspectFit
-            Layout.alignment: Qt.AlignCenter
+        Label {
+            text: audioIcon
+            font.pointSize: 40
+            font.family: "Icons"
+            color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
+            horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
 
             Audio {
                 id: audio

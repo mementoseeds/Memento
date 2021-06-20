@@ -123,9 +123,11 @@ Item {
                             Layout.preferredWidth: parent.width
                         }
 
-                        Image {
-                            source: "assets/icons/playaudio.svg"
-                            sourceSize.width: platformIsMobile ? 50 : 100
+                        Label {
+                            text: audioIcon
+                            font.pointSize: 40
+                            font.family: "Icons"
+                            color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
 
                             Audio {
                                 id: audio

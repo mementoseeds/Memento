@@ -121,12 +121,11 @@ Item {
     Component {
         id: audioColumnComponent
 
-        Image {
-            source: "assets/icons/playaudio.svg"
-            sourceSize.width: platformIsMobile ? 50 : 100
-            sourceSize.height: platformIsMobile ? 50 : 100
-            fillMode: Image.PreserveAspectFit
-            Layout.alignment: Qt.AlignLeft
+        Label {
+            text: audioIcon
+            font.pointSize: 40
+            font.family: "Icons"
+            color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
 
             Audio {
                 id: audio

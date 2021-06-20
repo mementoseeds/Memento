@@ -45,13 +45,15 @@ ApplicationWindow {
     property color globalGreen: Material.color(Material.Green)
     property color globalRed: Material.color(Material.Red)
     property color globalOrange: Material.color(Material.DeepOrange, Material.Shade400)
+    property color globalAmber: Material.color(Material.Amber)
     property color defaultToolbarColor: Material.color(Material.Teal)
     property var testColor: {"plant": globalGreen, "water": globalBlue}
 
     //Icon font
-    property string difficultIcon: "\ue900"
-    property string plantIcon: "\ue901"
-    property string waterIcon: "\ue902"
+    property string audioIcon: "\ue900"
+    property string difficultIcon: "\ue901"
+    property string plantIcon: "\ue902"
+    property string waterIcon: "\ue903"
 
     FontLoader {
         source: "assets/icons-font/Icons.ttf"
