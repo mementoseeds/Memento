@@ -21,59 +21,80 @@ import QtQuick.Controls 2.15
 Item {
     property int marginBase: 10
 
-    width: root.width - marginBase * 2
-    x: marginBase
-    height: levelEntryDelegate.childrenRect.height + 10
+    width: root.width
+    height: levelEntryDelegate.height
 
-    Rectangle {
+    ColumnLayout {
         id: levelEntryDelegate
-        height: childrenRect.height + 15
-        width: parent.width
-        color: "transparent"
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.leftMargin: marginBase
+        anchors.rightMargin: marginBase
 
-        Loader {
-            id: levelFirstColumn
-            anchors.left: parent.left
-            anchors.leftMargin: marginBase
-            width: parent.width / 3
-            property string columnEntry: test
-            sourceComponent: testColumnType === "text" ? textColumnComponent : imageColumnComponent
+        RowLayout {
+            Layout.alignment: Qt.AlignCenter
+            Layout.preferredWidth: parent.width
+            spacing: marginBase
+
+            Loader {
+                id: levelTestColumn
+                Layout.preferredWidth: parent.Layout.preferredWidth / 3
+                property string columnEntry: test
+                sourceComponent:
+                {
+                    switch (testColumnType)
+                    {
+                        case "text":
+                            return textColumnComponent
+                        case "image":
+                            return imageColumnComponent
+//                        case "audio":
+//                            return audioComponent
+                    }
+                }
+            }
+
+            Loader {
+                id: levelPromptColumn
+                Layout.preferredWidth: levelTestColumn.Layout.preferredWidth
+                property string columnEntry: prompt
+                sourceComponent:
+                {
+                    switch (promptColumnType)
+                    {
+                        case "text":
+                            return textColumnComponent
+                        case "image":
+                            return imageColumnComponent
+//                        case "audio":
+//                            return audioComponent
+                    }
+                }
+            }
+
+            Label {
+                id: metaColumn
+                text: progress
+                font.pointSize: 12
+                font.family: "Icons"
+                textFormat: Text.RichText
+                horizontalAlignment: Text.AlignRight
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: levelTestColumn.Layout.preferredWidth / 2
+            }
         }
 
-        Loader {
-            id: levelSecondColumn
-            anchors.left: levelFirstColumn.right
-            anchors.right: levelThirdColumn.left
-            anchors.leftMargin: 10
-            anchors.rightMargin: 10
-            width: parent.width / 3 - anchors.leftMargin - anchors.rightMargin
-            property string columnEntry: prompt
-            sourceComponent: promptColumnType === "text" ? textColumnComponent : imageColumnComponent
-        }
-
-        Label {
-            id: levelThirdColumn
-            anchors.right: parent.right
-            anchors.rightMargin: marginBase
-            width: parent.width / 3
-            text: progress
-            font.pointSize: 10
-            font.family: "Icons"
-            textFormat: Text.RichText
-            horizontalAlignment: Text.AlignRight
+        Rectangle {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 1
         }
     }
 
     MouseArea {
-        anchors.fill: levelEntryDelegate
+        anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
         onClicked: rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": [id], "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
-    }
-
-    Rectangle {
-        width: parent.width
-        anchors.top: levelEntryDelegate.bottom
-        height: 1
     }
 
     Component {
@@ -91,7 +112,7 @@ Item {
         Image {
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnEntry)
             fillMode: Image.PreserveAspectFit
-            height: 200
+            sourceSize.width: 200
         }
     }
 }
