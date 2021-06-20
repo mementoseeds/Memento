@@ -68,7 +68,7 @@ Item {
                 tests.push(test)
 
                 test = {}
-                test[itemArray[i]] = TestType.MULTIPLECHOICE //Start all with multiple choice
+                test[itemArray[i]] = userSettings["enabledTests"]["enabledMultipleChoice"] ? TestType.MULTIPLECHOICE : getRandomTest()
                 tests.push(test)
             }
 
