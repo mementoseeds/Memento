@@ -137,7 +137,13 @@ Item {
                             MouseArea {
                                 anchors.fill: parent
                                 cursorShape: Qt.PointingHandCursor
-                                onClicked: audio.play()
+                                onClicked:
+                                {
+                                    if (audio.playbackState !== Audio.PlayingState)
+                                        audio.play()
+                                    else
+                                        audio.stop()
+                                }
                             }
                         }
                     }

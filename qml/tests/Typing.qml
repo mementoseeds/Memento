@@ -84,7 +84,7 @@ Item {
                         {
                             correctAnswerCounter++
                             textfieldBackground.color = "green"
-                            testHeader.testAudio.play()
+                            //testHeader.testAudio.play()
                         }
                         else
                         {

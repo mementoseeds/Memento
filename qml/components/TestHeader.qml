@@ -22,13 +22,18 @@ import QtMultimedia 5.15
 ColumnLayout {
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
-    property alias testAudio: audio
+    //property alias testAudio: audio
     property alias radialBarText: radialBar.showText
     property int testHeaderHeight: 0
 
     signal countdownReached()
 
     spacing: 20
+
+    function showAfterTests()
+    {
+
+    }
 
     RadialBar {
         id: radialBar
@@ -40,17 +45,21 @@ ColumnLayout {
         Layout.alignment: Qt.AlignCenter
     }
 
-    Audio {
-        id: audio
-        //source: Qt.resolvedUrl("file://" + courseDirectory + "/" + globalBackend.readItemAudio(itemId))
-        autoPlay: false
-        audioRole: Audio.GameRole
-    }
-
     Loader {
         Layout.fillWidth: true
         property var columnData: globalBackend.readItemColumn(itemId, promptColumn)
-        sourceComponent: columnData[0] === "text" ? textComponent : imageComponent
+        sourceComponent:
+        {
+            switch (columnData[0])
+            {
+                case "text":
+                    return textComponent
+                case "image":
+                    return imageComponent
+                case "audio":
+                    return audioComponent
+            }
+        }
     }
 
     Rectangle {
@@ -81,6 +90,36 @@ ColumnLayout {
         horizontalAlignment: Text.AlignHCenter
     }
 
+    Timer {
+        id: countdownTimer
+        property int maxSeconds: userSettings["countdownTimer"]
+        property int currentSeconds: 0
+        interval: 1000
+        running: true
+        repeat: true
+        onTriggered:
+        {
+            currentSeconds++
+            if (currentSeconds <= maxSeconds)
+            {
+                radialBar.value = radialBar.maxValue - (Math.floor(currentSeconds / maxSeconds * 100))
+            }
+            else
+            {
+                running = false
+                countdownReached()
+            }
+        }
+    }
+
+    Timer {
+        id: cooldownTimer
+        interval: 2000
+        running: false
+        repeat: false
+        onTriggered: triggerNextItem()
+    }
+
     Component {
         id: textComponent
 
@@ -108,33 +147,39 @@ ColumnLayout {
         }
     }
 
-    Timer {
-        id: countdownTimer
-        property int maxSeconds: userSettings["countdownTimer"]
-        property int currentSeconds: 0
-        interval: 1000
-        running: true
-        repeat: true
-        onTriggered:
-        {
-            currentSeconds++
-            if (currentSeconds <= maxSeconds)
-            {
-                radialBar.value = radialBar.maxValue - (Math.floor(currentSeconds / maxSeconds * 100))
+    Component {
+        id: audioComponent
+
+        Image {
+            source: "assets/icons/playaudio.svg"
+            sourceSize.width: platformIsMobile ? 50 : 100
+            sourceSize.height: platformIsMobile ? 50 : 100
+            fillMode: Image.PreserveAspectFit
+            Layout.alignment: Qt.AlignCenter
+
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
+
+            Audio {
+                id: audio
+                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + columnData[1].split(":")[0])
+                autoPlay: true
+                audioRole: Audio.GameRole
             }
-            else
-            {
-                running = false
-                countdownReached()
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked:
+                {
+                    if (audio.playbackState !== Audio.PlayingState)
+                        audio.play()
+                    else
+                    {
+                        audio.stop()
+                        audio.play()
+                    }
+                }
             }
         }
-    }
-
-    Timer {
-        id: cooldownTimer
-        interval: 1500
-        running: false
-        repeat: false
-        onTriggered: triggerNextItem()
     }
 }

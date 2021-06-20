@@ -35,7 +35,7 @@ Item {
     {
         correctAnswerCounter++
         testHeader.radialBarText = "Success"
-        testHeader.testAudio.play()
+        //testHeader.testAudio.play()
     }
 
     function wrongAnswer()
