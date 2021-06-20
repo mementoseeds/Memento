@@ -35,6 +35,8 @@ def showHelp():
     print("Extra options:")
     print("\t-f --from --> Set the level from which to start downloading")
     print("\t-t --to --> Set the level when to stop downloading")
+    print("\t-d --destination --> Set the download destination")
+    print("\t-n --no-audio --> Do not download any audio columns")
     print("Examples:")
     print("\tScrape capitals up to level 3 --> python scrape_memrise.py -t 3 https://app.memrise.com/course/63061/capital-cities-2/")
     print("\tScrape capitals from level 3 to the end --> python scrape_memrise.py -f 3 https://app.memrise.com/course/63061/capital-cities-2/")
@@ -46,7 +48,7 @@ try:
 
         if (o in ("-f", "--from")):
             minLevel = int(a)
-        
+
         if (o in ("-t", "--to")):
             maxLevel = int(a)
 
