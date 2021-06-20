@@ -24,6 +24,8 @@ Item {
     property string testColumn: ""
     property string promptColumn: ""
 
+    property int marginBase: 10
+
     Component.onCompleted: globalBackend.readItem(itemId, testColumn, promptColumn)
 
     ListView {
@@ -103,49 +105,48 @@ Item {
     Component {
         id: audioComponent
 
-        RowLayout {
+        ColumnLayout {
             width: parent.width
 
+            Label {
+                id: audioName
+                text: name
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
+                Layout.preferredWidth: parent.width
+            }
+
             RowLayout {
+                Layout.preferredWidth: parent.Layout.preferredWidth
                 Layout.alignment: Qt.AlignCenter
 
                 Repeater {
                     model: content.split(":")
 
-                    ColumnLayout {
-                        width: parent.width
+                    Label {
+                        text: audioIcon
+                        font.pointSize: 40
+                        font.family: "Icons"
+                        color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
+                        horizontalAlignment: Text.AlignHCenter
+                        rightPadding: marginBase
 
-                        Label {
-                            id: audioName
-                            text: name
-                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                            horizontalAlignment: Text.AlignHCenter
-                            Layout.preferredWidth: parent.width
+                        Audio {
+                            id: audio
+                            source: Qt.resolvedUrl("file://" + courseDirectory + "/" + modelData)
+                            autoPlay: index === 0
+                            audioRole: Audio.GameRole
                         }
 
-                        Label {
-                            text: audioIcon
-                            font.pointSize: 40
-                            font.family: "Icons"
-                            color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
-
-                            Audio {
-                                id: audio
-                                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + modelData)
-                                autoPlay: index === 0
-                                audioRole: Audio.GameRole
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                cursorShape: Qt.PointingHandCursor
-                                onClicked:
-                                {
-                                    if (audio.playbackState !== Audio.PlayingState)
-                                        audio.play()
-                                    else
-                                        audio.stop()
-                                }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked:
+                            {
+                                if (audio.playbackState !== Audio.PlayingState)
+                                    audio.play()
+                                else
+                                    audio.stop()
                             }
                         }
                     }
