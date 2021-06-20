@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 
 Item {
     property int marginBase: 10
@@ -41,13 +42,35 @@ Item {
                 id: testItem
                 property string columnEntry: testData
                 Layout.preferredWidth: parent.Layout.preferredWidth / 3
-                sourceComponent: testDataType === "text" ? textColumnComponent : imageColumnComponent
+                sourceComponent:
+                {
+                    switch (testDataType)
+                    {
+                        case "text":
+                            return textColumnComponent
+                        case "image":
+                            return imageColumnComponent
+                        case "audio":
+                            return audioColumnComponent
+                    }
+                }
             }
 
             Loader {
                 property string columnEntry: promptData
                 Layout.preferredWidth: testItem.Layout.preferredWidth
-                sourceComponent: promptDataType === "text" ? textColumnComponent : imageColumnComponent
+                sourceComponent:
+                {
+                    switch (promptDataType)
+                    {
+                        case "text":
+                            return textColumnComponent
+                        case "image":
+                            return imageColumnComponent
+                        case "audio":
+                            return audioColumnComponent
+                    }
+                }
             }
 
             Label {
@@ -57,7 +80,7 @@ Item {
                 font.bold: true
                 Layout.alignment: Qt.AlignRight
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                Layout.preferredWidth: parent.Layout.preferredWidth / 3 / 2
+                Layout.preferredWidth: testItem.Layout.preferredWidth / 2
             }
 
             Label {
@@ -91,7 +114,38 @@ Item {
         Image {
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnEntry)
             fillMode: Image.PreserveAspectFit
-            height: 200
+            sourceSize.width: 200
+        }
+    }
+
+    Component {
+        id: audioColumnComponent
+
+        Image {
+            source: "assets/icons/playaudio.svg"
+            sourceSize.width: platformIsMobile ? 50 : 100
+            sourceSize.height: platformIsMobile ? 50 : 100
+            fillMode: Image.PreserveAspectFit
+            Layout.alignment: Qt.AlignLeft
+
+            Audio {
+                id: audio
+                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + columnEntry.split(":")[0])
+                autoPlay: false
+                audioRole: Audio.GameRole
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked:
+                {
+                    if (audio.playbackState !== Audio.PlayingState)
+                        audio.play()
+                    else
+                        audio.stop()
+                }
+            }
         }
     }
 }

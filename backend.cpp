@@ -492,10 +492,10 @@ void Backend::setStartTime()
 QString Backend::getStopTime()
 {
     uint duration = elapsedTimer.elapsed() / 1000;
-    return parseTime(duration);
+    return parseTime(duration, true);
 }
 
-QString Backend::parseTime(uint seconds)
+QString Backend::parseTime(uint seconds, bool fullTime)
 {
     if (seconds >= 2629746)
         return QString::number(seconds / 2629746) + " months";
@@ -506,7 +506,7 @@ QString Backend::parseTime(uint seconds)
     else if (seconds >= 3600)
         return QString::number(seconds / 3600) + " hours";
     else if (seconds >= 60)
-        return QString::number(seconds / 60) + " minutes : " + QString::number(seconds % 60) + " seconds";
+        return QString::number(seconds / 60) + " minutes" + (fullTime ? " : " + QString::number(seconds & 60) + " seconds" : "");
     else
         return QString::number(seconds) + " seconds";
 

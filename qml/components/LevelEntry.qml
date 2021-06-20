@@ -17,9 +17,15 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtMultimedia 5.15
 
 Item {
     property int marginBase: 10
+
+    function openOnePreview()
+    {
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": [id], "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+    }
 
     width: root.width
     height: levelEntryDelegate.height
@@ -49,8 +55,8 @@ Item {
                             return textColumnComponent
                         case "image":
                             return imageColumnComponent
-//                        case "audio":
-//                            return audioComponent
+                        case "audio":
+                            return audioColumnComponent
                     }
                 }
             }
@@ -67,8 +73,8 @@ Item {
                             return textColumnComponent
                         case "image":
                             return imageColumnComponent
-//                        case "audio":
-//                            return audioComponent
+                        case "audio":
+                            return audioColumnComponent
                     }
                 }
             }
@@ -76,10 +82,11 @@ Item {
             Label {
                 id: metaColumn
                 text: progress
-                font.pointSize: 12
+                font.pointSize: 10
                 font.family: "Icons"
                 textFormat: Text.RichText
                 horizontalAlignment: Text.AlignRight
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.alignment: Qt.AlignRight
                 Layout.preferredWidth: levelTestColumn.Layout.preferredWidth / 2
             }
@@ -91,28 +98,67 @@ Item {
         }
     }
 
-    MouseArea {
-        anchors.fill: parent
-        cursorShape: Qt.PointingHandCursor
-        onClicked: rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": [id], "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
-    }
-
     Component {
         id: textColumnComponent
+
         Label {
             text: columnEntry
             font.pointSize: 12
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: openOnePreview()
+            }
         }
     }
 
     Component {
         id: imageColumnComponent
+
         Image {
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + columnEntry)
             fillMode: Image.PreserveAspectFit
             sourceSize.width: 200
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked: openOnePreview()
+            }
+        }
+    }
+
+    Component {
+        id: audioColumnComponent
+
+        Image {
+            source: "assets/icons/playaudio.svg"
+            sourceSize.width: platformIsMobile ? 50 : 100
+            sourceSize.height: platformIsMobile ? 50 : 100
+            fillMode: Image.PreserveAspectFit
+            Layout.alignment: Qt.AlignCenter
+
+            Audio {
+                id: audio
+                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + columnEntry.split(":")[0])
+                autoLoad: false
+                audioRole: Audio.GameRole
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                cursorShape: Qt.PointingHandCursor
+                onClicked:
+                {
+                    if (audio.playbackState !== Audio.PlayingState)
+                        audio.play()
+                    else
+                        audio.stop()
+                }
+            }
         }
     }
 }

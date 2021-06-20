@@ -176,7 +176,7 @@ private:
     void correctAnswer(QString itemId);
     void wrongAnswer(QString itemId);
     String getWateringTime(int streak);
-    QString parseTime(uint seconds);
+    QString parseTime(uint seconds, bool fullTime = false);
     const Json getRandom(const Json json, bool returnKey);
     QString getReviewTime(QString date);
 

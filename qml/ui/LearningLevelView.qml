@@ -200,7 +200,8 @@ Item {
                                         signalSource.refreshCourseLevels()
                                         reloadLevel()
                                     }
-                                    else showPassiveNotification("No items to auto learn")
+                                    else
+                                        showPassiveNotification("No items to auto learn")
 
                                     break
                             }
@@ -251,6 +252,36 @@ Item {
                             }
                         }
                     }
+                }
+
+                RowLayout {
+                    Layout.preferredWidth: parent.width
+                    Layout.topMargin: marginBase
+
+                    Label {
+                        text: testColumn
+                        font.pointSize: 12
+                        font.bold: true
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        horizontalAlignment: Text.AlignLeft
+                        Layout.leftMargin: marginBase
+                        Layout.preferredWidth: parent.Layout.preferredWidth / 3
+                    }
+
+                    Label {
+                        text: promptColumn
+                        font.pointSize: 12
+                        font.bold: true
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        horizontalAlignment: Text.AlignLeft
+                        Layout.preferredWidth: parent.Layout.preferredWidth / 3
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    Layout.bottomMargin: marginBase
                 }
             }
         }
