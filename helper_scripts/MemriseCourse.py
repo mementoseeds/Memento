@@ -104,6 +104,7 @@ class MemriseCourse():
                 pattern = re.compile("var level_multimedia = '(.*?)';$", re.MULTILINE)
                 rawMedia = soup.find("script", text = pattern).string.strip()
                 cleanMedia = re.sub("^var level_multimedia = '|';$", "", rawMedia)
+                cleanMedia = re.sub("embed:", "", cleanMedia)
                 
                 levelContent["mediaContent"] = cleanMedia.encode("utf-8").decode('unicode-escape').encode('latin1').decode('utf-8')
                 self.level.append(levelContent)
