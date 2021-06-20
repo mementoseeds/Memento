@@ -212,12 +212,14 @@ class MemriseCourse():
                 if itemInfo["thing"]["columns"][column]["kind"] == "audio" and not skipAudio:
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "audio"
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = []
+                    audioArray = []
 
                     for audio in itemInfo["thing"]["columns"][column]["val"]:
                         audioName = audio["url"].split("/")[-1]
                         open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
-                        self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"].append("assets/audio/" + audioName)
+                        audioArray.append("assets/audio/" + audioName)
+
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = ":".join(audioArray)
                 
                 # Image column
                 elif itemInfo["thing"]["columns"][column]["kind"] == "image":
