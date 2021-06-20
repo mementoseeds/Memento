@@ -19,6 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.12
 import TestType 1.0
+import QtMultimedia 5.15
 
 Item {
     property string testType: "MultipleChoice"
@@ -52,6 +53,12 @@ Item {
         tests.splice(itemIndex + 1, 0, test)
     }
 
+    function stopAllAudio()
+    {
+        for (var i = 0; i < choices.model.length; i++)
+            choices.itemAt(i).children[1].item.stopAudio()
+    }
+
     ScrollView {
         anchors.fill: parent
         contentWidth: root.width
@@ -83,7 +90,7 @@ Item {
                             id: choiceIndex
                             Component.onCompleted:
                             {
-                                if (itemData[0] === "text")
+                                if (itemData[0] === "text" || itemData[0] === "audio")
                                 {
                                     anchors.top = parent.top
                                     anchors.left = parent.left
@@ -109,7 +116,18 @@ Item {
                             id: choicesLoader
                             property string choiceData: modelData
                             property int buttonHeight: (root.height - testHeader.testHeaderHeight) / numberChoices - choiceIndex.contentHeight
-                            sourceComponent: itemData[0] === "text" ? buttonComponent : imageComponent
+                            sourceComponent:
+                            {
+                                switch (itemData[0])
+                                {
+                                    case "text":
+                                        return buttonComponent
+                                    case "image":
+                                        return imageComponent
+                                    case "audio":
+                                        return audioComponent
+                                }
+                            }
                         }
                     }
                 }
@@ -204,6 +222,76 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 onClicked: parent.clicked()
+            }
+        }
+    }
+
+    Component {
+        id: audioComponent
+
+        Button {
+            id: audioButton
+            text: audioIcon
+            width: root.width / 2 - flowLayout.spacing - flowLayout.Layout.margins
+            height: buttonHeight
+            font.family: "Icons"
+            font.pointSize: 100
+            Material.background: Material.color(Material.BlueGrey, Material.Shade600)
+
+            contentItem: Text {
+                id: buttonContentItem
+                text: parent.text
+                font: parent.font
+                fontSizeMode: Text.Fit
+                minimumPointSize: 10
+                opacity: enabled ? 1.0 : 0.3
+                color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
+            }
+
+            onClicked:
+            {
+                if (audio.playbackState !== Audio.PlayingState)
+                {
+                    stopAllAudio()
+                    audio.play()
+                }
+                else
+                {
+                    if (testHeader.countdownTimer.running)
+                    {
+                        testHeader.countdownTimer.running = false
+
+                        if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
+                        {
+                            audioButton.Material.background = globalGreen
+                            correctAnswer()
+                        }
+                        else
+                        {
+                            audioButton.Material.background = globalRed
+                            wrongAnswer()
+                        }
+
+                        testHeader.cooldownTimer.running = true
+                    }
+                    else
+                        triggerNextItem()
+                }
+            }
+
+            function stopAudio()
+            {
+                audio.stop()
+            }
+
+            Audio {
+                id: audio
+                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + choiceData.split(":")[0])
+                autoLoad: false
+                audioRole: Audio.GameRole
             }
         }
     }
