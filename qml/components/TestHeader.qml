@@ -42,7 +42,7 @@ ColumnLayout {
 
     Audio {
         id: audio
-        source: Qt.resolvedUrl("file://" + courseDirectory + "/" + globalBackend.readItemAudio(itemId))
+        //source: Qt.resolvedUrl("file://" + courseDirectory + "/" + globalBackend.readItemAudio(itemId))
         autoPlay: false
         audioRole: Audio.GameRole
     }

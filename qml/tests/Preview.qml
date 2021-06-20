@@ -112,21 +112,33 @@ Item {
                 Repeater {
                     model: content.split(":")
 
-                    Image {
-                        source: "assets/icons/playaudio.svg"
-                        sourceSize.width: platformIsMobile ? 50 : 100
+                    ColumnLayout {
+                        width: parent.width
 
-                        Audio {
-                            id: audio
-                            source: Qt.resolvedUrl("file://" + courseDirectory + "/" + modelData)
-                            autoPlay: index === 0
-                            audioRole: Audio.GameRole
+                        Label {
+                            id: audioName
+                            text: name
+                            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                            horizontalAlignment: Text.AlignHCenter
+                            Layout.preferredWidth: parent.width
                         }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            cursorShape: Qt.PointingHandCursor
-                            onClicked: audio.play()
+                        Image {
+                            source: "assets/icons/playaudio.svg"
+                            sourceSize.width: platformIsMobile ? 50 : 100
+
+                            Audio {
+                                id: audio
+                                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + modelData)
+                                autoPlay: index === 0
+                                audioRole: Audio.GameRole
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                cursorShape: Qt.PointingHandCursor
+                                onClicked: audio.play()
+                            }
                         }
                     }
                 }

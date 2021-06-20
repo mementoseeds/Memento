@@ -214,18 +214,18 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     Json item = globalSeedbox[itemId.toStdString()];
 
     //Add audio
-    Json audioArray = item["audio"];
+//    Json audioArray = item["audio"];
 
-    if (!audioArray.empty())
-    {
-        QStringList audioList;
-        for (auto &val : audioArray)
-            if (!val.is_null())
-                audioList.append(QString::fromStdString(val.get<String>()));
+//    if (!audioArray.empty())
+//    {
+//        QStringList audioList;
+//        for (auto &val : audioArray)
+//            if (!val.is_null())
+//                audioList.append(QString::fromStdString(val.get<String>()));
 
-        if (!audioList.isEmpty())
-            emit addItemDetails("audio", "Audio", audioList.join(":"));
-    }
+//        if (!audioList.isEmpty())
+//            emit addItemDetails("audio", "Audio", audioList.join(":"));
+//    }
 
     //Add attributes
     QString attributes = QString::fromStdString(item["attributes"].get<String>());
@@ -315,15 +315,15 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
     return list;
 }
 
-QString Backend::readItemAudio(QString itemId)
-{
-    QString itemAudio = "";
-    Json audio = globalSeedbox[itemId.toStdString()]["audio"][0];
-    if (audio.is_string())
-        itemAudio = QString::fromStdString(audio.get<String>());
+//QString Backend::readItemAudio(QString itemId)
+//{
+//    QString itemAudio = "";
+//    Json audio = globalSeedbox[itemId.toStdString()]["audio"][0];
+//    if (audio.is_string())
+//        itemAudio = QString::fromStdString(audio.get<String>());
 
-    return itemAudio;
-}
+//    return itemAudio;
+//}
 
 bool Backend::getLevelCompleted()
 {

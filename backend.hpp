@@ -117,7 +117,7 @@ public:
 
     Q_INVOKABLE QString readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
-    Q_INVOKABLE QString readItemAudio(QString itemId);
+    //Q_INVOKABLE QString readItemAudio(QString itemId);
 
     Q_INVOKABLE bool getLevelCompleted();
 
