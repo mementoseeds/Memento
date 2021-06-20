@@ -83,6 +83,7 @@ class MemriseCourse():
         self.pool = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(poolId)).json()
 
         # Find which columns to show after tests
+        print("Finding columns to show after tests")
         self.showAfterTests = []
         for column in self.pool["pool"]["columns"]:
             if self.pool["pool"]["columns"][column]["show_after_tests"]:
@@ -203,16 +204,22 @@ class MemriseCourse():
 
             self.seedbox[key] = {}
             self.seedbox[key]["attributes"] = itemInfo["thing"]["attributes"]["1"]["val"] if "1" in itemInfo["thing"]["attributes"] else ""
-            self.seedbox[key]["audio"] = []
 
             # Columns
             for column in itemInfo["thing"]["columns"]:
+
+                # Audio column
                 if itemInfo["thing"]["columns"][column]["kind"] == "audio" and not skipAudio:
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "audio"
+                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = []
+
                     for audio in itemInfo["thing"]["columns"][column]["val"]:
                         audioName = audio["url"].split("/")[-1]
                         open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
-                        self.seedbox[key]["audio"].append("assets/audio/" + audioName)
+                        self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"].append("assets/audio/" + audioName)
                 
+                # Image column
                 elif itemInfo["thing"]["columns"][column]["kind"] == "image":
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "image"
@@ -222,6 +229,7 @@ class MemriseCourse():
 
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
                 
+                # Text column
                 elif itemInfo["thing"]["columns"][column]["kind"] == "text":
                     self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
 
