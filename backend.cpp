@@ -278,13 +278,9 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     }
 }
 
-QString Backend::readCourseTitle(QString courseDirectory)
+QString Backend::readCourseTitle()
 {
-    std::ifstream infoFile(QString(courseDirectory + "/info.json").toStdString());
-    Json courseInfo;
-    infoFile >> courseInfo;
-    infoFile.close();
-    return QString::fromStdString(courseInfo["title"].get<String>());
+    return QString::fromStdString(globalInfo["title"].get<String>());
 }
 
 QString Backend::readItemAttributes(QString itemId)
@@ -310,6 +306,13 @@ void Backend::setManualReview(bool manualReview)
 {
     this->manualReview = manualReview;
     streakUnlocked = !manualReview;
+}
+
+void Backend::loadCourseInfo(QString courseDirectory)
+{
+    std::ifstream infoFile(QString(courseDirectory + "/info.json").toStdString());
+    infoFile >> globalInfo;
+    infoFile.close();
 }
 
 bool Backend::checkAnswer(QString itemId, QString column, QString answer)
@@ -386,7 +389,8 @@ void Backend::getShowAfterTests(QString itemId, QString testColumn, QString prom
         String entry = item.key();
         QString qEntry = QString::fromStdString(entry);
 
-        if (globalSeedbox[id][entry].is_object() && qEntry.compare(testColumn) != 0 && qEntry.compare(promptColumn) != 0)
+        if (globalSeedbox[id][entry].is_object() && qEntry.compare(testColumn) != 0 && qEntry.compare(promptColumn) != 0
+            && (std::find(globalInfo["showAfterTests"].begin(), globalInfo["showAfterTests"].end(), entry) != globalInfo["showAfterTests"].end()))
             emit addShowAfterTests(QString::fromStdString(globalSeedbox[id][entry]["type"].get<String>()), QString::fromStdString(globalSeedbox[id][entry]["primary"].get<String>()));
     }
 }

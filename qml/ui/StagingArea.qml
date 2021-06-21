@@ -36,7 +36,7 @@ Item {
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
 
-    Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle(courseDirectory))
+    Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle())
 
     function getRandomTest()
     {
@@ -57,6 +57,7 @@ Item {
     Component.onCompleted:
     {
         globalBackend.setManualReview(manualReview)
+        globalBackend.loadCourseInfo(courseDirectory)
 
         if (actionType === "plant")
         {

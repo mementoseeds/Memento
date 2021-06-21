@@ -48,6 +48,8 @@ ColumnLayout {
     Loader {
         Layout.fillWidth: true
         property var columnData: globalBackend.readItemColumn(itemId, promptColumn)
+        property int textSize: 20
+        property int audioSize: 40
         sourceComponent:
         {
             switch (columnData[0])
@@ -68,6 +70,8 @@ ColumnLayout {
         Loader {
             Layout.fillWidth: true
             property var columnData: showAfterTestsData.split(";")
+            property int textSize: 15
+            property int audioSize: 20
             sourceComponent:
             {
                 switch (columnData[0])
@@ -146,7 +150,7 @@ ColumnLayout {
 
         Label {
             text: columnData[1]
-            font.pointSize: 20
+            font.pointSize: textSize
             font.bold: true
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
@@ -173,7 +177,7 @@ ColumnLayout {
 
         Label {
             text: audioIcon
-            font.pointSize: 40
+            font.pointSize: audioSize
             font.family: "Icons"
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter

@@ -113,7 +113,7 @@ public:
 
     Q_INVOKABLE void readItem(QString itemId, QString testColumn, QString promptColumn);
 
-    Q_INVOKABLE QString readCourseTitle(QString courseDirectory);
+    Q_INVOKABLE QString readCourseTitle();
 
     Q_INVOKABLE QString readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
@@ -121,6 +121,7 @@ public:
     Q_INVOKABLE bool getLevelCompleted();
 
     Q_INVOKABLE void setManualReview(bool manualReview);
+    Q_INVOKABLE void loadCourseInfo(QString courseDirectory);
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
     Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
 
@@ -186,6 +187,7 @@ private:
     Json globalSeedbox;
     Json globalLevel;
     Json globalLevelSeeds;
+    Json globalInfo;
     int globalSeedsAmount;
 
     bool manualReview = false;
