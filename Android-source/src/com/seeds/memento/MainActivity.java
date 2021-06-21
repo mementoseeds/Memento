@@ -22,7 +22,6 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
-import java.io.File;
 
 public class MainActivity extends QtActivity
 {

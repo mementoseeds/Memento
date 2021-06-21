@@ -161,7 +161,7 @@ ColumnLayout {
 
             Audio {
                 id: audio
-                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + columnData[1].split(":")[0])
+                source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + columnData[1].split(":")[0])
                 autoPlay: true
                 audioRole: Audio.GameRole
             }

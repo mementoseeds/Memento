@@ -38,6 +38,7 @@ ApplicationWindow {
 
     property var userSettings: globalBackend.getUserSettings()
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
+    property string fileUrlStart: Qt.platform.os === "windows" ? "file:///" : "file://"
 
     //Colors
     property color defaultMaterialAccept: globalBlue

@@ -142,7 +142,7 @@ Item {
 
             Audio {
                 id: audio
-                source: Qt.resolvedUrl("file://" + courseDirectory + "/" + columnEntry.split(":")[0])
+                source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + columnEntry.split(":")[0])
                 autoLoad: false
                 audioRole: Audio.GameRole
             }
