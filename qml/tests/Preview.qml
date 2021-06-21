@@ -173,6 +173,7 @@ Item {
                 id: textContent
                 visible: text.length > 0
                 text: content
+                font.bold: type !== "alternative"
                 font.pointSize: type === "attributes" || type === "alternative" ? 12 : 20
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
