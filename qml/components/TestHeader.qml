@@ -139,7 +139,7 @@ ColumnLayout {
 
     Timer {
         id: cooldownTimer
-        interval: 2000
+        interval: userSettings["cooldownTimer"]
         running: false
         repeat: false
         onTriggered: triggerNextItem()

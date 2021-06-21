@@ -29,6 +29,7 @@ Item {
     {
         userSettings["coursesLocation"] = coursesLocationTextField.text
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
+        userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
@@ -82,6 +83,21 @@ Item {
                 id: countdownTimerSpinBox
                 from: 1
                 value: userSettings["countdownTimer"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Post-test cooldown timer ms"
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: cooldownTimerSpinBox
+                from: 100
+                to: 100000
+                stepSize: 100
+                value: userSettings["cooldownTimer"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }
