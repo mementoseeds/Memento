@@ -24,6 +24,7 @@ ColumnLayout {
     property alias countdownTimer: countdownTimer
     property alias radialBarText: radialBar.showText
     property int testHeaderHeight: 0
+    property bool testRunning: true
 
     signal countdownReached()
 
@@ -34,26 +35,8 @@ ColumnLayout {
         globalBackend.getShowAfterTests(itemId, testColumn, promptColumn)
     }
 
-    Button {
-        id: pauseButton
-        text: "Pause"
-        enabled: countdownTimer.running
-        icon.source: "assets/actions/pause.svg"
-        onClicked:
-        {
-            countdownTimer.running = false
-
-            if (testHeaderMainLoader.columnData[0] === "audio")
-                testHeaderMainLoader.item.pauseAudio()
-
-            rootStackView.push("qrc:/PauseRoom.qml")
-        }
-    }
-
-    Shortcut {
-        sequence: "Alt+p"
-        onActivated: pauseButton.clicked()
-    }
+    Component.onCompleted: mainMenuBar.insertAction(0, pauseAction)
+    Component.onDestruction: mainMenuBar.takeAction(0)
 
     RadialBar {
         id: radialBar
@@ -176,7 +159,7 @@ ColumnLayout {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
         }
     }
 
@@ -189,7 +172,7 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
-            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + height + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
         }
     }
 
@@ -214,7 +197,7 @@ ColumnLayout {
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
 
             Audio {
                 id: audio
@@ -252,11 +235,27 @@ ColumnLayout {
     Connections {
         target: signalSource
 
+        function onPauseTest()
+        {
+            if (testRunning)
+            {
+                countdownTimer.running = false
+
+                if (testHeaderMainLoader.columnData[0] === "audio")
+                    testHeaderMainLoader.item.pauseAudio()
+
+                rootStackView.push("qrc:/PauseRoom.qml")
+            }
+        }
+
         function onResumeTest()
         {
-            countdownTimer.running = true
-            if (testHeaderMainLoader.columnData[0] === "audio")
-                testHeaderMainLoader.item.resumeAudio()
+            if (testRunning)
+            {
+                countdownTimer.running = true
+                if (testHeaderMainLoader.columnData[0] === "audio")
+                    testHeaderMainLoader.item.resumeAudio()
+            }
         }
     }
 }

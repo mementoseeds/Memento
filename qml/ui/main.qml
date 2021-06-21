@@ -66,6 +66,7 @@ ApplicationWindow {
         signal reloadLearningLevel()
         signal refreshCourseLevels()
         signal refreshAllCourses()
+        signal pauseTest()
         signal resumeTest()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
@@ -230,6 +231,14 @@ ApplicationWindow {
                 onTriggered: signalSource.refreshAllCourses()
             }
         }
+    }
+
+    Action {
+        id: pauseAction
+        text: "&Pause"
+        icon.source: "assets/actions/pause.svg"
+        shortcut: "Alt+p"
+        onTriggered: signalSource.pauseTest()
     }
 
     StackView {

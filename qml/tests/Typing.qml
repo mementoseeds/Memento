@@ -131,6 +131,9 @@ Item {
         target: testHeader
         function onCountdownReached()
         {
+            //Lock the test
+            testHeader.testRunning = false
+
             textfield.accepted()
         }
     }

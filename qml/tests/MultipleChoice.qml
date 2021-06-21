@@ -300,6 +300,9 @@ Item {
         target: testHeader
         function onCountdownReached()
         {
+            //Lock the test
+            testHeader.testRunning = false
+
             //Just for updating statistics
             globalBackend.checkAnswer(itemId, testColumn, "")
 
