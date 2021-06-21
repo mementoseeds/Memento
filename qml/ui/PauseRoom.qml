@@ -20,6 +20,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.12
 
 Item {
+    objectName: "PauseRoom.qml"
 
     Component.onDestruction: signalSource.resumeTest()
 

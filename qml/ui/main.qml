@@ -215,7 +215,7 @@ ApplicationWindow {
                 text: "&Options"
                 icon.source: "assets/actions/configure.svg"
                 shortcut: "Ctrl+p"
-                enabled: rootStackView.currentItem.objectName !== "StagingArea.qml"
+                enabled: rootStackView.currentItem.objectName !== "StagingArea.qml" && rootStackView.currentItem.objectName !== "PauseRoom.qml"
                 onTriggered:
                 {
                     if (rootStackView.currentItem.objectName !== "Options.qml")
@@ -238,6 +238,7 @@ ApplicationWindow {
         text: "&Pause"
         icon.source: "assets/actions/pause.svg"
         shortcut: "Alt+p"
+        enabled: rootStackView.currentItem.objectName !== "PauseRoom.qml"
         onTriggered: signalSource.pauseTest()
     }
 
