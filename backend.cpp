@@ -149,7 +149,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
-    userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", true).toBool());
+    userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
 
     QVariantMap testCheck = userSettings["enabledTests"].toMap();
