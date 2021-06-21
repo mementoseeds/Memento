@@ -36,7 +36,6 @@ Item {
     {
         correctAnswerCounter++
         testHeader.radialBarText = "Success"
-        //testHeader.testAudio.play()
     }
 
     function wrongAnswer()
@@ -166,6 +165,7 @@ Item {
                 if (testHeader.countdownTimer.running)
                 {
                     testHeader.countdownTimer.running = false
+                    testHeader.showAfterTests()
 
                     if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
                     {

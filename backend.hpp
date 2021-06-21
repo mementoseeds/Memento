@@ -117,12 +117,12 @@ public:
 
     Q_INVOKABLE QString readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
-    //Q_INVOKABLE QString readItemAudio(QString itemId);
 
     Q_INVOKABLE bool getLevelCompleted();
 
     Q_INVOKABLE void setManualReview(bool manualReview);
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
+    Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
 
     Q_INVOKABLE void saveLevel(QString levelPath);
 
@@ -164,6 +164,8 @@ signals:
 
     void addItemDetails(QString type, QString name, QString content);
     void addItemSeparator();
+
+    void addShowAfterTests(QString type, QString content);
 
     void addItemResults(QString testData, QString testDataType, QString promptData, QString promptDataType, int successes, int failures, int streak);
 

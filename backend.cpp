@@ -213,20 +213,6 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
 {
     Json item = globalSeedbox[itemId.toStdString()];
 
-    //Add audio
-//    Json audioArray = item["audio"];
-
-//    if (!audioArray.empty())
-//    {
-//        QStringList audioList;
-//        for (auto &val : audioArray)
-//            if (!val.is_null())
-//                audioList.append(QString::fromStdString(val.get<String>()));
-
-//        if (!audioList.isEmpty())
-//            emit addItemDetails("audio", "Audio", audioList.join(":"));
-//    }
-
     //Add attributes
     QString attributes = QString::fromStdString(item["attributes"].get<String>());
     if (!attributes.isEmpty())
@@ -315,16 +301,6 @@ QVariantList Backend::readItemColumn(QString itemId, QString column)
     return list;
 }
 
-//QString Backend::readItemAudio(QString itemId)
-//{
-//    QString itemAudio = "";
-//    Json audio = globalSeedbox[itemId.toStdString()]["audio"][0];
-//    if (audio.is_string())
-//        itemAudio = QString::fromStdString(audio.get<String>());
-
-//    return itemAudio;
-//}
-
 bool Backend::getLevelCompleted()
 {
     return globalLevel["completed"].get<bool>();
@@ -400,6 +376,19 @@ void Backend::wrongAnswer(QString itemId)
     streakUnlocked = true;
 
     globalLevelSeeds[id] = item;
+}
+
+void Backend::getShowAfterTests(QString itemId, QString testColumn, QString promptColumn)
+{
+    String id = itemId.toStdString();
+    for (auto &item : globalSeedbox[id].items())
+    {
+        String entry = item.key();
+        QString qEntry = QString::fromStdString(entry);
+
+        if (globalSeedbox[id][entry].is_object() && qEntry.compare(testColumn) != 0 && qEntry.compare(promptColumn) != 0)
+            emit addShowAfterTests(QString::fromStdString(globalSeedbox[id][entry]["type"].get<String>()), QString::fromStdString(globalSeedbox[id][entry]["primary"].get<String>()));
+    }
 }
 
 String Backend::getWateringTime(int streak)

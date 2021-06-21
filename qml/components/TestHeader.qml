@@ -32,7 +32,7 @@ ColumnLayout {
 
     function showAfterTests()
     {
-
+        globalBackend.getShowAfterTests(itemId, testColumn, promptColumn)
     }
 
     RadialBar {
@@ -58,6 +58,27 @@ ColumnLayout {
                     return imageComponent
                 case "audio":
                     return audioComponent
+            }
+        }
+    }
+
+    Repeater {
+        model: ListModel {id: showAfterTestsModel}
+
+        Loader {
+            Layout.fillWidth: true
+            property var columnData: showAfterTestsData.split(";")
+            sourceComponent:
+            {
+                switch (columnData[0])
+                {
+                    case "text":
+                        return textComponent
+                    case "image":
+                        return imageComponent
+                    case "audio":
+                        return audioComponent
+                }
             }
         }
     }
@@ -180,6 +201,15 @@ ColumnLayout {
                     }
                 }
             }
+        }
+    }
+
+    Connections {
+        target: globalBackend
+
+        function onAddShowAfterTests(type, content)
+        {
+            showAfterTestsModel.append({"showAfterTestsData": [type, content].join(";")})
         }
     }
 }
