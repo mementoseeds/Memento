@@ -66,6 +66,7 @@ ApplicationWindow {
         signal reloadLearningLevel()
         signal refreshCourseLevels()
         signal refreshAllCourses()
+        signal resumeTest()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
     }
@@ -227,11 +228,6 @@ ApplicationWindow {
                 shortcut: "Alt+r"
                 enabled: rootStackView.depth === 1
                 onTriggered: signalSource.refreshAllCourses()
-            }
-
-            Action {
-                text: "debug"
-                onTriggered: console.debug(rootStackView.currentItem.objectName)
             }
         }
     }

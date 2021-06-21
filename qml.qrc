@@ -32,5 +32,8 @@
         <file>assets/icons-font/Icons.ttf</file>
         <file>assets/icons/difficult.svg</file>
         <file alias="MultipleChoice.qml">qml/tests/MultipleChoice.qml</file>
+        <file>assets/actions/pause.svg</file>
+        <file alias="PauseRoom.qml">qml/ui/PauseRoom.qml</file>
+        <file>assets/actions/continue.svg</file>
     </qresource>
 </RCC>

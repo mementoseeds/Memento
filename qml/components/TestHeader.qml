@@ -22,7 +22,6 @@ import QtMultimedia 5.15
 ColumnLayout {
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
-    //property alias testAudio: audio
     property alias radialBarText: radialBar.showText
     property int testHeaderHeight: 0
 
@@ -33,6 +32,27 @@ ColumnLayout {
     function showAfterTests()
     {
         globalBackend.getShowAfterTests(itemId, testColumn, promptColumn)
+    }
+
+    Button {
+        id: pauseButton
+        text: "Pause"
+        enabled: countdownTimer.running
+        icon.source: "assets/actions/pause.svg"
+        onClicked:
+        {
+            countdownTimer.running = false
+
+            if (testHeaderMainLoader.columnData[0] === "audio")
+                testHeaderMainLoader.item.pauseAudio()
+
+            rootStackView.push("qrc:/PauseRoom.qml")
+        }
+    }
+
+    Shortcut {
+        sequence: "Alt+p"
+        onActivated: pauseButton.clicked()
     }
 
     RadialBar {
@@ -46,6 +66,7 @@ ColumnLayout {
     }
 
     Loader {
+        id: testHeaderMainLoader
         Layout.fillWidth: true
         property var columnData: globalBackend.readItemColumn(itemId, promptColumn)
         property int textSize: 20
@@ -155,7 +176,7 @@ ColumnLayout {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
         }
     }
 
@@ -168,7 +189,7 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + height + instructions.contentHeight
         }
     }
 
@@ -176,13 +197,24 @@ ColumnLayout {
         id: audioComponent
 
         Label {
+
+            function pauseAudio()
+            {
+                audio.pause()
+            }
+
+            function resumeAudio()
+            {
+                audio.play()
+            }
+
             text: audioIcon
             font.pointSize: audioSize
             font.family: "Icons"
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = pauseButton.height + radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
 
             Audio {
                 id: audio
@@ -214,6 +246,17 @@ ColumnLayout {
         function onAddShowAfterTests(type, content)
         {
             showAfterTestsModel.append({"showAfterTestsData": [type, content].join(";")})
+        }
+    }
+
+    Connections {
+        target: signalSource
+
+        function onResumeTest()
+        {
+            countdownTimer.running = true
+            if (testHeaderMainLoader.columnData[0] === "audio")
+                testHeaderMainLoader.item.resumeAudio()
         }
     }
 }
