@@ -582,7 +582,16 @@ QVariantList Backend::getRandomValues(QString itemId, QString column, int count)
             String key = getRandom(globalSeedbox, true);
 
             if (globalSeedbox[key][itemColumn].is_object())
+            {
                 value = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>());
+
+                //Guarantee unique values as long as there are enough in the seedbox
+                if (globalSeedbox.size() > (ulong)count && list.contains(value))
+                {
+                    value.clear();
+                    continue;
+                }
+            }
             else
                 continue;
         }
