@@ -219,7 +219,8 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
         String attributeNumber = val.key();
         emit addItemDetails("attributes", QString::fromStdString(item["attributes"][attributeNumber]["label"].get<String>()), QString::fromStdString(item["attributes"][attributeNumber]["value"].get<String>()));
     }
-    emit addItemSeparator();
+    if (!item["attributes"].empty())
+        emit addItemSeparator();
 
     String stdTestColumn = testColumn.toStdString();
     String stdPromptColumn = promptColumn.toStdString();
@@ -283,15 +284,17 @@ QString Backend::readCourseTitle()
     return QString::fromStdString(globalInfo["title"].get<String>());
 }
 
-void Backend::readItemAttributes(QString itemId)
+QVariantList Backend::readItemAttributes(QString itemId)
 {
+    QVariantList list;
     String id = itemId.toStdString();
     for (auto &val : globalSeedbox[id]["attributes"].items())
     {
         String attributeNumber = val.key();
         if (globalSeedbox[id]["attributes"][attributeNumber]["showAtTests"].get<bool>())
-            emit addAttributes(QString::fromStdString(globalSeedbox[id]["attributes"][attributeNumber]["value"].get<String>()));
+            list.append(QString::fromStdString(globalSeedbox[id]["attributes"][attributeNumber]["value"].get<String>()));
     }
+    return list;
 }
 
 QVariantList Backend::readItemColumn(QString itemId, QString column)

@@ -103,8 +103,7 @@ ColumnLayout {
 
         Repeater {
             id: attributesRepeater
-            model: ListModel {id: attributesModel}
-            Component.onCompleted: globalBackend.readItemAttributes(itemId)
+            model: globalBackend.readItemAttributes(itemId)
 
             Rectangle {
                 width: attributes.contentWidth + 10
@@ -116,7 +115,7 @@ ColumnLayout {
 
                 Label {
                     id: attributes
-                    text: value
+                    text: modelData
                     font.pointSize: platformIsMobile ? 15 : 10
                     anchors.centerIn: parent
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -175,14 +174,7 @@ ColumnLayout {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            Connections {
-                target: globalBackend
-
-                function onAddAttributes(value)
-                {
-                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
-                }
-            }
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
         }
     }
 
@@ -195,14 +187,7 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
-            Connections {
-                target: globalBackend
-
-                function onAddAttributes(value)
-                {
-                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + height + instructions.contentHeight
-                }
-            }
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + height + instructions.contentHeight
         }
     }
 
@@ -227,14 +212,7 @@ ColumnLayout {
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter
 
-            Connections {
-                target: globalBackend
-
-                function onAddAttributes(value)
-                {
-                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
-                }
-            }
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
 
             Audio {
                 id: audio
@@ -262,11 +240,6 @@ ColumnLayout {
 
     Connections {
         target: globalBackend
-
-        function onAddAttributes(value)
-        {
-            attributesModel.append({"value": value})
-        }
 
         function onAddShowAfterTests(type, content)
         {

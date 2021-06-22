@@ -115,7 +115,7 @@ public:
 
     Q_INVOKABLE QString readCourseTitle();
 
-    Q_INVOKABLE void readItemAttributes(QString itemId);
+    Q_INVOKABLE QVariantList readItemAttributes(QString itemId);
     Q_INVOKABLE QVariantList readItemColumn(QString itemId, QString column);
 
     Q_INVOKABLE bool getLevelCompleted();
@@ -166,8 +166,6 @@ signals:
 
     void addItemDetails(QString type, QString name, QString content);
     void addItemSeparator();
-
-    void addAttributes(QString value);
 
     void addShowAfterTests(QString type, QString content);
 
