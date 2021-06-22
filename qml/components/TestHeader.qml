@@ -174,7 +174,7 @@ ColumnLayout {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + (attributesRepeater.model.length > 0 ? attributesRepeater.itemAt(0).height : 0) + contentHeight + instructions.contentHeight
         }
     }
 
@@ -187,7 +187,7 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
-            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + height + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + (attributesRepeater.model.length > 0 ? attributesRepeater.itemAt(0).height : 0) + height + instructions.contentHeight
         }
     }
 
@@ -212,7 +212,7 @@ ColumnLayout {
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
+            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + (attributesRepeater.model.length > 0 ? attributesRepeater.itemAt(0).height : 0) + contentHeight + instructions.contentHeight
 
             Audio {
                 id: audio
