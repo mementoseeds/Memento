@@ -582,20 +582,40 @@ QVariantList Backend::getRandomValues(QString itemId, QString column, int count)
             String key = getRandom(globalSeedbox, true);
 
             if (globalSeedbox[key][itemColumn].is_object())
-            {
                 value = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>());
-                if (list.contains(value))
-                {
-                    value.clear();
-                    continue;
-                }
-            }
             else
                 continue;
         }
 
         list.append(value);
     }
+
+    return list;
+}
+
+QVariantList Backend::getRandomCharacters(QString itemId, QString column, int count)
+{
+    String itemColumn = column.toStdString();
+
+    //Get correct answer
+    QStringList answerChars = QString::fromStdString(globalSeedbox[itemId.toStdString()][itemColumn]["primary"].get<String>()).remove(" ").toLower().split("", Qt::SkipEmptyParts);
+    answerChars.removeDuplicates();
+
+    //Fill up remaining space if count is not reached
+    while (answerChars.size() < count)
+    {
+        String key = getRandom(globalSeedbox, true);
+        QStringList randomChars = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>()).remove(" ").toLower().split("", Qt::SkipEmptyParts);
+
+        foreach (QString randChar, randomChars)
+            if (!answerChars.contains(randChar))
+                answerChars.append(randChar);
+    }
+
+    //Convert to QVariantList
+    QVariantList list;
+    foreach (QString character, answerChars)
+        list << character;
 
     return list;
 }

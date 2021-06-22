@@ -131,14 +131,15 @@ Item {
     Component {
         id: buttonComponent
 
-        Button {
+        RoundButton {
             id: choiceButton
+            radius: 5
             text: choiceData
             width: root.width / 2 - flowLayout.spacing - flowLayout.Layout.margins
             height: buttonHeight
             font.capitalization: Font.MixedCase
             font.pointSize: 40
-            Material.background: Material.color(Material.BlueGrey, Material.Shade600)
+            Material.background: globalBlueGrey
 
             contentItem: Text {
                 id: buttonContentItem
@@ -226,14 +227,15 @@ Item {
     Component {
         id: audioComponent
 
-        Button {
+        RoundButton {
             id: audioButton
+            radius: 5
             text: audioIcon
             width: root.width / 2 - flowLayout.spacing - flowLayout.Layout.margins
             height: buttonHeight
             font.family: "Icons"
             font.pointSize: 100
-            Material.background: Material.color(Material.BlueGrey, Material.Shade600)
+            Material.background: globalBlueGrey
 
             contentItem: Text {
                 id: buttonContentItem

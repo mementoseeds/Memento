@@ -30,10 +30,10 @@ Item {
     property bool tappingEnabled: false
 
     property var itemData: globalBackend.readItemColumn(itemId, testColumn)
+    property int numberTappingButtons: Math.floor(Math.random() * 6) + 5
 
     Component.onCompleted:
     {
-        console.debug(tappingEnabled)
         if (itemData[0] === "image" || itemData[0] === "audio")
             manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
     }
@@ -106,6 +106,41 @@ Item {
                         testHeader.cooldownTimer.running = true
                     }
                 }
+            }
+
+            Flow {
+                id: flowLayout
+                visible: tappingEnabled
+                Layout.fillWidth: true
+                Layout.margins: marginBase
+                spacing: 20
+
+                Repeater {
+                    id: choices
+                    model: globalBackend.getRandomCharacters(itemId, testColumn, numberTappingButtons).sort(() => Math.random() - 0.5)
+
+                    RoundButton {
+                        id: tapButton
+                        radius: 5
+                        text: modelData
+                        font.capitalization: Font.MixedCase
+                        font.pointSize: 15
+                        Material.background: globalBlueGrey
+                        onClicked: textfield.text += text
+                    }
+                }
+            }
+
+            RoundButton {
+                visible: flowLayout.visible
+                radius: 5
+                text: "Space"
+                implicitWidth: flowLayout.width
+                font.capitalization: Font.MixedCase
+                font.pointSize: 15
+                Material.background: globalBlueGrey
+                Layout.alignment: Qt.AlignCenter
+                onClicked: textfield.text += " "
             }
 
             Button {

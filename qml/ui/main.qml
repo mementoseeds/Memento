@@ -47,6 +47,7 @@ ApplicationWindow {
     property color globalRed: Material.color(Material.Red)
     property color globalOrange: Material.color(Material.DeepOrange, Material.Shade400)
     property color globalAmber: Material.color(Material.Amber)
+    property color globalBlueGrey: Material.color(Material.BlueGrey, Material.Shade600)
     property color defaultToolbarColor: Material.color(Material.Teal)
     property var testColor: {"plant": globalGreen, "water": globalBlue}
 
