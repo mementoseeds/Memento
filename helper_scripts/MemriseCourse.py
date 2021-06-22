@@ -86,7 +86,7 @@ class MemriseCourse():
         print("Finding columns to show after tests")
         self.showAfterTests = []
         for column in self.pool["pool"]["columns"]:
-            if self.pool["pool"]["columns"][column]["show_after_tests"]:
+            if self.pool["pool"]["columns"][column]["show_after_tests"] or self.pool["pool"]["columns"][column]["always_show"]:
                 self.showAfterTests.append(self.pool["pool"]["columns"][column]["label"])
 
     def scrapeLevels(self, start, stop):
@@ -138,7 +138,7 @@ class MemriseCourse():
             self.level.append(levelContent)
     
     def writeCourseInfo(self, destination):
-        self.courseDir = join(destination, self.title)
+        self.courseDir = re.sub("[<>:\"\'|?*]", "", join(destination, self.title))
         
         try:
             os.mkdir(self.courseDir)
