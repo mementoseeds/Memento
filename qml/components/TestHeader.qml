@@ -97,22 +97,32 @@ ColumnLayout {
         }
     }
 
-    Rectangle {
-        id: attributesBackground
-        width: attributes.contentWidth + 10
-        height: attributes.contentHeight + 5
+    RowLayout {
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignCenter
-        color: "gray"
-        radius: 100
-        visible: attributes.text.length > 0
 
-        Label {
-            id: attributes
-            text: globalBackend.readItemAttributes(itemId)
-            font.pointSize: platformIsMobile ? 15 : 10
-            anchors.centerIn: parent
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-            horizontalAlignment: Text.AlignHCenter
+        Repeater {
+            id: attributesRepeater
+            model: ListModel {id: attributesModel}
+            Component.onCompleted: globalBackend.readItemAttributes(itemId)
+
+            Rectangle {
+                width: attributes.contentWidth + 10
+                height: attributes.contentHeight + 5
+                Layout.alignment: Qt.AlignCenter
+                color: "gray"
+                radius: 100
+                visible: attributes.text.length > 0
+
+                Label {
+                    id: attributes
+                    text: value
+                    font.pointSize: platformIsMobile ? 15 : 10
+                    anchors.centerIn: parent
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    horizontalAlignment: Text.AlignHCenter
+                }
+            }
         }
     }
 
@@ -165,7 +175,14 @@ ColumnLayout {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Connections {
+                target: globalBackend
+
+                function onAddAttributes(value)
+                {
+                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
+                }
+            }
         }
     }
 
@@ -178,7 +195,14 @@ ColumnLayout {
             fillMode: Image.PreserveAspectFit
             Layout.alignment: Qt.AlignCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + height + instructions.contentHeight
+            Connections {
+                target: globalBackend
+
+                function onAddAttributes(value)
+                {
+                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + height + instructions.contentHeight
+                }
+            }
         }
     }
 
@@ -203,7 +227,14 @@ ColumnLayout {
             color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
             horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = radialBar.height + attributesBackground.height + contentHeight + instructions.contentHeight
+            Connections {
+                target: globalBackend
+
+                function onAddAttributes(value)
+                {
+                    testHeaderHeight = testHeaderHeight = radialBar.height + attributesRepeater.itemAt(0).height + contentHeight + instructions.contentHeight
+                }
+            }
 
             Audio {
                 id: audio
@@ -231,6 +262,11 @@ ColumnLayout {
 
     Connections {
         target: globalBackend
+
+        function onAddAttributes(value)
+        {
+            attributesModel.append({"value": value})
+        }
 
         function onAddShowAfterTests(type, content)
         {

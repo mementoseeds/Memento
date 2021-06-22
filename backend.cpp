@@ -24,9 +24,7 @@ Backend::Backend(QObject *parent) : QObject(parent) {}
 
 void Backend::debugFun()
 {
-    //toStdString() = QString --> std::string
-    //QString::fromStdString(std::string) = std::string --> QString
-    //qDebug() << globalLevelSeeds;
+
 }
 
 void Backend::setGlobalBackendInstance()
@@ -216,12 +214,12 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     Json item = globalSeedbox[itemId.toStdString()];
 
     //Add attributes
-    QString attributes = QString::fromStdString(item["attributes"].get<String>());
-    if (!attributes.isEmpty())
+    for (auto &val : item["attributes"].items())
     {
-        emit addItemDetails("attributes", "Attributes", attributes);
-        emit addItemSeparator();
+        String attributeNumber = val.key();
+        emit addItemDetails("attributes", QString::fromStdString(item["attributes"][attributeNumber]["label"].get<String>()), QString::fromStdString(item["attributes"][attributeNumber]["value"].get<String>()));
     }
+    emit addItemSeparator();
 
     String stdTestColumn = testColumn.toStdString();
     String stdPromptColumn = promptColumn.toStdString();
@@ -261,7 +259,7 @@ void Backend::readItem(QString itemId, QString testColumn, QString promptColumn)
     {
         String column = entry.key();
 
-        if (item[column].is_object() && column.compare(stdTestColumn) != 0 && column.compare(stdPromptColumn) != 0)
+        if (item[column].is_object() && column.compare(stdTestColumn) != 0 && column.compare(stdPromptColumn) != 0 && column.compare("attributes") != 0)
         {
             Json columnData = item[column];
             emit addItemDetails(QString::fromStdString(columnData["type"].get<String>()), QString::fromStdString(column), QString::fromStdString(columnData["primary"].get<String>()));
@@ -285,9 +283,15 @@ QString Backend::readCourseTitle()
     return QString::fromStdString(globalInfo["title"].get<String>());
 }
 
-QString Backend::readItemAttributes(QString itemId)
+void Backend::readItemAttributes(QString itemId)
 {
-    return QString::fromStdString(globalSeedbox[itemId.toStdString()]["attributes"].get<String>());
+    String id = itemId.toStdString();
+    for (auto &val : globalSeedbox[id]["attributes"].items())
+    {
+        String attributeNumber = val.key();
+        if (globalSeedbox[id]["attributes"][attributeNumber]["showAtTests"].get<bool>())
+            emit addAttributes(QString::fromStdString(globalSeedbox[id]["attributes"][attributeNumber]["value"].get<String>()));
+    }
 }
 
 QVariantList Backend::readItemColumn(QString itemId, QString column)
