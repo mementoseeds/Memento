@@ -145,9 +145,21 @@ Item {
                             onClicked:
                             {
                                 if (audio.playbackState !== Audio.PlayingState)
+                                {
+                                    signalSource.stopAllAudio()
                                     audio.play()
+                                }
                                 else
                                     audio.stop()
+                            }
+                        }
+
+                        Connections {
+                            target: signalSource
+
+                            function onStopAllAudio()
+                            {
+                                audio.stop()
                             }
                         }
                     }
