@@ -52,12 +52,6 @@ Item {
         tests.splice(itemIndex + 1, 0, test)
     }
 
-    function stopAllAudio()
-    {
-        for (var i = 0; i < choices.model.length; i++)
-            choices.itemAt(i).children[1].item.stopAudio()
-    }
-
     ScrollView {
         anchors.fill: parent
         contentWidth: root.width
@@ -164,6 +158,7 @@ Item {
             {
                 if (testHeader.countdownTimer.running)
                 {
+                    testHeader.answered()
                     testHeader.countdownTimer.running = false
                     testHeader.showAfterTests()
 
@@ -194,7 +189,9 @@ Item {
             {
                 if (testHeader.countdownTimer.running)
                 {
+                    testHeader.answered()
                     testHeader.countdownTimer.running = false
+                    testHeader.showAfterTests()
 
                     if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
                     {
@@ -255,14 +252,16 @@ Item {
             {
                 if (audio.playbackState !== Audio.PlayingState)
                 {
-                    stopAllAudio()
+                    signalSource.stopAllAudio()
                     audio.play()
                 }
                 else
                 {
                     if (testHeader.countdownTimer.running)
                     {
+                        testHeader.answered()
                         testHeader.countdownTimer.running = false
+                        testHeader.showAfterTests()
 
                         if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
                         {
@@ -282,16 +281,25 @@ Item {
                 }
             }
 
-            function stopAudio()
-            {
-                audio.stop()
-            }
-
             Audio {
                 id: audio
                 source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + choiceData.split(":")[0])
                 autoLoad: false
                 audioRole: Audio.GameRole
+            }
+
+            Connections {
+                target: signalSource
+
+                function onPauseTest()
+                {
+                    audio.pause()
+                }
+
+                function onStopAllAudio()
+                {
+                    audio.stop()
+                }
             }
         }
     }
@@ -300,8 +308,7 @@ Item {
         target: testHeader
         function onCountdownReached()
         {
-            //Lock the test
-            testHeader.testRunning = false
+            testHeader.answered()
 
             //Just for updating statistics
             globalBackend.checkAnswer(itemId, testColumn, "")

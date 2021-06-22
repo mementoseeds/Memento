@@ -50,6 +50,7 @@ Item {
                 Layout.alignment: Qt.AlignLeft
                 icon.source: "assets/actions/go-previous.svg"
                 display: AbstractButton.IconOnly
+                enabled: actionType === "preview"
                 onClicked:
                 {
                     if (itemIndex !== 1)

@@ -76,6 +76,8 @@ Item {
                         if (text.length === 0 && testHeader.countdownTimer.running)
                             return
 
+                        testHeader.answered()
+
                         testHeader.countdownTimer.running = false
                         testHeader.showAfterTests()
                         readOnly = true
@@ -131,8 +133,7 @@ Item {
         target: testHeader
         function onCountdownReached()
         {
-            //Lock the test
-            testHeader.testRunning = false
+            testHeader.answered()
 
             textfield.accepted()
         }

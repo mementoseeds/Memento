@@ -30,6 +30,12 @@ ColumnLayout {
 
     spacing: 20
 
+    function answered()
+    {
+        //Lock the test
+        testRunning = false
+    }
+
     function showAfterTests()
     {
         globalBackend.getShowAfterTests(itemId, testColumn, promptColumn)

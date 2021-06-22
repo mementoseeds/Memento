@@ -56,6 +56,7 @@ Item {
 
     Component.onCompleted:
     {
+        signalSource.stopAllAudio()
         globalBackend.setManualReview(manualReview)
         globalBackend.loadCourseInfo(courseDirectory)
 
