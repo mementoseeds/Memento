@@ -256,13 +256,13 @@ class MemriseCourse():
         
         for i in range(0, len(self.level)):
             if self.level[i]["isMultimedia"]:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1) + ".md"), "w")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w")
                 levelFile.write("[comment]: <> (" + self.level[i]["title"] + ")\n")
                 levelFile.write(self.level[i]["mediaContent"])
                 levelFile.close()
             
             else:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1) + ".json"), "w")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w")
                 levelInfo = {"title": self.level[i]["title"],
                     "completed": False,
                     "test": self.pool["pool"]["columns"][self.level[i]["testColumn"]]["label"],
