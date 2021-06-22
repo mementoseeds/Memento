@@ -61,11 +61,15 @@ Item {
                 TextField {
                     id: textfield
                     font.pointSize: 15
-                    Component.onCompleted: textfield.forceActiveFocus()
-                    focus: true
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
                     Material.accent: testColor[actionType]
+
+                    Component.onCompleted:
+                    {
+                        if (!tappingEnabled || !platformIsMobile)
+                            textfield.forceActiveFocus()
+                    }
 
                     onTextChanged:
                     {
@@ -112,11 +116,12 @@ Item {
                 id: flowLayout
                 visible: tappingEnabled
                 Layout.fillWidth: true
-                Layout.margins: marginBase
-                spacing: 20
+                Layout.topMargin: marginBase
+                Layout.bottomMargin: marginBase
+                Layout.leftMargin: root.width / 2 - childrenRect.width / 2 - marginBase
+                spacing: 5
 
                 Repeater {
-                    id: choices
                     model: globalBackend.getRandomCharacters(itemId, testColumn, numberTappingButtons).sort(() => Math.random() - 0.5)
 
                     RoundButton {
@@ -124,23 +129,39 @@ Item {
                         radius: 5
                         text: modelData
                         font.capitalization: Font.MixedCase
-                        font.pointSize: 15
+                        font.pointSize: platformIsMobile ? 20 : 15
                         Material.background: globalBlueGrey
                         onClicked: textfield.text += text
                     }
                 }
             }
 
-            RoundButton {
-                visible: flowLayout.visible
-                radius: 5
-                text: "Space"
-                implicitWidth: flowLayout.width
-                font.capitalization: Font.MixedCase
-                font.pointSize: 15
-                Material.background: globalBlueGrey
+            RowLayout {
                 Layout.alignment: Qt.AlignCenter
-                onClicked: textfield.text += " "
+
+                RoundButton {
+                    visible: flowLayout.visible
+                    radius: 5
+                    text: spacebarIcon
+                    font.family: "Icons"
+                    implicitWidth: root.width / 3
+                    font.capitalization: Font.MixedCase
+                    font.pointSize: 12
+                    Material.background: globalBlueGrey
+                    onClicked: textfield.text += " "
+                }
+
+                RoundButton {
+                    visible: flowLayout.visible
+                    radius: 5
+                    text: backspaceIcon
+                    font.family: "Icons"
+                    implicitWidth: root.width / 3
+                    font.capitalization: Font.MixedCase
+                    font.pointSize: 20
+                    Material.background: globalBlueGrey
+                    onClicked: textfield.remove(textfield.length - 1, textfield.length)
+                }
             }
 
             Button {
