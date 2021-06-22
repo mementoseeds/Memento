@@ -33,7 +33,7 @@ Item {
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
-        userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked}
+        userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -160,6 +160,15 @@ Item {
                     id: enabledTyping
                     checked: userSettings["enabledTests"]["enabledTyping"]
                     text: qsTr("Typing")
+                    leftPadding: indicator.width
+                    ButtonGroup.group: enabledTestsGroup
+                    Material.accent: globalGreen
+                }
+
+                CheckBox {
+                    id: enabledTapping
+                    checked: userSettings["enabledTests"]["enabledTapping"]
+                    text: qsTr("Tapping")
                     leftPadding: indicator.width
                     ButtonGroup.group: enabledTestsGroup
                     Material.accent: globalGreen

@@ -27,12 +27,14 @@ Item {
     property string itemId: ""
     property string testColumn: ""
     property string promptColumn: ""
+    property bool tappingEnabled: false
 
     property var itemData: globalBackend.readItemColumn(itemId, testColumn)
 
     Component.onCompleted:
     {
-        if (itemData[0] === "image")
+        console.debug(tappingEnabled)
+        if (itemData[0] === "image" || itemData[0] === "audio")
             manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
     }
 

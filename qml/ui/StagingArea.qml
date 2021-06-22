@@ -40,8 +40,10 @@ Item {
 
     function getRandomTest()
     {
-        var testType = Math.floor(Math.random() * 2) + 1
-        if ((testType === 1 && !userSettings["enabledTests"]["enabledMultipleChoice"]) || (testType === 2 && !userSettings["enabledTests"]["enabledTyping"]))
+        var testType = Math.floor(Math.random() * 3) + 1
+        if ((testType === TestType.MULTIPLECHOICE && !userSettings["enabledTests"]["enabledMultipleChoice"])
+            || (testType === TestType.TYPING && !userSettings["enabledTests"]["enabledTyping"])
+            || (testType === TestType.TAPPING && !userSettings["enabledTests"]["enabledTapping"]))
             return getRandomTest()
         else
             return testType
@@ -160,6 +162,8 @@ Item {
                     testLoader.setSource("qrc:/MultipleChoice.qml", variables)
                     break
 
+                case TestType.TAPPING:
+                    variables["tappingEnabled"] = true
                 case TestType.TYPING:
                     testLoader.setSource("qrc:/Typing.qml", variables)
                     break

@@ -156,9 +156,9 @@ QVariantMap Backend::getUserSettings()
 
     QVariantMap testCheck = userSettings["enabledTests"].toMap();
 
-    if (!testCheck["enabledMultipleChoice"].toBool() && !testCheck["enabledTyping"].toBool())
+    if (!testCheck["enabledMultipleChoice"].toBool() && !testCheck["enabledTyping"].toBool() && !testCheck["enabledTapping"].toBool())
     {
-        testCheck["enabledMultipleChoice"] = testCheck["enabledTyping"] = true;
+        testCheck["enabledMultipleChoice"] = testCheck["enabledTyping"] = testCheck["enabledTapping"] = true;
         userSettings["enabledTests"] = testCheck;
     }
 
