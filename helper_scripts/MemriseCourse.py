@@ -202,8 +202,14 @@ class MemriseCourse():
             itemInfo = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + item).json()
             key = str(item)
 
+            # Attributes
             self.seedbox[key] = {}
-            self.seedbox[key]["attributes"] = itemInfo["thing"]["attributes"]["1"]["val"] if "1" in itemInfo["thing"]["attributes"] else ""
+            self.seedbox[key]["attributes"] = {}
+            for number in itemInfo["thing"]["attributes"]:
+                self.seedbox[key]["attributes"][number] = {}
+                self.seedbox[key]["attributes"][number]["label"] = self.pool["pool"]["attributes"][number]["label"]
+                self.seedbox[key]["attributes"][number]["showAtTests"] = self.pool["pool"]["attributes"][number]["show_at_tests"]
+                self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
 
             # Columns
             for column in itemInfo["thing"]["columns"]:
