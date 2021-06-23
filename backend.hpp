@@ -143,6 +143,8 @@ public:
     Q_INVOKABLE QVariantList getRandomValues(QString itemId, QString column, int count);
     Q_INVOKABLE QVariantList getRandomCharacters(QString itemId, QString column, int count);
 
+    Q_INVOKABLE void ignoreItem(QString levelPath, QString itemId, bool ignored);
+
     enum TestType
     {
         PREVIEW,

@@ -46,11 +46,13 @@ Item {
             Button {
                 visible: ignoreVisible
                 width: this.Layout.preferredWidth
+                height: this.Layout.preferredHeight
                 text: ignoreIcon
-                font.pointSize: 10
+                font.pointSize: platformIsMobile ? 15 : 10
                 font.family: "Icons"
                 Layout.alignment: Qt.AlignLeft
                 Layout.preferredWidth: ignoreButtonContentItem.contentWidth * 2
+                Layout.preferredHeight: ignoreButtonContentItem.contentHeight * 2.1
 
                 contentItem: Text {
                     id: ignoreButtonContentItem
@@ -59,9 +61,15 @@ Item {
                     opacity: enabled ? 1.0 : 0.3
                     color: ignored ? "red" : "white"
                     textFormat: Text.RichText
-                    horizontalAlignment: Text.AlignLeft
+                    horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+
+                onClicked:
+                {
+                    ignored = !ignored
+                    globalBackend.ignoreItem(levelPath, id, ignored)
                 }
             }
 

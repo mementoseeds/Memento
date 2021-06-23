@@ -638,3 +638,9 @@ QVariantList Backend::getRandomCharacters(QString itemId, QString column, int co
 
     return list;
 }
+
+void Backend::ignoreItem(QString levelPath, QString itemId, bool ignored)
+{
+    globalLevelSeeds[itemId.toStdString()]["ignored"] = ignored;
+    saveLevel(levelPath);
+}
