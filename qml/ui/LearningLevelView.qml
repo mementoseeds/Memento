@@ -186,7 +186,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Mock water", "Refresh", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Mock water", "Refresh", "Ignore", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -209,6 +209,9 @@ Item {
                                     break
                                 case "Refresh":
                                     reloadLevel()
+                                    break
+                                case "Ignore":
+                                    signalSource.showIgnore()
                                     break
                                 case "Auto learn":
                                     if (!levelCompleted)
@@ -317,10 +320,24 @@ Item {
                 "test": test,
                 "prompt": prompt,
                 "planted": planted,
-                "progress": ignored ? "ignored" : (planted ? progress + " <span style=font-size:" + iconSize + "pt style=color:" + globalBlue + ">" + waterIcon + "</span>"
-                                                           : "<span style=font-size:" + iconSize + "pt style=color:" + globalGreen + ">" + plantIcon + "</span>"),
-                "ignored": ignored
+                "progress": planted ? progress + " <span style=font-size:" + iconSize + "pt style=color:" + globalBlue + ">" + waterIcon + "</span>"
+                                                           : "<span style=font-size:" + iconSize + "pt style=color:" + globalGreen + ">" + plantIcon + "</span>",
+                "ignored": ignored,
+                "ignoreVisible": false
                                        })
+        }
+    }
+
+    Connections {
+        target: signalSource
+
+        function onShowIgnore()
+        {
+            for (var i = 0; i < levelEntryListModel.count; i++)
+            {
+                var item = levelEntryListModel.get(i)
+                item.ignoreVisible = !item.ignoreVisible
+            }
         }
     }
 

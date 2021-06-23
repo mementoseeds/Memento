@@ -55,9 +55,10 @@ ApplicationWindow {
     property string audioIcon: "\ue900"
     property string backspaceIcon: "\ue901"
     property string difficultIcon: "\ue902"
-    property string plantIcon: "\ue903"
-    property string spacebarIcon: "\ue904"
-    property string waterIcon: "\ue905"
+    property string ignoreIcon: "\ue903"
+    property string plantIcon: "\ue904"
+    property string spacebarIcon: "\ue905"
+    property string waterIcon: "\ue906"
 
     FontLoader {
         source: "assets/icons-font/Icons.ttf"
@@ -72,6 +73,7 @@ ApplicationWindow {
         signal pauseTest()
         signal resumeTest()
         signal stopAllAudio()
+        signal showIgnore()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
     }

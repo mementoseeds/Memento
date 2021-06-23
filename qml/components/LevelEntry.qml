@@ -43,6 +43,28 @@ Item {
             Layout.preferredWidth: parent.width
             spacing: marginBase
 
+            Button {
+                visible: ignoreVisible
+                width: this.Layout.preferredWidth
+                text: ignoreIcon
+                font.pointSize: 10
+                font.family: "Icons"
+                Layout.alignment: Qt.AlignLeft
+                Layout.preferredWidth: ignoreButtonContentItem.contentWidth * 2
+
+                contentItem: Text {
+                    id: ignoreButtonContentItem
+                    text: parent.text
+                    font: parent.font
+                    opacity: enabled ? 1.0 : 0.3
+                    color: ignored ? "red" : "white"
+                    textFormat: Text.RichText
+                    horizontalAlignment: Text.AlignLeft
+                    verticalAlignment: Text.AlignVCenter
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                }
+            }
+
             Loader {
                 id: levelTestColumn
                 Layout.preferredWidth: parent.Layout.preferredWidth / 3
@@ -81,7 +103,8 @@ Item {
 
             Label {
                 id: metaColumn
-                text: progress
+                text: ignored ? ignoreIcon : progress
+                color: ignored ? "red" : "white"
                 font.pointSize: 10
                 font.family: "Icons"
                 textFormat: Text.RichText
@@ -103,6 +126,7 @@ Item {
 
         Label {
             text: columnEntry
+            color: ignored ? "gray" : "white"
             font.pointSize: 12
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
