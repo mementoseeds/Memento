@@ -364,7 +364,7 @@ void Backend::correctAnswer(QString itemId)
     int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
-    if (successes >= 5 && unlockedItems[itemId])
+    if (successes >= 5 && (unlockedItems[itemId] || !manualReview))
     {
         unlockedItems[itemId] = !manualReview;
 

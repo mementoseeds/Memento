@@ -46,14 +46,30 @@ ColumnLayout {
     Component.onCompleted: mainMenuBar.insertAction(0, pauseAction)
     Component.onDestruction: mainMenuBar.takeAction(0)
 
-    RadialBar {
-        id: radialBar
-        minValue: 0
-        maxValue: 100
-        value: maxValue
-        showText: "Countdown"
-        Layout.topMargin: 10
+    RowLayout {
+        Layout.fillWidth: true
         Layout.alignment: Qt.AlignCenter
+
+        RadialBar {
+            id: radialBar
+            minValue: 0
+            maxValue: 100
+            value: maxValue
+            showText: "Countdown"
+            Layout.topMargin: 10
+            Layout.alignment: Qt.AlignCenter
+            Layout.leftMargin: skipItemButton.visible ? skipItemButton.width : 0
+        }
+
+        RoundButton {
+            id: skipItemButton
+            visible: actionType === "plant"
+            radius: 5
+            text: "Skip"
+            font.capitalization: Font.MixedCase
+            Layout.alignment: Qt.AlignRight
+            onClicked: skipLearningItem(itemId)
+        }
     }
 
     Loader {

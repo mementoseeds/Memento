@@ -69,6 +69,20 @@ Item {
         tests.splice(newRandomPosition, 0, test)
     }
 
+    function skipLearningItem(itemId)
+    {
+        for (var i = 0; i < tests.length; i++)
+        {
+            var testItemId = Object.keys(tests[i]).toString()
+            if (itemId === testItemId)
+            {
+                //tests.splice(i, 1)
+            }
+        }
+
+        //triggerNextItem()
+    }
+
     Component.onCompleted:
     {
         signalSource.stopAllAudio()
