@@ -106,7 +106,7 @@ Item {
             {
                 item = levelEntryListModel.get(i)
                 if (item.planted && !item.ignored)
-                    items.push(levelEntryListModel.get(i).id)
+                    items.push(item.id)
             }
 
             manualReview = true
@@ -132,6 +132,20 @@ Item {
                 "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})
         else
             showPassiveNotification("There are no items to water")
+    }
+
+    function mockWaterAction()
+    {
+        var items = []
+        for (var i = 0; i < levelEntryListModel.count; i++)
+        {
+            var item = levelEntryListModel.get(i)
+            if (!item.ignored)
+                items.push(item.id)
+        }
+
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
+            "itemArray": items, "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "mockReview": true})
     }
 
     function reloadLevel()
@@ -172,7 +186,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Refresh", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Mock water", "Refresh", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -186,6 +200,9 @@ Item {
                                     break
                                 case "Water":
                                     waterAction()
+                                    break
+                                case "Mock water":
+                                    mockWaterAction()
                                     break
                                 case "Reset":
                                     confirmLevelReset.visible = true

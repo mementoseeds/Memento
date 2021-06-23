@@ -30,6 +30,7 @@ Item {
     property string testColumn: ""
     property string promptColumn: ""
     property bool manualReview: false
+    property bool mockReview: false
 
     property int itemIndex: 0
     property var tests: []
@@ -59,7 +60,7 @@ Item {
     Component.onCompleted:
     {
         signalSource.stopAllAudio()
-        globalBackend.setManualReview(manualReview)
+        globalBackend.setReviewType(manualReview, mockReview)
         globalBackend.loadCourseInfo(courseDirectory)
 
         if (actionType === "plant")

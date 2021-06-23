@@ -311,9 +311,10 @@ bool Backend::getLevelCompleted()
     return globalLevel["completed"].get<bool>();
 }
 
-void Backend::setManualReview(bool manualReview)
+void Backend::setReviewType(bool manualReview, bool mockReview)
 {
     this->manualReview = manualReview;
+    this->mockReview = mockReview;
     streakUnlocked = !manualReview;
 }
 
@@ -354,40 +355,46 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
 
 void Backend::correctAnswer(QString itemId)
 {
-    String id = itemId.toStdString();
-
-    Json item = globalLevelSeeds[id];
-
-    int successes = item["successes"].get<int>() + 1;
-    item["successes"] = successes;
-
-    if (successes >= 5 && streakUnlocked)
+    if (!mockReview)
     {
-        streakUnlocked = !manualReview;
+        String id = itemId.toStdString();
 
-        item["planted"] = true;
+        Json item = globalLevelSeeds[id];
 
-        int streak = item["streak"].get<int>() + 1;
-        item["streak"] = streak;
+        int successes = item["successes"].get<int>() + 1;
+        item["successes"] = successes;
 
-        item["nextWatering"] = getWateringTime(streak);
+        if (successes >= 5 && streakUnlocked)
+        {
+            streakUnlocked = !manualReview;
+
+            item["planted"] = true;
+
+            int streak = item["streak"].get<int>() + 1;
+            item["streak"] = streak;
+
+            item["nextWatering"] = getWateringTime(streak);
+        }
+
+        globalLevelSeeds[id] = item;
     }
-
-    globalLevelSeeds[id] = item;
 }
 
 void Backend::wrongAnswer(QString itemId)
 {
-    String id = itemId.toStdString();
+    if (!mockReview)
+    {
+        String id = itemId.toStdString();
 
-    Json item = globalLevelSeeds[id];
-    item["failures"] = item["failures"].get<int>() + 1;
-    item["difficult"] = item["planted"].get<bool>();
-    item["streak"] = 0;
+        Json item = globalLevelSeeds[id];
+        item["failures"] = item["failures"].get<int>() + 1;
+        item["difficult"] = item["planted"].get<bool>();
+        item["streak"] = 0;
 
-    streakUnlocked = true;
+        streakUnlocked = true;
 
-    globalLevelSeeds[id] = item;
+        globalLevelSeeds[id] = item;
+    }
 }
 
 void Backend::getShowAfterTests(QString itemId, QString testColumn, QString promptColumn)

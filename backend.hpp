@@ -120,7 +120,7 @@ public:
 
     Q_INVOKABLE bool getLevelCompleted();
 
-    Q_INVOKABLE void setManualReview(bool manualReview);
+    Q_INVOKABLE void setReviewType(bool manualReview, bool mockReview);
     Q_INVOKABLE void loadCourseInfo(QString courseDirectory);
     Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
     Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
@@ -192,6 +192,7 @@ private:
     int globalSeedsAmount;
 
     bool manualReview = false;
+    bool mockReview = false;
     bool streakUnlocked = true;
 
     QVariantMap userSettings;
