@@ -315,7 +315,6 @@ void Backend::setReviewType(bool manualReview, bool mockWater)
 {
     this->manualReview = manualReview;
     this->mockWater = mockWater;
-    streakUnlocked = !manualReview;
 }
 
 void Backend::loadCourseInfo(QString courseDirectory)
@@ -365,9 +364,9 @@ void Backend::correctAnswer(QString itemId)
     int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
-    if (successes >= 5 && streakUnlocked)
+    if (successes >= 5 && unlockedItems[itemId])
     {
-        streakUnlocked = !manualReview;
+        unlockedItems[itemId] = !manualReview;
 
         item["planted"] = true;
 
@@ -389,7 +388,7 @@ void Backend::wrongAnswer(QString itemId)
     item["difficult"] = item["planted"].get<bool>();
     item["streak"] = 0;
 
-    streakUnlocked = true;
+    unlockedItems[itemId] = true;
 
     globalLevelSeeds[id] = item;
 }

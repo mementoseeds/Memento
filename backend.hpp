@@ -77,6 +77,8 @@ using String = std::string;
 #include <QThread>
 #include "worker.hpp"
 
+
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -193,7 +195,7 @@ private:
 
     bool manualReview = false;
     bool mockWater = false;
-    bool streakUnlocked = true;
+    QMap<QString, bool> unlockedItems;
 
     QVariantMap userSettings;
 
