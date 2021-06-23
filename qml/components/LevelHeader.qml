@@ -41,7 +41,7 @@ RowLayout {
         Image {
             source: levelHeaderIcon
             sourceSize.width: 80
-            sourceSize.height: levelCompleted ? 80 : 100
+            sourceSize.height: typeof(levelCompleted) === "undefined" ? 80 : (levelCompleted ? 80 : 100)
             Layout.alignment: Qt.AlignHCenter
         }
     }
@@ -64,7 +64,7 @@ RowLayout {
             to: headerIsLearning ? levelHeaderItemAmount : 100
             value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
             indeterminate:  false
-            Material.accent: levelCompleted ? globalBlue : globalGreen
+            Material.accent: typeof(levelCompleted) === "undefined" ? defaultToolbarColor : (levelCompleted ? globalBlue : globalGreen)
             Layout.preferredWidth: parent.width
             Layout.alignment: Qt.AlignCenter
         }

@@ -22,7 +22,6 @@ import QtQuick.Controls.Material.impl 2.12
 
 Item {
     property int marginBase: 10
-    //property int imageHeight: platformIsMobile ? 50 : 100
 
     width: cellBody.width
     height: cellBody.height
