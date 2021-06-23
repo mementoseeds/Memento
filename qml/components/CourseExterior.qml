@@ -18,6 +18,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material.impl 2.12
 
 Item {
     property int marginBase: 10
@@ -110,18 +111,22 @@ Item {
         radius: 10
         z: -1
 
-        Behavior on color {
-            ColorAnimation {duration: 200}
+        Ripple {
+            id: ripple
+            anchors.fill: parent
+            clipRadius: 4
+            active: courseExteriorMouseArea.containsMouse
+            pressed: courseExteriorMouseArea.pressed
+            color: "#20FFFFFF"
         }
     }
 
     MouseArea {
+        id: courseExteriorMouseArea
         anchors.fill: parent
         z: -1
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
-        onEntered: itemBackground.color = "#3F51B5"
-        onExited: itemBackground.color = "transparent"
         onClicked:
         {
             mainToolbarTitle.text = title

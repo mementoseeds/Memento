@@ -17,6 +17,8 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material.impl 2.12
 
 Item {
     property int marginBase: 10
@@ -30,15 +32,10 @@ Item {
         width: 250
         height: cellColumnLayout.height + marginBase
         x: platformIsMobile ? (root.width / 2 - width / 2) : 0
-
         color: "transparent"
         border.width: 1
         border.color: "gray"
         radius: 10
-
-        Behavior on color {
-            ColorAnimation {duration: 200}
-        }
 
         ColumnLayout {
             id: cellColumnLayout
@@ -103,14 +100,22 @@ Item {
                 }
             }
         }
+
+        Ripple {
+            id: ripple
+            anchors.fill: parent
+            clipRadius: 4
+            active: levelExteriorMouseArea.containsMouse
+            pressed: levelExteriorMouseArea.pressed
+            color: "#20FFFFFF"
+        }
     }
 
     MouseArea {
+        id: levelExteriorMouseArea
         anchors.fill: cellBody
         cursorShape: Qt.PointingHandCursor
         hoverEnabled: true
-        onEntered: cellBody.color = "#3F51B5"
-        onExited: cellBody.color = "transparent"
         onClicked:
         {
             if (levelPath.endsWith(".json"))
