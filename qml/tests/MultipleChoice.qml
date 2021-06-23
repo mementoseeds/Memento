@@ -42,14 +42,7 @@ Item {
     {
         wrongAnswerCounter++
         testHeader.radialBarText = "Fail"
-
-        var test = {}
-        test[itemId] = TestType.PREVIEW
-        tests.splice(itemIndex, 0, test)
-
-        test = {}
-        test[itemId] = getRandomTest()
-        tests.splice(itemIndex + 1, 0, test)
+        scheduleTestAfterMistake(itemId)
     }
 
     ScrollView {

@@ -57,6 +57,18 @@ Item {
         testLoader.active = true
     }
 
+    function scheduleTestAfterMistake(id)
+    {
+        var test = {}
+        test[id] = TestType.PREVIEW
+        tests.splice(itemIndex, 0, test)
+
+        var newRandomPosition = Math.floor((Math.random() * (tests.length - itemIndex)) + 1) + itemIndex
+        test = {}
+        test[id] = getRandomTest()
+        tests.splice(newRandomPosition, 0, test)
+    }
+
     Component.onCompleted:
     {
         signalSource.stopAllAudio()
