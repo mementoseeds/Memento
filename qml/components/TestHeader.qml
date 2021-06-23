@@ -241,6 +241,7 @@ ColumnLayout {
                             }
                         }
 
+                        property bool audioPaused: false
                         Connections {
                             target: signalSource
 
@@ -249,7 +250,24 @@ ColumnLayout {
                                 if (testRunning)
                                 {
                                     if (columnData[0] === "audio")
+                                    {
+                                        if (audio.playbackState === Audio.PlayingState)
+                                            audioPaused = true
+
                                         audio.pause()
+                                    }
+                                }
+                            }
+
+                            function onResumeTest()
+                            {
+                                if (audioPaused)
+                                {
+                                    if (audio.playbackState === Audio.PausedState)
+                                    {
+                                        audio.play()
+                                        audioPaused = false
+                                    }
                                 }
                             }
                         }
