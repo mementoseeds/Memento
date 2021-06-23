@@ -288,5 +288,11 @@ ColumnLayout {
                 rootStackView.push("qrc:/PauseRoom.qml")
             }
         }
+
+        function onResumeTest()
+        {
+            if (testRunning)
+                countdownTimer.running = true
+        }
     }
 }

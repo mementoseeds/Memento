@@ -70,6 +70,7 @@ ApplicationWindow {
         signal refreshCourseLevels()
         signal refreshAllCourses()
         signal pauseTest()
+        signal resumeTest()
         signal stopAllAudio()
         signal openPreviousLevel(int currentIndex)
         signal openNextLevel(int currentIndex)
