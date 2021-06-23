@@ -20,6 +20,8 @@ import QtQuick.Controls 2.15
 import QtMultimedia 5.15
 
 ColumnLayout {
+    id: testHeader
+    signal stopHeaderAudio()
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
     property alias radialBarText: radialBar.showText
@@ -194,44 +196,72 @@ ColumnLayout {
     Component {
         id: audioComponent
 
-        Label {
+        RowLayout {
+            Layout.fillWidth: true
 
-            function pauseAudio()
-            {
-                audio.pause()
-            }
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
 
-            function resumeAudio()
-            {
-                audio.play()
-            }
+                Repeater {
+                    id: audioRepeater
+                    model: columnData[1].split(":")
 
-            text: audioIcon
-            font.pointSize: audioSize
-            font.family: "Icons"
-            color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
-            horizontalAlignment: Text.AlignHCenter
+                    Label {
+                        text: audioIcon
+                        font.pointSize: audioSize
+                        font.family: "Icons"
+                        color: audio.playbackState === Audio.PlayingState ? globalAmber : "white"
+                        horizontalAlignment: Text.AlignHCenter
 
-            Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + (attributesRepeater.model.length > 0 ? attributesRepeater.itemAt(0).height : 0) + contentHeight + instructions.contentHeight
+                        Component.onCompleted: testHeaderHeight = testHeaderHeight = radialBar.height + (attributesRepeater.model.length > 0 ? attributesRepeater.itemAt(0).height : 0) + contentHeight + instructions.contentHeight
 
-            Audio {
-                id: audio
-                source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + columnData[1].split(":")[0])
-                autoPlay: true
-                audioRole: Audio.GameRole
-            }
+                        Audio {
+                            id: audio
+                            source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + modelData)
+                            autoPlay: index === 0
+                            audioRole: Audio.GameRole
+                        }
 
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-                onClicked:
-                {
-                    if (audio.playbackState !== Audio.PlayingState)
-                        audio.play()
-                    else
-                    {
-                        audio.stop()
-                        audio.play()
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked:
+                            {
+                                if (audio.playbackState !== Audio.PlayingState)
+                                {
+                                    testHeader.stopHeaderAudio()
+                                    audio.play()
+                                }
+
+                                else
+                                {
+                                    audio.stop()
+                                    audio.play()
+                                }
+                            }
+                        }
+
+                        Connections {
+                            target: signalSource
+
+                            function onPauseTest()
+                            {
+                                if (testRunning)
+                                {
+                                    if (columnData[0] === "audio")
+                                        audio.pause()
+                                }
+                            }
+                        }
+
+                        Connections {
+                            target: testHeader
+
+                            function onStopHeaderAudio()
+                            {
+                                audio.stop()
+                            }
+                        }
                     }
                 }
             }
@@ -255,21 +285,7 @@ ColumnLayout {
             if (testRunning)
             {
                 countdownTimer.running = false
-
-                if (testHeaderMainLoader.columnData[0] === "audio")
-                    testHeaderMainLoader.item.pauseAudio()
-
                 rootStackView.push("qrc:/PauseRoom.qml")
-            }
-        }
-
-        function onResumeTest()
-        {
-            if (testRunning)
-            {
-                countdownTimer.running = true
-                if (testHeaderMainLoader.columnData[0] === "audio")
-                    testHeaderMainLoader.item.resumeAudio()
             }
         }
     }
