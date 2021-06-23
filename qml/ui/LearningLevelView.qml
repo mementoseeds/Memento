@@ -145,7 +145,7 @@ Item {
         }
 
         rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-            "itemArray": items, "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "mockReview": true})
+            "itemArray": items, "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "mockWater": true})
     }
 
     function reloadLevel()
