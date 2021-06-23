@@ -145,6 +145,8 @@ public:
 
     Q_INVOKABLE void ignoreItem(QString levelPath, QString itemId, bool ignored);
 
+    Q_INVOKABLE void autoLearnItem(QString itemId, int streakCount);
+
     enum TestType
     {
         PREVIEW,

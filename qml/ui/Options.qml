@@ -33,6 +33,7 @@ Item {
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
+        userSettings["showAutoLearnOnTests"] = showAutoLearnOnTests.checked
         userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
         globalBackend.setUserSettings(userSettings)
     }
@@ -134,8 +135,16 @@ Item {
 
             CheckBox {
                 id: enableTestPromptSwitch
-                text: "Enable switching test and prompt"
+                text: "Enable switching test and prompt on multiple choices"
                 checked: userSettings["enableTestPromptSwitch"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
+                id: showAutoLearnOnTests
+                text: "Show auto learn button on planting tests"
+                checked: userSettings["showAutoLearnOnTests"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

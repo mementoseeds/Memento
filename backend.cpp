@@ -138,6 +138,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
+    settings.setValue("showAutoLearnOnTests", userSettings["showAutoLearnOnTests"]);
     settings.setValue("enabledTests", userSettings["enabledTests"]);
 }
 
@@ -150,6 +151,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
+    userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
 
     QVariantMap testCheck = userSettings["enabledTests"].toMap();
@@ -643,4 +645,16 @@ void Backend::ignoreItem(QString levelPath, QString itemId, bool ignored)
 {
     globalLevelSeeds[itemId.toStdString()]["ignored"] = ignored;
     saveLevel(levelPath);
+}
+
+void Backend::autoLearnItem(QString itemId, int streakCount)
+{
+    String id = itemId.toStdString();
+    globalLevelSeeds[id]["planted"] = true;
+    globalLevelSeeds[id]["nextWatering"] = getWateringTime(streakCount);
+    globalLevelSeeds[id]["ignored"] = false;
+    globalLevelSeeds[id]["difficult"] = false;
+    globalLevelSeeds[id]["successes"] = 5;
+    globalLevelSeeds[id]["failures"] = 0;
+    globalLevelSeeds[id]["streak"] = streakCount;
 }

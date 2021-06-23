@@ -36,6 +36,7 @@ Item {
     property var tests: []
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
+    property var autoLearned: []
 
     Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle())
 
@@ -69,18 +70,11 @@ Item {
         tests.splice(newRandomPosition, 0, test)
     }
 
-    function skipLearningItem(itemId)
+    function autoLearnItem(itemId)
     {
-        for (var i = 0; i < tests.length; i++)
-        {
-            var testItemId = Object.keys(tests[i]).toString()
-            if (itemId === testItemId)
-            {
-                //tests.splice(i, 1)
-            }
-        }
-
-        //triggerNextItem()
+        autoLearned.push(itemId)
+        globalBackend.autoLearnItem(itemId, 1)
+        triggerNextItem()
     }
 
     Component.onCompleted:
@@ -161,6 +155,14 @@ Item {
         if (itemIndex !== tests.length)
         {
             var itemId = Object.keys(tests[itemIndex]).toString()
+
+            //Skip over this item if the user has requested a skip
+            if (autoLearned.includes(itemId))
+            {
+                itemIndex++
+                triggerNextItem()
+                return
+            }
 
             //Random chance to switch test and prompt columns if the next test is multiple choice
             if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && tests[itemIndex][itemId] === TestType.MULTIPLECHOICE)

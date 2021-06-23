@@ -34,5 +34,6 @@
         <file>assets/actions/pause.svg</file>
         <file alias="PauseRoom.qml">qml/ui/PauseRoom.qml</file>
         <file>assets/actions/continue.svg</file>
+        <file>assets/actions/autoLearn.svg</file>
     </qresource>
 </RCC>

@@ -58,17 +58,18 @@ ColumnLayout {
             showText: "Countdown"
             Layout.topMargin: 10
             Layout.alignment: Qt.AlignCenter
-            Layout.leftMargin: skipItemButton.visible ? skipItemButton.width : 0
+            Layout.leftMargin: autoLearnItemButton.visible ? autoLearnItemButton.width : 0
         }
 
         RoundButton {
-            id: skipItemButton
-            visible: actionType === "plant"
+            id: autoLearnItemButton
+            visible: actionType === "plant" && userSettings["showAutoLearnOnTests"]
             radius: 5
-            text: "Skip"
+            text: "Auto learn"
+            icon.source: "assets/actions/autoLearn.svg"
             font.capitalization: Font.MixedCase
             Layout.alignment: Qt.AlignRight
-            onClicked: skipLearningItem(itemId)
+            onClicked: autoLearnItem(itemId)
         }
     }
 
