@@ -87,6 +87,20 @@ Item {
                 Layout.alignment: Qt.AlignCenter
             }
 
+            RowLayout {
+                Layout.alignment: Qt.AlignCenter
+
+                Button {
+                    text: "Minimize"
+                    onClicked: countdownTimerSpinBox.value = countdownTimerSpinBox.from
+                }
+
+                Button {
+                    text: "Maximize"
+                    onClicked: countdownTimerSpinBox.value = countdownTimerSpinBox.to
+                }
+            }
+
             Label {
                 text: "Post-test cooldown timer ms"
                 Layout.alignment: Qt.AlignCenter
