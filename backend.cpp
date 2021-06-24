@@ -135,6 +135,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
     settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
+    settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
@@ -148,6 +149,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
+    userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());

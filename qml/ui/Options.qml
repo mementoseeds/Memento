@@ -30,6 +30,7 @@ Item {
         userSettings["coursesLocation"] = coursesLocationTextField.text
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
+        userSettings["maxPlantingItems"] = maxPlantingItems.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
@@ -117,6 +118,20 @@ Item {
                 Layout.alignment: Qt.AlignCenter
             }
 
+            Label {
+                text: "Items per planting session"
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: maxPlantingItems
+                from: 2
+                to: 100
+                value: userSettings["maxPlantingItems"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
             CheckBox {
                 id: autoRefreshCourses
                 text: "Auto refresh courses on startup"
@@ -135,7 +150,7 @@ Item {
 
             CheckBox {
                 id: enableTestPromptSwitch
-                text: "Enable switching test and prompt on multiple choices"
+                text: "Allow test prompt switch on multiple choices"
                 checked: userSettings["enableTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter

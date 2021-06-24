@@ -100,7 +100,7 @@ Item {
             var unorderedTests = []
             for (i = 0; i < itemArray.length; i++)
             {
-                for (var o = 0; o < 4; o++) //4 is amount of tests - 1
+                for (var o = 0; o < 4; o++)
                 {
                     test = {}
                     test[itemArray[i]] = getRandomTest()

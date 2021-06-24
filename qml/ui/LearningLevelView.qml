@@ -120,7 +120,7 @@ Item {
     {
         if (!levelCompleted)
             rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-                "itemArray": getPlantingItems(5), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+                "itemArray": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
         else
             showPassiveNotification("This level is already completed")
     }
