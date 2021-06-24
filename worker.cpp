@@ -38,6 +38,7 @@ void Worker::doCourseRefresh(QVariantList courses)
 
         foreach (QString lvl, courseDir.entryList({"*.json"}, QDir::Files))
         {
+            String stdLvl = lvl.toStdString();
             QString levelPath = coursePath + "/levels/" + lvl;
             std::ifstream levelFile(levelPath.toStdString());
             Json level;
@@ -64,7 +65,9 @@ void Worker::doCourseRefresh(QVariantList courses)
                     if (QDateTime::currentDateTime() > nextWatering)
                     {
                         water++;
-                        review.push_back(id);
+
+                        if (std::find(review.begin(), review.end(), stdLvl) == review.end())
+                            review.push_back(stdLvl);
                     }
                 }
 
@@ -72,12 +75,10 @@ void Worker::doCourseRefresh(QVariantList courses)
 
                 ignored += (int)level["seeds"][id]["ignored"].get<bool>();
             }
-
-            reviewJson[lvl.toStdString()] = review;
-            review.clear();
         }
 
         std::ofstream reviewFile(QString(coursePath + "/review.json").toStdString());
+        reviewJson = review;
         reviewFile << reviewJson.dump(jsonIndent) << std::endl;
         reviewFile.close();
 
