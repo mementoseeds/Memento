@@ -707,3 +707,39 @@ void Backend::advancedAutoLevelAdjust(bool learn, QString courseDirectory, int s
         levelFile.close();
     }
 }
+
+QVariantMap Backend::getFirstIncompleteLevel(QString courseDirectory)
+{
+    QDir levelsDir(courseDirectory + "/levels");
+    QString absolutePath = levelsDir.absolutePath() + "/";
+    QStringList levelList = levelsDir.entryList({"*.json"}, QDir::Files);
+
+    for (int i = 0; i < levelList.size(); i++)
+    {
+        QString levelPath = absolutePath + levelList[i];
+        std::ifstream levelFile(levelPath.toStdString());
+        Json levelJson;
+        levelFile >> levelJson;
+        levelFile.close();
+
+        if (!levelJson["completed"].get<bool>())
+        {
+            QVariantMap levelVariables
+            {
+                {"courseDirectory", courseDirectory},
+                {"levelPath", levelPath},
+                {"levelNumber", i + 1},
+                {"levelTitle", QString::fromStdString(levelJson["title"].get<String>())},
+                {"testColumn", QString::fromStdString(levelJson["test"].get<String>())},
+                {"promptColumn", QString::fromStdString(levelJson["prompt"].get<String>())},
+                {"testColumnType", QString::fromStdString(levelJson["testType"].get<String>())},
+                {"promptColumnType", QString::fromStdString(levelJson["promptType"].get<String>())},
+                {"itemAmount", QVariant::fromValue(levelJson["seeds"].size())}
+            };
+
+            return levelVariables;
+        }
+    }
+
+    return QVariantMap();
+}

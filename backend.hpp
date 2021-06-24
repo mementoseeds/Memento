@@ -150,6 +150,8 @@ public:
     Q_INVOKABLE int getCourseLevelAmount(QString courseDirectory);
     Q_INVOKABLE void advancedAutoLevelAdjust(bool learn, QString courseDirectory, int start, int stop, int streak, bool waterRightNow);
 
+    Q_INVOKABLE QVariantMap getFirstIncompleteLevel(QString courseDirectory);
+
     enum TestType
     {
         PREVIEW,

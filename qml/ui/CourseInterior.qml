@@ -40,6 +40,15 @@ Item {
     Component.onCompleted: globalBackend.getCourseLevels(directory)
     Component.onDestruction: mainToolbarTitle.text = root.title
 
+    function plantAction()
+    {
+        var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
+        if (Object.keys(levelVariables).length !== 0)
+            rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
+        else
+            showPassiveNotification("This course is already completed")
+    }
+
     GridView {
         anchors.fill: parent
         ScrollBar.vertical: ScrollBar{width: 10}
@@ -112,18 +121,22 @@ Item {
                     Layout.bottomMargin: 20
 
                     ComboBox {
-                        model: ["Auto learn", "Reset"]
+                        model: ["Plant", "Water", "Auto learn", "Reset"]
                         onActivated:
                         {
                             switch (currentText)
                             {
+                                case "Plant":
+                                    plantAction()
+                                    break
+
                                 case "Auto learn":
                                     rootStackView.push("qrc:/AdvancedAutoLearn.qml", {"courseDirectory": directory})
-                                break
+                                    break
 
                                 case "Reset":
                                     resetCourseMessageBox.visible = true
-                                break
+                                    break
                             }
                         }
                     }
@@ -133,7 +146,7 @@ Item {
                         icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: completed ? globalBlue : globalGreen
                         Layout.alignment: Qt.AlignRight
-                        onClicked: showPassiveNotification("Todo")
+                        onClicked: text === "Plant" ? plantAction() : showPassiveNotification("Todo")
                     }
                 }
 

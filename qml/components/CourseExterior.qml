@@ -26,6 +26,15 @@ Item {
     width: root.width
     height: courseExteriorDelegate.height + marginBase * 2
 
+    function plantAction()
+    {
+        var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
+        if (Object.keys(levelVariables).length !== 0)
+            rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
+        else
+            showPassiveNotification("This course is already completed")
+    }
+
     RowLayout {
         id: courseExteriorDelegate
         anchors.top: parent.top
@@ -87,7 +96,7 @@ Item {
                     text: completed ? "Water" : "Plant"
                     icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                     Material.background: completed ? globalBlue : globalGreen
-                    onClicked: showPassiveNotification("Todo")
+                    onClicked: text === "Plant" ? plantAction() : showPassiveNotification("Todo")
                 }
 
                 Button {
