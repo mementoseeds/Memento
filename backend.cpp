@@ -660,3 +660,50 @@ void Backend::autoLearnItem(QString itemId, int streakCount)
     globalLevelSeeds[id]["failures"] = 0;
     globalLevelSeeds[id]["streak"] = streakCount;
 }
+
+int Backend::getCourseLevelAmount(QString courseDirectory)
+{
+    QDir levelsDir(courseDirectory + "/levels");
+    return levelsDir.entryList({"*.json", "*.md"}, QDir::Files).size();
+}
+
+void Backend::advancedAutoLearn(QString courseDirectory, int start, int stop, int streak, bool waterRightNow)
+{
+    QDir levelsDir(courseDirectory + "/levels");
+    QString absolutePath = levelsDir.absolutePath() + "/";
+    QStringList levelList = levelsDir.entryList({"*.json", "*.md"}, QDir::Files | QDir::NoDotAndDotDot);
+
+    for (int i = start - 1; i < stop; i++)
+    {
+        QString level = levelList[i];
+
+        if (level.endsWith(".md"))
+            continue;
+
+        Json levelJson;
+        String levelPath = QString(absolutePath + level).toStdString();
+        {
+            std::ifstream levelFile(levelPath);
+            levelFile >> levelJson;
+            levelFile.close();
+        }
+
+        levelJson["completed"] = true;
+        for (auto &item : levelJson["seeds"].items())
+        {
+            String id = item.key();
+
+            levelJson["seeds"][id]["planted"] = true;
+            levelJson["seeds"][id]["nextWatering"] = waterRightNow ? QDateTime::currentDateTime().toString().toStdString() : getWateringTime(streak);
+            //levelJson["seeds"][id]["ignored"] = false; //Leave unchanged
+            //levelJson["seeds"][id]["difficult"] = false; //Leave unchanged
+            levelJson["seeds"][id]["successes"] = 5 + streak;
+            //levelJson["seeds"][id]["failures"] = 0; //Leave unchanged
+            levelJson["seeds"][id]["streak"] = streak;
+        }
+
+        std::ofstream levelFile(levelPath);
+        levelFile << levelJson.dump(jsonIndent) << std::endl;
+        levelFile.close();
+    }
+}

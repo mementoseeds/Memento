@@ -22,7 +22,9 @@ import QtQuick.Controls.Material 2.12
 Item {
     property int marginBase: 10
 
-    property int levelAmount: 50
+    property string courseDirectory: ""
+
+    property int levelAmount: globalBackend.getCourseLevelAmount(courseDirectory)
 
     objectName: "AdvancedAutoLearn.qml"
 
@@ -118,7 +120,13 @@ Item {
             Button {
                 text: "Begin"
                 Layout.alignment: Qt.AlignCenter
-                onClicked: console.debug("Begin")
+                onClicked:
+                {
+                    globalBackend.advancedAutoLearn(courseDirectory, levelRangeSlider.first.value, levelRangeSlider.second.value, streakCountSpinBox.value, waterNow.checked)
+                    globalBackend.refreshCourses([courseDirectory])
+                    signalSource.refreshCourseLevels()
+                    rootStackView.pop()
+                }
             }
         }
     }

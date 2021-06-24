@@ -117,7 +117,7 @@ Item {
                             switch (currentText)
                             {
                                 case "Auto learn":
-                                    rootStackView.push("qrc:/AdvancedAutoLearn.qml")
+                                    rootStackView.push("qrc:/AdvancedAutoLearn.qml", {"courseDirectory": directory})
                                 break
                             }
                         }
