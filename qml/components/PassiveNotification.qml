@@ -14,6 +14,12 @@ Item {
     function hide()
     {
         y = root.height
+        notificationHideTimer.running = false
+    }
+
+    function reduceTimer()
+    {
+        notificationHideTimer.interval = 1000
     }
 
     width: root.width / 2
@@ -44,11 +50,7 @@ Item {
 
         MouseArea {
             anchors.fill: parent
-            onClicked:
-            {
-                hide()
-                notificationHideTimer.running = false
-            }
+            onClicked: hide()
         }
     }
 

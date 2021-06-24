@@ -297,7 +297,7 @@ ApplicationWindow {
 
         function onFinishedRefreshingCourses()
         {
-            passiveNotification.hide()
+            passiveNotification.reduceTimer()
         }
     }
 
