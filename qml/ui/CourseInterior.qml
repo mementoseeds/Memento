@@ -142,7 +142,6 @@ Item {
 
                     Label {
                         text: planted + " / " + items + " seeds planted"
-                        font.pointSize: 10
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -151,7 +150,6 @@ Item {
 
                     Label {
                         text: ignored + " ignored"
-                        font.pointSize: 10
                         font.bold: true
                         horizontalAlignment: Text.AlignRight
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere

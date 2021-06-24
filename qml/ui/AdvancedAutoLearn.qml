@@ -41,8 +41,7 @@ Item {
             spacing: marginBase
 
             Label {
-                text: "<b>Advanced auto learn</b><br>Here you can select what range of levels you want to auto learn<br>how much their streak should be<br>and whether the next review should be scheduled now or in the future based on the streak"
-                font.pointSize: 10
+                text: "<b>Advanced auto learn</b><br>Here you can select what range of levels you want to auto learn, how much their streak should be, and whether the next review should be scheduled now or in the future based on the streak"
                 textFormat: Text.RichText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
@@ -51,7 +50,6 @@ Item {
 
             Label {
                 text: "Level begin and end"
-                font.pointSize: 10
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.fillWidth: true
                 Layout.topMargin: marginBase
@@ -64,7 +62,6 @@ Item {
 
                 Label {
                     text: Math.floor(levelRangeSlider.first.value)
-                    font.pointSize: 10
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.alignment: Qt.AlignLeft
                     horizontalAlignment: Text.AlignHCenter
@@ -84,7 +81,6 @@ Item {
 
                 Label {
                     text: Math.floor(levelRangeSlider.second.value)
-                    font.pointSize: 10
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.alignment: Qt.AlignRight
                     horizontalAlignment: Text.AlignHCenter
@@ -121,6 +117,7 @@ Item {
             Button {
                 text: "Begin"
                 Layout.alignment: Qt.AlignCenter
+                Material.background: globalGreen
                 onClicked: advancedAutoLearnMessageBox.visible = true
             }
         }
