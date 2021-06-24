@@ -667,7 +667,7 @@ int Backend::getCourseLevelAmount(QString courseDirectory)
     return levelsDir.entryList({"*.json", "*.md"}, QDir::Files).size();
 }
 
-void Backend::advancedAutoLearn(QString courseDirectory, int start, int stop, int streak, bool waterRightNow)
+void Backend::advancedAutoLevelAdjust(bool learn, QString courseDirectory, int start, int stop, int streak, bool waterRightNow)
 {
     QDir levelsDir(courseDirectory + "/levels");
     QString absolutePath = levelsDir.absolutePath() + "/";
@@ -688,18 +688,18 @@ void Backend::advancedAutoLearn(QString courseDirectory, int start, int stop, in
             levelFile.close();
         }
 
-        levelJson["completed"] = true;
+        levelJson["completed"] = learn;
         for (auto &item : levelJson["seeds"].items())
         {
             String id = item.key();
 
-            levelJson["seeds"][id]["planted"] = true;
-            levelJson["seeds"][id]["nextWatering"] = waterRightNow ? QDateTime::currentDateTime().toString().toStdString() : getWateringTime(streak);
-            //levelJson["seeds"][id]["ignored"] = false; //Leave unchanged
-            //levelJson["seeds"][id]["difficult"] = false; //Leave unchanged
-            levelJson["seeds"][id]["successes"] = 5 + streak;
-            //levelJson["seeds"][id]["failures"] = 0; //Leave unchanged
-            levelJson["seeds"][id]["streak"] = streak;
+            levelJson["seeds"][id]["planted"] = learn;
+            levelJson["seeds"][id]["nextWatering"] = learn ? (waterRightNow ? QDateTime::currentDateTime().toString().toStdString() : getWateringTime(streak)) : "";
+            levelJson["seeds"][id]["ignored"] = learn ? levelJson["seeds"][id]["ignored"].get<bool>() : false;
+            levelJson["seeds"][id]["difficult"] = learn ? levelJson["seeds"][id]["difficult"].get<bool>() : false;
+            levelJson["seeds"][id]["successes"] = learn ? 5 + streak : 0;
+            levelJson["seeds"][id]["failures"] = learn ? levelJson["seeds"][id]["failures"].get<int>() : 0;
+            levelJson["seeds"][id]["streak"] = learn ? streak : 0;
         }
 
         std::ofstream levelFile(levelPath);

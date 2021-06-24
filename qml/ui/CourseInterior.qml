@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
 Item {
@@ -111,13 +112,17 @@ Item {
                     Layout.bottomMargin: 20
 
                     ComboBox {
-                        model: ["Auto learn"]
+                        model: ["Auto learn", "Reset"]
                         onActivated:
                         {
                             switch (currentText)
                             {
                                 case "Auto learn":
                                     rootStackView.push("qrc:/AdvancedAutoLearn.qml", {"courseDirectory": directory})
+                                break
+
+                                case "Reset":
+                                    resetCourseMessageBox.visible = true
                                 break
                             }
                         }
@@ -216,6 +221,20 @@ Item {
 //                else if (newLevelPath.endsWith(".md"))
 //                    rootPageStack.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
             }
+        }
+    }
+
+    MessageDialog {
+        id: resetCourseMessageBox
+        icon: StandardIcon.Question
+        title: "Reset course?"
+        text: "Are you sure you want to reset the entire course?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes:
+        {
+            globalBackend.advancedAutoLevelAdjust(false, directory, 1, globalBackend.getCourseLevelAmount(directory), 1, false)
+            globalBackend.refreshCourses([directory])
+            rootStackView.pop(null)
         }
     }
 }

@@ -141,7 +141,8 @@ Item {
                         "planted": planted,
                         "water": water,
                         "difficult": difficult,
-                        "ignored": ignored
+                        "ignored": ignored,
+                        "completed": completed
                             })
         }
     }

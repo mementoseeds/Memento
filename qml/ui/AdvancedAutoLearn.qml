@@ -17,6 +17,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Dialogs 1.3
 import QtQuick.Controls.Material 2.12
 
 Item {
@@ -120,14 +121,22 @@ Item {
             Button {
                 text: "Begin"
                 Layout.alignment: Qt.AlignCenter
-                onClicked:
-                {
-                    globalBackend.advancedAutoLearn(courseDirectory, levelRangeSlider.first.value, levelRangeSlider.second.value, streakCountSpinBox.value, waterNow.checked)
-                    globalBackend.refreshCourses([courseDirectory])
-                    signalSource.refreshCourseLevels()
-                    rootStackView.pop()
-                }
+                onClicked: advancedAutoLearnMessageBox.visible = true
             }
+        }
+    }
+
+    MessageDialog {
+        id: advancedAutoLearnMessageBox
+        icon: StandardIcon.Question
+        title: "Auto learn range?"
+        text: "Are you sure you want to auto learn " + (Math.floor(levelRangeSlider.second.value) - Math.floor(levelRangeSlider.first.value) + 1) + " levels?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes:
+        {
+            globalBackend.advancedAutoLevelAdjust(true, courseDirectory, Math.floor(levelRangeSlider.first.value), Math.floor(levelRangeSlider.second.value), streakCountSpinBox.value, waterNow.checked)
+            globalBackend.refreshCourses([courseDirectory])
+            rootStackView.pop(null)
         }
     }
 }

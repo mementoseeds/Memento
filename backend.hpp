@@ -148,7 +148,7 @@ public:
     Q_INVOKABLE void autoLearnItem(QString itemId, int streakCount);
 
     Q_INVOKABLE int getCourseLevelAmount(QString courseDirectory);
-    Q_INVOKABLE void advancedAutoLearn(QString courseDirectory, int start, int stop, int streak, bool waterRightNow);
+    Q_INVOKABLE void advancedAutoLevelAdjust(bool learn, QString courseDirectory, int start, int stop, int streak, bool waterRightNow);
 
     enum TestType
     {
