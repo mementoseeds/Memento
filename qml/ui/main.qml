@@ -289,9 +289,24 @@ ApplicationWindow {
 
     Connections {
         target: globalBackend
+
         function onShowPassiveNotification(text, duration)
         {
             showPassiveNotification(text, duration)
+        }
+
+        function onFinishedRefreshingCourses()
+        {
+            passiveNotification.hide()
+        }
+    }
+
+    Connections {
+        target: signalSource
+
+        function onRefreshAllCourses()
+        {
+            passiveNotification.show("Please do not exit while refreshing courses", Number.MAX_SAFE_INTEGER)
         }
     }
 
