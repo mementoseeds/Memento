@@ -107,7 +107,7 @@ Item {
                 }
 
                 RowLayout {
-                    Layout.bottomMargin: 40
+                    Layout.bottomMargin: 20
 
                     ComboBox {
                         model: ["Debug"]
@@ -125,6 +125,45 @@ Item {
                         Material.background: completed ? globalBlue : globalGreen
                         onClicked: showPassiveNotification("Todo")
                     }
+                }
+
+                RowLayout {
+                    Layout.preferredWidth: parent.width
+
+                    Label {
+                        text: planted + " / " + items + " seeds planted"
+                        font.pointSize: 10
+                        font.bold: true
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Layout.alignment: Qt.AlignLeft
+                    }
+
+                    Label {
+                        text: ignored + " ignored"
+                        font.pointSize: 10
+                        font.bold: true
+                        horizontalAlignment: Text.AlignRight
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        Layout.alignment: Qt.AlignRight
+                    }
+                }
+
+                ProgressBar {
+                    id: courseProgressBar
+                    from: 0
+                    to: items
+                    value: planted
+                    indeterminate:  false
+                    Material.accent: completed ? globalBlue : globalGreen
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.fillWidth: true
+                }
+
+                Label {
+                    text: Math.floor(courseProgressBar.value / courseProgressBar.to * 100) + "%"
+                    Layout.alignment: Qt.AlignCenter
+                    Layout.bottomMargin: 40
                 }
             }
         }
