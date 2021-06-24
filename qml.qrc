@@ -35,5 +35,6 @@
         <file alias="PauseRoom.qml">qml/ui/PauseRoom.qml</file>
         <file>assets/actions/continue.svg</file>
         <file>assets/actions/autoLearn.svg</file>
+        <file alias="AdvancedAutoLearn.qml">qml/ui/AdvancedAutoLearn.qml</file>
     </qresource>
 </RCC>

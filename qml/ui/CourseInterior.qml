@@ -107,22 +107,27 @@ Item {
                 }
 
                 RowLayout {
+                    Layout.preferredWidth: parent.width
                     Layout.bottomMargin: 20
 
                     ComboBox {
-                        model: ["Debug"]
-                        onActivated: signalSource.refreshCourseLevels()
-                    }
-
-                    Label {
-                        text: ""
-                        Layout.fillWidth: true
+                        model: ["Auto learn"]
+                        onActivated:
+                        {
+                            switch (currentText)
+                            {
+                                case "Auto learn":
+                                    rootStackView.push("qrc:/AdvancedAutoLearn.qml")
+                                break
+                            }
+                        }
                     }
 
                     Button {
                         text: completed ? "Water" : "Plant"
                         icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: completed ? globalBlue : globalGreen
+                        Layout.alignment: Qt.AlignRight
                         onClicked: showPassiveNotification("Todo")
                     }
                 }
