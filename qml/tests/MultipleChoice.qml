@@ -25,6 +25,7 @@ Item {
     property string testType: "MultipleChoice"
     property int marginBase: 10
 
+    property string levelPath: ""
     property string itemId: ""
     property string testColumn: ""
     property string promptColumn: ""
@@ -42,7 +43,7 @@ Item {
     {
         wrongAnswerCounter++
         testHeader.radialBarText = "Fail"
-        scheduleTestAfterMistake(itemId)
+        scheduleTestAfterMistake(levelPath, itemId)
     }
 
     ScrollView {
@@ -156,7 +157,7 @@ Item {
                     testHeader.countdownTimer.running = false
                     testHeader.showAfterTests()
 
-                    if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
+                    if (globalBackend.checkAnswer(levelPath, itemId, testColumn, choiceData))
                     {
                         choiceButton.Material.background = globalGreen
                         correctAnswer()
@@ -187,7 +188,7 @@ Item {
                     testHeader.countdownTimer.running = false
                     testHeader.showAfterTests()
 
-                    if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
+                    if (globalBackend.checkAnswer(levelPath, itemId, testColumn, choiceData))
                     {
                         setToolbarColor(Material.color(Material.Green, Material.ShadeA700))
                         correctAnswer()
@@ -258,7 +259,7 @@ Item {
                         testHeader.countdownTimer.running = false
                         testHeader.showAfterTests()
 
-                        if (globalBackend.checkAnswer(itemId, testColumn, choiceData))
+                        if (globalBackend.checkAnswer(levelPath, itemId, testColumn, choiceData))
                         {
                             audioButton.Material.background = globalGreen
                             correctAnswer()
@@ -306,7 +307,7 @@ Item {
             testHeader.answered()
 
             //Just for updating statistics
-            globalBackend.checkAnswer(itemId, testColumn, "")
+            globalBackend.checkAnswer(levelPath, itemId, testColumn, "")
 
             for (var i = 0; i < choices.model.length; i++)
             {

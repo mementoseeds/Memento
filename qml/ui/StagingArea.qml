@@ -87,16 +87,19 @@ Item {
         testLoader.active = true
     }
 
-    function scheduleTestAfterMistake(id)
+    function scheduleTestAfterMistake(levelPath, id)
     {
-        var test = {}
-        test[id] = TestType.PREVIEW
-        tests.splice(itemIndex, 0, test)
+        var level = Object.keys(testingContent)[levelIndex]
+        //console.debug(JSON.stringify(testingContent[level], null, 4))
+        console.debug(JSON.stringify(testingContent[level][itemIndex], null, 4))
+//        var test = {}
+//        test[id] = TestType.PREVIEW
+//        tests.splice(itemIndex, 0, test)
 
-        var newRandomPosition = Math.floor((Math.random() * (tests.length - itemIndex)) + 1) + itemIndex
-        test = {}
-        test[id] = getRandomTest()
-        tests.splice(newRandomPosition, 0, test)
+//        var newRandomPosition = Math.floor((Math.random() * (tests.length - itemIndex)) + 1) + itemIndex
+//        test = {}
+//        test[id] = getRandomTest()
+//        tests.splice(newRandomPosition, 0, test)
     }
 
     function autoLearnItem(itemId)
@@ -232,7 +235,7 @@ Item {
                 promptColumn = columns[1]
             }
 
-            var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
+            var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
 
             testLoader.active = false
             switch (testingContent[level][itemIndex][itemId])

@@ -124,7 +124,7 @@ public:
 
     Q_INVOKABLE void setReviewType(bool manualReview, bool mockWater);
     Q_INVOKABLE void loadCourseInfo(QString courseDirectory);
-    Q_INVOKABLE bool checkAnswer(QString itemId, QString column, QString answer);
+    Q_INVOKABLE bool checkAnswer(QString levelPath, QString itemId, QString column, QString answer);
     Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
 
     Q_INVOKABLE void saveLevel(QString levelPath);
@@ -194,8 +194,8 @@ private:
     static Backend *m_instance;
 
     //Methods
-    void correctAnswer(QString itemId);
-    void wrongAnswer(QString itemId);
+    void correctAnswer(QString levelPath, QString itemId);
+    void wrongAnswer(QString levelPath, QString itemId);
     String getWateringTime(int streak);
     QString parseTime(uint seconds, bool fullTime = false);
     const Json getRandom(const Json json, bool returnKey);
@@ -211,7 +211,7 @@ private:
 
     bool manualReview = false;
     bool mockWater = false;
-    QMap<QString, bool> unlockedItems;
+    QMap<QString, QMap<QString, bool>> unlockedItems;
 
     QVariantMap userSettings;
 

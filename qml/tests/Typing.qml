@@ -24,6 +24,7 @@ Item {
     property string testType: "Typing"
     property int marginBase: 10
 
+    property string levelPath: ""
     property string itemId: ""
     property string testColumn: ""
     property string promptColumn: ""
@@ -88,7 +89,7 @@ Item {
                         testHeader.showAfterTests()
                         readOnly = true
 
-                        if (globalBackend.checkAnswer(itemId, testColumn, text))
+                        if (globalBackend.checkAnswer(levelPath, itemId, testColumn, text))
                         {
                             correctAnswerCounter++
                             textfieldBackground.color = "green"
@@ -97,7 +98,7 @@ Item {
                         {
                             wrongAnswerCounter++
                             textfieldBackground.color = "red"
-                            scheduleTestAfterMistake(itemId)
+                            scheduleTestAfterMistake(levelPath, itemId)
                         }
 
                         testHeader.cooldownTimer.running = true

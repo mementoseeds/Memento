@@ -328,7 +328,7 @@ void Backend::loadCourseInfo(QString courseDirectory)
     infoFile.close();
 }
 
-bool Backend::checkAnswer(QString itemId, QString column, QString answer)
+bool Backend::checkAnswer(QString levelPath, QString itemId, QString column, QString answer)
 {
     bool result = false;
     answer = answer.trimmed();
@@ -351,26 +351,26 @@ bool Backend::checkAnswer(QString itemId, QString column, QString answer)
     if (!mockWater)
     {
         if (result)
-            correctAnswer(itemId);
+            correctAnswer(levelPath, itemId);
         else
-            wrongAnswer(itemId);
+            wrongAnswer(levelPath, itemId);
     }
 
     return result;
 }
 
-void Backend::correctAnswer(QString itemId)
+void Backend::correctAnswer(QString levelPath, QString itemId)
 {
     String id = itemId.toStdString();
 
-    Json item = globalLevelSeeds[id];
+    Json item = jsonMap[levelPath]["seeds"][id];
 
     int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
-    if (successes >= 5 && (unlockedItems[itemId] || !manualReview))
+    if (successes >= 5 && (unlockedItems[levelPath][itemId] || !manualReview))
     {
-        unlockedItems[itemId] = !manualReview;
+        unlockedItems[levelPath][itemId] = !manualReview;
 
         item["planted"] = true;
 
@@ -380,21 +380,21 @@ void Backend::correctAnswer(QString itemId)
         item["nextWatering"] = getWateringTime(streak);
     }
 
-    globalLevelSeeds[id] = item;
+    jsonMap[levelPath]["seeds"][id] = item;
 }
 
-void Backend::wrongAnswer(QString itemId)
+void Backend::wrongAnswer(QString levelPath, QString itemId)
 {
     String id = itemId.toStdString();
 
-    Json item = globalLevelSeeds[id];
+    Json item = jsonMap[levelPath]["seeds"][id];
     item["failures"] = item["failures"].get<int>() + 1;
     item["difficult"] = item["planted"].get<bool>();
     item["streak"] = 0;
 
-    unlockedItems[itemId] = true;
+    unlockedItems[levelPath][itemId] = true;
 
-    globalLevelSeeds[id] = item;
+    jsonMap[levelPath]["seeds"][id] = item;
 }
 
 void Backend::getShowAfterTests(QString itemId, QString testColumn, QString promptColumn)
