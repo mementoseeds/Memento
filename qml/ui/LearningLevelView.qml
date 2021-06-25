@@ -126,7 +126,7 @@ Item {
     function plantAction()
     {
         if (!levelCompleted)
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContent": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant"})
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant"})
         else
             showPassiveNotification("This level is already completed")
     }
@@ -199,7 +199,7 @@ Item {
                             switch (currentText)
                             {
                                 case "Preview":
-                                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContent": getAllItems(), "actionType": "preview"})
+                                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getAllItems(), "actionType": "preview"})
                                     break
                                 case "Plant":
                                     plantAction()

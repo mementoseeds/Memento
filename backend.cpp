@@ -180,8 +180,6 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     std::ifstream levelFile(levelPath.toStdString());
     levelFile >> globalLevel;
     levelFile.close();
-    globalLevelSeeds = globalLevel["seeds"];
-    globalSeedsAmount = globalLevelSeeds.size();
 
     //Open the seedbox
     std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
@@ -192,7 +190,7 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
     String testColumn = globalLevel["test"].get<String>();
     String promptColumn = globalLevel["prompt"].get<String>();
 
-    for (auto &item : globalLevelSeeds.items())
+    for (auto &item : globalLevel["seeds"].items())
     {
         String id = item.key();
 
@@ -203,10 +201,10 @@ void Backend::getLevelItems(QString courseDirectory, QString levelPath)
             QString::fromStdString(id),
             test,
             prompt,
-            globalLevelSeeds[id]["planted"].get<bool>(),
-            getReviewTime(QString::fromStdString(globalLevelSeeds[id]["nextWatering"].get<String>())),
-            globalLevelSeeds[id]["ignored"].get<bool>(),
-            globalLevelSeeds[id]["difficult"].get<bool>()
+            globalLevel["seeds"][id]["planted"].get<bool>(),
+            getReviewTime(QString::fromStdString(globalLevel["seeds"][id]["nextWatering"].get<String>())),
+            globalLevel["seeds"][id]["ignored"].get<bool>(),
+            globalLevel["seeds"][id]["difficult"].get<bool>()
                     );
     }
 
@@ -447,19 +445,36 @@ String Backend::getWateringTime(int streak)
 
 void Backend::saveLevel(QString levelPath)
 {
-    int completedSeeds = 0;
-    for (auto &item : globalLevelSeeds.items())
+    ulong completedSeeds = 0;
+    for (auto &item : globalLevel["seeds"].items())
     {
-        if (globalLevelSeeds[item.key()]["planted"].get<bool>())
+        if (globalLevel["seeds"][item.key()]["planted"].get<bool>())
             completedSeeds++;
     }
-    globalLevel["completed"] = (completedSeeds == globalSeedsAmount);
-
-    globalLevel["seeds"] = globalLevelSeeds;
+    globalLevel["completed"] = (completedSeeds == globalLevel["seeds"].size());
 
     std::ofstream level(levelPath.toStdString());
     level << globalLevel.dump(jsonIndent) << std::endl;
     level.close();
+}
+
+void Backend::saveLevels()
+{
+    foreach (QString levelPath, jsonMap.keys())
+    {
+        ulong completedSeeds = 0;
+        for (auto &item : jsonMap[levelPath]["seeds"].items())
+        {
+            if (jsonMap[levelPath]["seeds"][item.key()]["planted"].get<bool>())
+                completedSeeds++;
+        }
+
+        jsonMap[levelPath]["completed"] = (completedSeeds == jsonMap[levelPath]["seeds"].size());
+
+        std::ofstream level(levelPath.toStdString());
+        level << jsonMap[levelPath].dump(jsonIndent) << std::endl;
+        level.close();
+    }
 }
 
 const Json Backend::getRandom(const Json json, bool returnKey)
@@ -473,10 +488,10 @@ const Json Backend::getRandom(const Json json, bool returnKey)
         return *it;
 }
 
-void Backend::getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray)
+void Backend::getLevelResults(QString levelPath, QVariantList itemArray)
 {
-    String test = testColumn.toStdString();
-    String prompt = promptColumn.toStdString();
+    String test = jsonMap[levelPath]["test"].get<String>();
+    String prompt = jsonMap[levelPath]["prompt"].get<String>();
     foreach (QVariant itemId, itemArray)
     {
         String id = itemId.toString().toStdString();
@@ -486,9 +501,9 @@ void Backend::getLevelResults(QString  testColumn, QString  promptColumn, QVaria
             QString::fromStdString(globalSeedbox[id][test]["type"].get<String>()),
             QString::fromStdString(globalSeedbox[id][prompt]["primary"].get<String>()),
             QString::fromStdString(globalSeedbox[id][prompt]["type"].get<String>()),
-            globalLevelSeeds[id]["successes"].get<int>(),
-            globalLevelSeeds[id]["failures"].get<int>(),
-            globalLevelSeeds[id]["streak"].get<int>()
+            jsonMap[levelPath]["seeds"][id]["successes"].get<int>(),
+            jsonMap[levelPath]["seeds"][id]["failures"].get<int>(),
+            jsonMap[levelPath]["seeds"][id]["streak"].get<int>()
                     );
     }
 }
@@ -524,6 +539,7 @@ QString Backend::parseTime(uint seconds, bool fullTime)
 
 void Backend::resetCurrentLevel(QString levelPath)
 {
+    //Called from learning level view
     globalLevel["completed"] = false;
     for (auto &item : globalLevel["seeds"].items())
     {
@@ -542,19 +558,23 @@ void Backend::resetCurrentLevel(QString levelPath)
     level.close();
 }
 
-void Backend::autoLearn(QVariantList itemArray, QString levelPath)
+void Backend::autoLearn(QVariantMap levelAndItems)
 {
+    QString levelPath = levelAndItems.keys()[0];
+    QVariantList itemArray = levelAndItems[levelPath].toList();
+
+    //Called from learning level view
     foreach (QVariant item, itemArray)
     {
         String id = item.toString().toStdString();
 
-        globalLevelSeeds[id]["planted"] = true;
-        globalLevelSeeds[id]["nextWatering"] = getWateringTime(1);
-        globalLevelSeeds[id]["ignored"] = false;
-        globalLevelSeeds[id]["difficult"] = false;
-        globalLevelSeeds[id]["successes"] = 5;
-        globalLevelSeeds[id]["failures"] = 0;
-        globalLevelSeeds[id]["streak"] = 1;
+        globalLevel["seeds"][id]["planted"] = true;
+        globalLevel["seeds"][id]["nextWatering"] = getWateringTime(1);
+        globalLevel["seeds"][id]["ignored"] = false;
+        globalLevel["seeds"][id]["difficult"] = false;
+        globalLevel["seeds"][id]["successes"] = 5;
+        globalLevel["seeds"][id]["failures"] = 0;
+        globalLevel["seeds"][id]["streak"] = 1;
     }
 
     saveLevel(levelPath);
@@ -645,21 +665,21 @@ QVariantList Backend::getRandomCharacters(QString itemId, QString column, int co
 
 void Backend::ignoreItem(QString levelPath, QString itemId, bool ignored)
 {
-    globalLevelSeeds[itemId.toStdString()]["ignored"] = ignored;
+    globalLevel["seeds"][itemId.toStdString()]["ignored"] = ignored;
     saveLevel(levelPath);
 }
 
-void Backend::autoLearnItem(QString itemId, int streakCount)
+void Backend::autoLearnItem(QString levelPath, QString itemId, int streakCount)
 {
     //Called from button during planting
     String id = itemId.toStdString();
-    globalLevelSeeds[id]["planted"] = true;
-    globalLevelSeeds[id]["nextWatering"] = getWateringTime(streakCount);
-    globalLevelSeeds[id]["ignored"] = false;
-    globalLevelSeeds[id]["difficult"] = false;
-    globalLevelSeeds[id]["successes"] = 5;
-    globalLevelSeeds[id]["failures"] = 0;
-    globalLevelSeeds[id]["streak"] = streakCount;
+    jsonMap[levelPath]["seeds"][id]["planted"] = true;
+    jsonMap[levelPath]["seeds"][id]["nextWatering"] = getWateringTime(streakCount);
+    jsonMap[levelPath]["seeds"][id]["ignored"] = false;
+    jsonMap[levelPath]["seeds"][id]["difficult"] = false;
+    jsonMap[levelPath]["seeds"][id]["successes"] = 5;
+    jsonMap[levelPath]["seeds"][id]["failures"] = 0;
+    jsonMap[levelPath]["seeds"][id]["streak"] = streakCount;
 }
 
 int Backend::getCourseLevelAmount(QString courseDirectory)

@@ -128,15 +128,16 @@ public:
     Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
 
     Q_INVOKABLE void saveLevel(QString levelPath);
+    Q_INVOKABLE void saveLevels();
 
-    Q_INVOKABLE void getLevelResults(QString  testColumn, QString  promptColumn, QVariantList itemArray);
+    Q_INVOKABLE void getLevelResults(QString levelPath, QVariantList itemArray);
 
     Q_INVOKABLE void setStartTime();
     Q_INVOKABLE QString getStopTime();
 
     Q_INVOKABLE void resetCurrentLevel(QString levelPath);
 
-    Q_INVOKABLE void autoLearn(QVariantList itemArray, QString levelPath);
+    Q_INVOKABLE void autoLearn(QVariantMap levelAndItems);
 
     Q_INVOKABLE void refreshCourses(QVariantList courses);
 
@@ -145,7 +146,7 @@ public:
 
     Q_INVOKABLE void ignoreItem(QString levelPath, QString itemId, bool ignored);
 
-    Q_INVOKABLE void autoLearnItem(QString itemId, int streakCount);
+    Q_INVOKABLE void autoLearnItem(QString levelPath, QString itemId, int streakCount);
 
     Q_INVOKABLE int getCourseLevelAmount(QString courseDirectory);
     Q_INVOKABLE void advancedAutoLevelAdjust(bool learn, QString courseDirectory, int start, int stop, int streak, bool waterRightNow);
@@ -204,10 +205,8 @@ private:
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!
     Json globalSeedbox;
     Json globalLevel;
-    Json globalLevelSeeds;
     Json globalInfo;
     QMap<QString, Json> jsonMap;
-    int globalSeedsAmount;
 
     bool manualReview = false;
     bool mockWater = false;

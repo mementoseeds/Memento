@@ -69,7 +69,7 @@ ColumnLayout {
             icon.source: "assets/actions/autoLearn.svg"
             font.capitalization: Font.MixedCase
             Layout.alignment: Qt.AlignRight
-            onClicked: autoLearnItem(itemId)
+            onClicked: autoLearnItem(levelPath, itemId)
         }
     }
 

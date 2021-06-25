@@ -24,6 +24,7 @@ Item {
     objectName: "StagingArea.qml"
 
     property string courseDirectory: ""
+    property var testingContentOriginal: ({})
     property var testingContent: ({})
     //property var itemArray: []
     property string actionType: ""
@@ -32,6 +33,7 @@ Item {
     property bool manualReview: false
     property bool mockWater: false
 
+    property var levels: []
     property int uniqueItemCount: 0
     property int levelIndex: 0
     property int itemIndex: 0
@@ -99,10 +101,10 @@ Item {
         testingContent[levelPath].splice(newRandomPosition, 0, test)
     }
 
-    function autoLearnItem(itemId)
+    function autoLearnItem(levelPath, itemId)
     {
         autoLearned.push(itemId)
-        globalBackend.autoLearnItem(itemId, 1)
+        globalBackend.autoLearnItem(levelPath, itemId, 1)
         triggerNextItem()
     }
 
@@ -111,13 +113,15 @@ Item {
         signalSource.stopAllAudio()
         globalBackend.setReviewType(manualReview, mockWater)
         globalBackend.loadCourseInfo(courseDirectory)
-        globalBackend.loadLevelJsons(Object.keys(testingContent))
+
+        levels = Object.keys(testingContentOriginal)
+        globalBackend.loadLevelJsons(levels)
 
         if (actionType === "preview")
         {
-            for (var level in testingContent)
+            for (var level in testingContentOriginal)
             {
-                var itemArray = testingContent[level]
+                var itemArray = testingContentOriginal[level]
                 testingContent[level] = []
 
                 for (var id in itemArray)
@@ -131,9 +135,9 @@ Item {
         }
         else if (actionType === "plant")
         {
-            for (level in testingContent)
+            for (level in testingContentOriginal)
             {
-                itemArray = testingContent[level]
+                itemArray = testingContentOriginal[level]
                 uniqueItemCount = itemArray.length
                 testingContent[level] = []
 
@@ -177,89 +181,96 @@ Item {
 
     function triggerNextItem()
     {
-        var level = Object.keys(testingContent)[levelIndex]
-        var columns = globalBackend.getLevelColumns(level)
-
-        if (actionType === "preview")
+        if (levelIndex < levels.length)
         {
-            replaceToolbar("Previewing ", testingContent[level].length, testingContent[level].length, itemIndex, actionType)
+            var level = levels[levelIndex]
+            var columns = globalBackend.getLevelColumns(level)
+
+            if (actionType === "preview")
+            {
+                replaceToolbar("Previewing ", testingContent[level].length, testingContent[level].length, itemIndex, actionType)
+
+                if (itemIndex < testingContent[level].length)
+                {
+                    testLoader.active = false
+                    testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[level][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
+                    testLoader.active = true
+                    itemIndex++
+                }
+                else
+                    rootStackView.pop()
+
+                return
+            }
+            else if (actionType === "plant")
+            {
+                replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
+            }
+            else if (actionType === "water")
+            {
+                replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+            }
 
             if (itemIndex < testingContent[level].length)
             {
+                var itemId = Object.keys(testingContent[level][itemIndex]).toString()
+
+                //Skip over this item if the user has requested a skip
+                if (autoLearned.includes(itemId))
+                {
+                    itemIndex++
+                    triggerNextItem()
+                    return
+                }
+
+                //Random chance to switch test and prompt columns if the next test is multiple choice
+                if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
+                {
+                    console.debug("Switched")
+                    var tempColumn = columns[0]
+                    var testColumn = columns[1]
+                    var promptColumn = tempColumn
+                    delete tempColumn
+                }
+                else
+                {
+                    testColumn = columns[0]
+                    promptColumn = columns[1]
+                }
+
+                var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
+
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[level][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
+                switch (testingContent[level][itemIndex][itemId])
+                {
+                    case TestType.PREVIEW:
+                        testLoader.setSource("qrc:/Preview.qml", variables)
+                        break
+
+                    case TestType.MULTIPLECHOICE:
+                        testLoader.setSource("qrc:/MultipleChoice.qml", variables)
+                        break
+
+                    case TestType.TAPPING:
+                        variables["tappingEnabled"] = true
+                    case TestType.TYPING:
+                        testLoader.setSource("qrc:/Typing.qml", variables)
+                        break
+                }
                 testLoader.active = true
                 itemIndex++
             }
             else
-                rootStackView.pop()
-
-            return
-        }
-        else if (actionType === "plant")
-        {
-            replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
-        }
-        else if (actionType === "water")
-        {
-            replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
-        }
-
-        if (itemIndex < testingContent[level].length)
-        {
-            var itemId = Object.keys(testingContent[level][itemIndex]).toString()
-
-            //Skip over this item if the user has requested a skip
-            if (autoLearned.includes(itemId))
             {
-                itemIndex++
+                levelIndex++
                 triggerNextItem()
-                return
             }
-
-            //Random chance to switch test and prompt columns if the next test is multiple choice
-            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
-            {
-                console.debug("Switched")
-                var tempColumn = columns[0]
-                var testColumn = columns[1]
-                var promptColumn = tempColumn
-                delete tempColumn
-            }
-            else
-            {
-                testColumn = columns[0]
-                promptColumn = columns[1]
-            }
-
-            var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
-
-            testLoader.active = false
-            switch (testingContent[level][itemIndex][itemId])
-            {
-                case TestType.PREVIEW:
-                    testLoader.setSource("qrc:/Preview.qml", variables)
-                    break
-
-                case TestType.MULTIPLECHOICE:
-                    testLoader.setSource("qrc:/MultipleChoice.qml", variables)
-                    break
-
-                case TestType.TAPPING:
-                    variables["tappingEnabled"] = true
-                case TestType.TYPING:
-                    testLoader.setSource("qrc:/Typing.qml", variables)
-                    break
-            }
-            testLoader.active = true
-            itemIndex++
         }
         else
         {
-            globalBackend.saveLevel(levelPath)
-            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "itemArray": itemArray,
-                "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
-                "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
+            globalBackend.saveLevels()
+            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory,
+                "testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }
     }
 

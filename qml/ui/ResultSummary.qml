@@ -23,13 +23,25 @@ Item {
     property int marginBase: 10
 
     property string courseDirectory: ""
-    property var itemArray: []
-    property string testColumn: ""
-    property string promptColumn: ""
+    property var testingContent: ({})
+    property var levels: []
+//    property var itemArray: []
+//    property string testColumn: ""
+//    property string promptColumn: ""
     property int correctAnswerCounter: 0
     property int totalTests: 0
 
-    Component.onCompleted: globalBackend.getLevelResults(testColumn, promptColumn, itemArray)
+    Component.onCompleted:
+    {
+        levels = Object.keys(testingContent)
+        for (var level in levels)
+        {
+            var itemArray = testingContent[levels[level]]
+            //console.debug(levels[level], itemArray)
+            globalBackend.getLevelResults(levels[level], itemArray)
+        }
+    }
+
     Component.onDestruction:
     {
         signalSource.reloadLearningLevel()
@@ -110,7 +122,7 @@ Item {
                 Layout.topMargin: marginBase
 
                 Label {
-                    text: testColumn
+                    text: "Test"
                     font.pointSize: 12
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -121,7 +133,7 @@ Item {
                 }
 
                 Label {
-                    text: promptColumn
+                    text: "Prompt"
                     font.pointSize: 12
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
