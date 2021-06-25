@@ -63,6 +63,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
     settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
     settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
+    settings.setValue("maxWateringItems", userSettings["maxWateringItems"]);
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
@@ -77,6 +78,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
     userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
+    userSettings.insert("maxWateringItems", settings.value("maxWateringItems", 50).toInt());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
@@ -846,17 +848,15 @@ QVariantMap Backend::getCourseWideWateringItems(QString courseDirectory, int cou
 
         QDir levelsDirectory(levelsDir);
         QStringList levelList = levelsDirectory.entryList({"*.json"}, QDir::Files);
+        std::shuffle(levelList.begin(), levelList.end(), g);
 
-        while (totalItems < count)
+        foreach (QString name, levelList)
         {
-            QString name = levelList[QRandomGenerator::global()->generate() % levelList.size()];
-            if (levelList.size() > count && levelList.contains(name))
-                continue;
-
             std::ifstream levelFile(QString(levelsDir + name).toStdString());
             Json levelJson;
             levelFile >> levelJson;
             levelFile.close();
+
 
             QVariantList itemsToWater;
             for (auto &item : levelJson["seeds"].items())
@@ -875,5 +875,8 @@ QVariantMap Backend::getCourseWideWateringItems(QString courseDirectory, int cou
         }
     }
 
-    return QVariantMap {{"totalItems", totalItems}, {"manualReview", manualReview}, {"testingContentOriginal", testingContentOriginal}};
+    if (totalItems != 0)
+        return QVariantMap {{"totalItems", totalItems}, {"manualReview", manualReview}, {"testingContentOriginal", testingContentOriginal}};
+    else
+        return QVariantMap();
 }

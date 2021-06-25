@@ -31,6 +31,7 @@ Item {
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
         userSettings["maxPlantingItems"] = maxPlantingItems.value
+        userSettings["maxWateringItems"] = maxWateringItems.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
@@ -84,23 +85,11 @@ Item {
             SpinBox {
                 id: countdownTimerSpinBox
                 from: 1
+                to: 1000
+                editable: true
                 value: userSettings["countdownTimer"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
-            }
-
-            RowLayout {
-                Layout.alignment: Qt.AlignCenter
-
-                Button {
-                    text: "Minimize"
-                    onClicked: countdownTimerSpinBox.value = countdownTimerSpinBox.from
-                }
-
-                Button {
-                    text: "Maximize"
-                    onClicked: countdownTimerSpinBox.value = countdownTimerSpinBox.to
-                }
             }
 
             Label {
@@ -113,6 +102,7 @@ Item {
                 from: 100
                 to: 100000
                 stepSize: 100
+                editable: true
                 value: userSettings["cooldownTimer"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
@@ -126,8 +116,24 @@ Item {
             SpinBox {
                 id: maxPlantingItems
                 from: 2
-                to: 100
+                to: 1000
+                editable: true
                 value: userSettings["maxPlantingItems"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Items per watering session"
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: maxWateringItems
+                from: 1
+                to: 1000
+                editable: true
+                value: userSettings["maxWateringItems"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

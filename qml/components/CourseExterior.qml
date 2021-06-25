@@ -37,6 +37,18 @@ Item {
             showPassiveNotification("This course is already completed")
     }
 
+    function waterAction()
+    {
+        globalBackend.loadSeedbox(directory)
+
+        var wateringData = globalBackend.getCourseWideWateringItems(directory, userSettings["maxWateringItems"])
+        if (Object.keys(wateringData).length !== 0)
+                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
+                    "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
+        else
+            showPassiveNotification("This course has no planted items")
+    }
+
     RowLayout {
         id: courseExteriorDelegate
         anchors.top: parent.top
@@ -98,7 +110,7 @@ Item {
                     text: completed ? "Water" : "Plant"
                     icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                     Material.background: completed ? globalBlue : globalGreen
-                    onClicked: text === "Plant" ? plantAction() : showPassiveNotification("Todo")
+                    onClicked: text === "Plant" ? plantAction() : waterAction()
                 }
 
                 Button {

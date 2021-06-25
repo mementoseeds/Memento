@@ -95,28 +95,26 @@ Item {
     function getWateringItems(total)
     {
         var items = []
-        for (var i = 0; i < total; i++)
+
+        for (var i = 0; i < Math.min(total, levelEntryListModel.count); i++)
         {
-            if ((i + 1) <= levelEntryListModel.count)
-            {
-                var item = levelEntryListModel.get(i)
-                if (item.progress.startsWith("Now") && !item.ignored)
-                    items.push(item.id)
-                else
-                    total++
-            }
+            var item = levelEntryListModel.get(i)
+            if (item.progress.startsWith("Now") && !item.ignored)
+                items.push(item.id)
         }
 
         if (items.length === 0)
         {
+            manualReview = true
+
             for (i = 0; i < levelEntryListModel.count; i++)
             {
                 item = levelEntryListModel.get(i)
-                if (item.planted && !item.ignored)
+                if (!item.ignored)
                     items.push(item.id)
             }
 
-            manualReview = true
+            items.sort(() => 0.5 - Math.random()).splice(0, (items.length - total))
         }
 
         var levels = {}
@@ -136,7 +134,12 @@ Item {
     function waterAction()
     {
         if (plantedItems !== 0)
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getWateringItems(50), "actionType": "water", "manualReview": manualReview})
+        {
+            var wateringItems = getWateringItems(userSettings["maxWateringItems"])
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": wateringItems,
+                "actionType": "water", "manualReview": manualReview, "totalWateringItems": wateringItems[levelPath].length})
+        }
+
         else
             showPassiveNotification("There are no planted items to water")
     }
@@ -153,7 +156,8 @@ Item {
         var levels = {}
         levels[levelPath] = items
 
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": levels, "actionType": "water", "mockWater": true})
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory,
+            "testingContentOriginal": levels, "actionType": "water", "mockWater": true, "totalWateringItems": items.length})
     }
 
     function reloadLevel()

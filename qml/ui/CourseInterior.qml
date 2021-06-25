@@ -58,9 +58,12 @@ Item {
 
     function waterAction()
     {
-        var wateringData = globalBackend.getCourseWideWateringItems(directory, 10)
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
-            "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
+        var wateringData = globalBackend.getCourseWideWateringItems(directory, userSettings["maxWateringItems"])
+        if (Object.keys(wateringData).length !== 0)
+                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
+                    "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
+        else
+            showPassiveNotification("This course has no planted items")
     }
 
     GridView {
