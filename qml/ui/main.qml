@@ -320,7 +320,7 @@ ApplicationWindow {
         standardButtons: StandardButton.Yes | StandardButton.No
         onYes:
         {
-            rootStackView.pop(StackView.Immediate)
+            rootStackView.pop()
             signalSource.reloadLearningLevel()
         }
     }

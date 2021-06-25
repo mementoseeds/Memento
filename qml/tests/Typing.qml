@@ -36,7 +36,7 @@ Item {
     Component.onCompleted:
     {
         if (itemData[0] === "image" || itemData[0] === "audio")
-            manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn})
+            manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "levelPath": levelPath, "testColumn": testColumn, "promptColumn": promptColumn})
     }
 
     ScrollView {

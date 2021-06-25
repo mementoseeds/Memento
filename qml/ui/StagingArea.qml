@@ -27,11 +27,13 @@ Item {
     property var testingContentOriginal: ({})
     property string actionType: ""
     property bool manualReview: false
+    property int totalWateringItems: 0
     property bool mockWater: false
 
     property var testingContent: ({})
     property var levels: []
     property int uniqueItemCount: 0
+    property int totalWateringIndex: 0
     property int levelIndex: 0
     property int itemIndex: 0
     property int correctAnswerCounter: 0
@@ -187,7 +189,6 @@ Item {
         {
             var level = levels[levelIndex]
             var columns = globalBackend.getLevelColumns(level)
-            //console.debug(testingContent[level].length)
 
             if (actionType === "preview")
             {
@@ -211,7 +212,11 @@ Item {
             }
             else if (actionType === "water")
             {
-                //replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+                var total = 0
+                for (var testLevel in testingContent)
+                    total += testingContent[testLevel].length
+
+                replaceToolbar("Watering ", totalWateringItems, total, totalWateringIndex, actionType)
             }
 
             if (itemIndex < testingContent[level].length)
@@ -259,12 +264,15 @@ Item {
                         testLoader.setSource("qrc:/Typing.qml", variables)
                         break
                 }
+
                 testLoader.active = true
                 itemIndex++
+                totalWateringIndex++
             }
             else
             {
                 levelIndex++
+                autoLearned = []
                 itemIndex = 0
                 triggerNextItem()
             }

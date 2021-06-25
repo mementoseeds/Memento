@@ -799,6 +799,7 @@ QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
     QVariantMap testingContentOriginal;
     QString levelsDir = courseDirectory + "/levels/";
     int totalItems = 0;
+    bool manualReview = false;
 
     //TODO make it pick random levels from review.json
 
@@ -838,5 +839,5 @@ QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
 
     //TODO get random values from random levels if right here totalItems is still 0
 
-    return testingContentOriginal;
+    return QVariantMap {{"totalItems", totalItems}, {"manualReview", manualReview}, {"wateringItems", testingContentOriginal}};
 }

@@ -58,8 +58,9 @@ Item {
 
     function waterAction()
     {
-        var manualReview = false
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": globalBackend.getWateringItems(directory, 10), "actionType": "water", "manualReview": manualReview})
+        var wateringData = globalBackend.getWateringItems(directory, 10)
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["wateringItems"],
+            "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
     }
 
     GridView {
