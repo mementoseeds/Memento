@@ -152,6 +152,10 @@ public:
 
     Q_INVOKABLE QVariantMap getFirstIncompleteLevel(QString courseDirectory);
 
+    Q_INVOKABLE void loadLevelJsons(QVariantList levels);
+
+    Q_INVOKABLE QVariantList getLevelColumns(QString levelPath);
+
     Q_INVOKABLE QVariantMap getWateringItems(QString courseDirectory, int count);
 
     enum TestType

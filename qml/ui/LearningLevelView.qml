@@ -64,7 +64,11 @@ Item {
         var items = []
         for (var i = 0; i < levelEntryListModel.count; i++)
             items.push(levelEntryListModel.get(i).id)
-        return items
+
+        var levels = {}
+        levels[levelPath] = items
+
+        return levels
     }
 
     function getPlantingItems(total)
@@ -195,7 +199,7 @@ Item {
                             switch (currentText)
                             {
                                 case "Preview":
-                                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": getAllItems(), "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+                                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContent": getAllItems(), "actionType": "preview"})
                                     break
                                 case "Plant":
                                     plantAction()

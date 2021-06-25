@@ -32,8 +32,9 @@ Item {
     property bool manualReview: false
     property bool mockWater: false
 
+    property int levelIndex: 0
     property int itemIndex: 0
-    property var tests: []
+    //property var tests: []
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
     property var autoLearned: []
@@ -82,8 +83,9 @@ Item {
         signalSource.stopAllAudio()
         globalBackend.setReviewType(manualReview, mockWater)
         globalBackend.loadCourseInfo(courseDirectory)
+        globalBackend.loadLevelJsons(Object.keys(testingContent))
 
-        if (actionType === "plant")
+        if (actionType === "preview")
         {
             for (var level in testingContent)
             {
@@ -93,6 +95,22 @@ Item {
                 for (var id in itemArray)
                 {
                     var test = {}
+                    test[itemArray[id]] = TestType.PREVIEW
+                    testingContent[level].push(test)
+                }
+            }
+            //console.debug(JSON.stringify(testingContent, null, 4))
+        }
+        else if (actionType === "plant")
+        {
+            for (level in testingContent)
+            {
+                itemArray = testingContent[level]
+                testingContent[level] = []
+
+                for (id in itemArray)
+                {
+                    test = {}
                     test[itemArray[id]] = TestType.PREVIEW
                     testingContent[level].push(test)
 
@@ -114,8 +132,6 @@ Item {
 
                 testingContent[level] = testingContent[level].concat(unorderedTests.sort(() => Math.random() - 0.5))
             }
-
-            //console.debug(JSON.stringify(testingContent, null, 4))
         }
         else if (actionType === "water")
         {
@@ -132,14 +148,17 @@ Item {
 
     function triggerNextItem()
     {
+        var levels = Object.keys(testingContent)
+        var columns = globalBackend.getLevelColumns(levels[levelIndex])
+
         if (actionType === "preview")
         {
-            replaceToolbar("Previewing ", itemArray.length, itemArray.length, itemIndex, actionType)
+            replaceToolbar("Previewing ", testingContent[levels].length, testingContent[levels].length, itemIndex, actionType)
 
-            if (itemIndex !== itemArray.length)
+            if (itemIndex !== testingContent[levels].length)
             {
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": itemArray[itemIndex], "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn})
+                testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[levels][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
                 testLoader.active = true
                 itemIndex++
             }
@@ -221,7 +240,7 @@ Item {
         Component.onCompleted:
         {
             globalBackend.setStartTime()
-            //triggerNextItem()
+            triggerNextItem()
         }
     }
 }

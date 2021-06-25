@@ -748,6 +748,28 @@ QVariantMap Backend::getFirstIncompleteLevel(QString courseDirectory)
     return QVariantMap();
 }
 
+void Backend::loadLevelJsons(QVariantList levels)
+{
+    foreach (QVariant levelVar, levels)
+    {
+        QString levelPath = levelVar.toString();
+
+        std::ifstream levelFile(levelPath.toStdString());
+        Json levelJson;
+        levelFile >> levelJson;
+        levelFile.close();
+        jsonMap.insert(levelPath, levelJson);
+    }
+}
+
+QVariantList Backend::getLevelColumns(QString levelPath)
+{
+    QVariantList list;
+    list.append(QString::fromStdString(jsonMap[levelPath]["test"].get<String>()));
+    list.append(QString::fromStdString(jsonMap[levelPath]["prompt"].get<String>()));
+    return list;
+}
+
 QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
 {
     count = 10;
