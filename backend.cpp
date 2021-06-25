@@ -796,31 +796,47 @@ QVariantList Backend::getLevelColumns(QString levelPath)
 
 QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
 {
-    count = 10;
+    QVariantMap testingContentOriginal;
+    QString levelsDir = courseDirectory + "/levels/";
+    int totalItems = 0;
+
+    //TODO make it pick random levels from review.json
 
     std::ifstream reviewFile(QString(courseDirectory + "/review.json").toStdString());
     Json review;
     reviewFile >> review;
     reviewFile.close();
 
-//    QVariantMap test{{"234798234", 2}};
-//    QVariantList tests = {test};
-//    QVariantMap testmap{{"1.json", tests}};
-//    qDebug() << testmap;
-
     for (auto &levelName : review)
     {
-        String name = levelName.get<String>();
-        std::ifstream levelFile(QString(courseDirectory + "/levels/").toStdString() + name);
-        Json levelJson;
-        levelFile >> levelJson;
-        levelFile.close();
-        jsonMap.insert(QString::fromStdString(name), levelJson);
+        if (totalItems < count)
+        {
+            String name = levelName.get<String>();
+            std::ifstream levelFile(QString(levelsDir).toStdString() + name);
+            Json levelJson;
+            levelFile >> levelJson;
+            levelFile.close();
+
+            QVariantList itemsToWater;
+            for (auto &item : levelJson["seeds"].items())
+            {
+                String id = item.key();
+
+                if (totalItems < count
+                    && levelJson["seeds"][id]["planted"].get<bool>()
+                    && QDateTime::currentDateTime() > QDateTime::fromString(QString::fromStdString(levelJson["seeds"][id]["nextWatering"].get<String>())))
+                {
+                    itemsToWater.append(QString::fromStdString(id));
+                    totalItems++;
+                }
+            }
+
+            testingContentOriginal.insert(levelsDir + QString::fromStdString(name), itemsToWater);
+            itemsToWater.clear();
+        }
     }
 
-    //qDebug() << QString::fromStdString(jsonMap["00001.json"]["seeds"]["67742555"]["nextWatering"].get<String>());
+    //TODO get random values from random levels if right here totalItems is still 0
 
-
-
-    return QVariantMap();
+    return testingContentOriginal;
 }

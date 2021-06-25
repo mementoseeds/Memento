@@ -56,6 +56,12 @@ Item {
             showPassiveNotification("This course is already completed")
     }
 
+    function waterAction()
+    {
+        var manualReview = false
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": globalBackend.getWateringItems(directory, 10), "actionType": "water", "manualReview": manualReview})
+    }
+
     GridView {
         anchors.fill: parent
         ScrollBar.vertical: ScrollBar{width: 10}
@@ -138,7 +144,7 @@ Item {
                                     break
 
                                 case "Water":
-                                    globalBackend.getWateringItems(directory, 10)
+                                    waterAction()
                                     break
 
                                 case "Auto learn":
@@ -157,7 +163,7 @@ Item {
                         icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: completed ? globalBlue : globalGreen
                         Layout.alignment: Qt.AlignRight
-                        onClicked: text === "Plant" ? plantAction() : showPassiveNotification("Todo")
+                        onClicked: text === "Plant" ? plantAction() : waterAction()
                     }
                 }
 

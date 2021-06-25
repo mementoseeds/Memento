@@ -25,11 +25,11 @@ Item {
 
     property string courseDirectory: ""
     property var testingContentOriginal: ({})
-    property var testingContent: ({})
     property string actionType: ""
     property bool manualReview: false
     property bool mockWater: false
 
+    property var testingContent: ({})
     property var levels: []
     property int uniqueItemCount: 0
     property int levelIndex: 0
@@ -187,6 +187,7 @@ Item {
         {
             var level = levels[levelIndex]
             var columns = globalBackend.getLevelColumns(level)
+            //console.debug(testingContent[level].length)
 
             if (actionType === "preview")
             {
@@ -228,7 +229,6 @@ Item {
                 //Random chance to switch test and prompt columns if the next test is multiple choice
                 if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
                 {
-                    console.debug("Switched")
                     var tempColumn = columns[0]
                     var testColumn = columns[1]
                     var promptColumn = tempColumn
@@ -265,6 +265,7 @@ Item {
             else
             {
                 levelIndex++
+                itemIndex = 0
                 triggerNextItem()
             }
         }
