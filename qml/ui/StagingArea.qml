@@ -32,12 +32,40 @@ Item {
     property bool manualReview: false
     property bool mockWater: false
 
+    property int uniqueItemCount: 0
     property int levelIndex: 0
     property int itemIndex: 0
     //property var tests: []
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
     property var autoLearned: []
+
+    // testingContent structure -->
+    // dictionary of lists of dictionaries
+    // outer dictionary has level paths as keys and lists as values
+    // lists contain dictionaries
+    // inner dictionary has seed IDs as keys and enumerated test types as values
+    // example
+    /*
+{
+    "path/to/course/levels/00001.json": [
+        {
+            "67742594": 1
+        },
+        {
+            "67742595": 2
+        }
+    ],
+    "path/to/course/levels/00002.json": [
+        {
+            "67742596": 1
+        },
+        {
+            "67742597": 3
+        }
+    ]
+}
+    */
 
     Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle())
 
@@ -106,6 +134,7 @@ Item {
             for (level in testingContent)
             {
                 itemArray = testingContent[level]
+                uniqueItemCount = itemArray.length
                 testingContent[level] = []
 
                 for (id in itemArray)
@@ -148,17 +177,17 @@ Item {
 
     function triggerNextItem()
     {
-        var levels = Object.keys(testingContent)
-        var columns = globalBackend.getLevelColumns(levels[levelIndex])
+        var level = Object.keys(testingContent)[levelIndex]
+        var columns = globalBackend.getLevelColumns(level)
 
         if (actionType === "preview")
         {
-            replaceToolbar("Previewing ", testingContent[levels].length, testingContent[levels].length, itemIndex, actionType)
+            replaceToolbar("Previewing ", testingContent[level].length, testingContent[level].length, itemIndex, actionType)
 
-            if (itemIndex !== testingContent[levels].length)
+            if (itemIndex < testingContent[level].length)
             {
                 testLoader.active = false
-                testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[levels][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
+                testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[level][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
                 testLoader.active = true
                 itemIndex++
             }
@@ -169,16 +198,16 @@ Item {
         }
         else if (actionType === "plant")
         {
-            replaceToolbar("Planting ", itemArray.length, tests.length, itemIndex, actionType)
+            replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
         }
         else if (actionType === "water")
         {
             replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
         }
 
-        if (itemIndex !== tests.length)
+        if (itemIndex < testingContent[level].length)
         {
-            var itemId = Object.keys(tests[itemIndex]).toString()
+            var itemId = Object.keys(testingContent[level][itemIndex]).toString()
 
             //Skip over this item if the user has requested a skip
             if (autoLearned.includes(itemId))
@@ -189,23 +218,24 @@ Item {
             }
 
             //Random chance to switch test and prompt columns if the next test is multiple choice
-            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && tests[itemIndex][itemId] === TestType.MULTIPLECHOICE)
+            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
             {
-                var tempColumn = stagingArea.testColumn
-                var testColumn = stagingArea.promptColumn
+                console.debug("Switched")
+                var tempColumn = columns[0]
+                var testColumn = columns[1]
                 var promptColumn = tempColumn
                 delete tempColumn
             }
             else
             {
-                testColumn = stagingArea.testColumn
-                promptColumn = stagingArea.promptColumn
+                testColumn = columns[0]
+                promptColumn = columns[1]
             }
 
             var variables = {"itemId": itemId, "testColumn": testColumn, "promptColumn": promptColumn}
 
             testLoader.active = false
-            switch (tests[itemIndex][itemId])
+            switch (testingContent[level][itemIndex][itemId])
             {
                 case TestType.PREVIEW:
                     testLoader.setSource("qrc:/Preview.qml", variables)
