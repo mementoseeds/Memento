@@ -26,10 +26,7 @@ Item {
     property string courseDirectory: ""
     property var testingContentOriginal: ({})
     property var testingContent: ({})
-    //property var itemArray: []
     property string actionType: ""
-//    property string testColumn: ""
-//    property string promptColumn: ""
     property bool manualReview: false
     property bool mockWater: false
 
@@ -37,7 +34,6 @@ Item {
     property int uniqueItemCount: 0
     property int levelIndex: 0
     property int itemIndex: 0
-    //property var tests: []
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
     property var autoLearned: []
@@ -131,7 +127,6 @@ Item {
                     testingContent[level].push(test)
                 }
             }
-            //console.debug(JSON.stringify(testingContent, null, 4))
         }
         else if (actionType === "plant")
         {
@@ -168,14 +163,21 @@ Item {
         }
         else if (actionType === "water")
         {
-            for (i = 0; i < itemArray.length; i++)
+            for (level in testingContentOriginal)
             {
-                test = {}
-                test[itemArray[i]] = getRandomTest()
-                tests.push(test)
+                itemArray = testingContentOriginal[level]
+                uniqueItemCount = itemArray.length
+                testingContent[level] = []
+
+                for (id in itemArray)
+                {
+                    test = {}
+                    test[itemArray[id]] = getRandomTest()
+                    testingContent[level].push(test)
+                }
             }
 
-            tests.sort(() => Math.random() - 0.5)
+            testingContent[level].sort(() => Math.random() - 0.5)
         }
     }
 
@@ -208,7 +210,7 @@ Item {
             }
             else if (actionType === "water")
             {
-                replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
+                //replaceToolbar("Watering ", itemArray.length, tests.length, itemIndex, actionType)
             }
 
             if (itemIndex < testingContent[level].length)
@@ -269,8 +271,7 @@ Item {
         else
         {
             globalBackend.saveLevels()
-            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory,
-                "testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
+            rootStackView.replace("qrc:/ResultSummary.qml", {"testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }
     }
 

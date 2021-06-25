@@ -117,10 +117,12 @@ Item {
             }
 
             manualReview = true
-            return items
         }
-        else
-            return items
+
+        var levels = {}
+        levels[levelPath] = items
+
+        return levels
     }
 
     function plantAction()
@@ -134,10 +136,9 @@ Item {
     function waterAction()
     {
         if (plantedItems !== 0)
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-                "itemArray": getWateringItems(50), "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "manualReview": manualReview})
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getWateringItems(50), "actionType": "water", "manualReview": manualReview})
         else
-            showPassiveNotification("There are no items to water")
+            showPassiveNotification("There are no planted items to water")
     }
 
     function mockWaterAction()
@@ -149,9 +150,10 @@ Item {
             if (!item.ignored)
                 items.push(item.id)
         }
+        var levels = {}
+        levels[levelPath] = items
 
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-            "itemArray": items, "actionType": "water", "testColumn": testColumn, "promptColumn": promptColumn, "mockWater": true})
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": levels, "actionType": "water", "mockWater": true})
     }
 
     function reloadLevel()

@@ -22,14 +22,11 @@ Item {
     objectName: "ResultSummary.qml"
     property int marginBase: 10
 
-    property string courseDirectory: ""
     property var testingContent: ({})
-    property var levels: []
-//    property var itemArray: []
-//    property string testColumn: ""
-//    property string promptColumn: ""
     property int correctAnswerCounter: 0
     property int totalTests: 0
+
+    property var levels: []
 
     Component.onCompleted:
     {
@@ -37,8 +34,7 @@ Item {
         for (var level in levels)
         {
             var itemArray = testingContent[levels[level]]
-            //console.debug(levels[level], itemArray)
-            globalBackend.getLevelResults(levels[level], itemArray)
+            globalBackend.getSessionResults(levels[level], itemArray)
         }
     }
 

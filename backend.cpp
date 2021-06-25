@@ -317,6 +317,7 @@ void Backend::setReviewType(bool manualReview, bool mockWater)
 {
     this->manualReview = manualReview;
     this->mockWater = mockWater;
+    unlockedItems.clear();
 }
 
 void Backend::loadCourseInfo(QString courseDirectory)
@@ -488,7 +489,7 @@ const Json Backend::getRandom(const Json json, bool returnKey)
         return *it;
 }
 
-void Backend::getLevelResults(QString levelPath, QVariantList itemArray)
+void Backend::getSessionResults(QString levelPath, QVariantList itemArray)
 {
     String test = jsonMap[levelPath]["test"].get<String>();
     String prompt = jsonMap[levelPath]["prompt"].get<String>();
