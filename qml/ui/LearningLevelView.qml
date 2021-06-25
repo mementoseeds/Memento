@@ -82,7 +82,10 @@ Item {
             }
         }
 
-        return items
+        var levels = {}
+        levels[levelPath] = items
+
+        return levels
     }
 
     function getWateringItems(total)
@@ -119,8 +122,7 @@ Item {
     function plantAction()
     {
         if (!levelCompleted)
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath,
-                "itemArray": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant", "testColumn": testColumn, "promptColumn": promptColumn})
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContent": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant"})
         else
             showPassiveNotification("This level is already completed")
     }

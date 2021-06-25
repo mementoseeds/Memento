@@ -24,11 +24,11 @@ Item {
     objectName: "StagingArea.qml"
 
     property string courseDirectory: ""
-    property string levelPath: ""
-    property var itemArray: []
+    property var testingContent: ({})
+    //property var itemArray: []
     property string actionType: ""
-    property string testColumn: ""
-    property string promptColumn: ""
+//    property string testColumn: ""
+//    property string promptColumn: ""
     property bool manualReview: false
     property bool mockWater: false
 
@@ -85,32 +85,37 @@ Item {
 
         if (actionType === "plant")
         {
-            //Create array of dicts for amount of tests, the item to test on and its test type
-            for (var i = 0; i < itemArray.length; i++)
+            for (var level in testingContent)
             {
-                var test = {}
-                test[itemArray[i]] = TestType.PREVIEW
-                tests.push(test)
+                var itemArray = testingContent[level]
+                testingContent[level] = []
 
-                test = {}
-                test[itemArray[i]] = userSettings["enabledTests"]["enabledMultipleChoice"] ? TestType.MULTIPLECHOICE : getRandomTest()
-                tests.push(test)
-            }
-
-            var unorderedTests = []
-            for (i = 0; i < itemArray.length; i++)
-            {
-                for (var o = 0; o < 4; o++)
+                for (var id in itemArray)
                 {
+                    var test = {}
+                    test[itemArray[id]] = TestType.PREVIEW
+                    testingContent[level].push(test)
+
                     test = {}
-                    test[itemArray[i]] = getRandomTest()
-                    unorderedTests.push(test)
+                    test[itemArray[id]] = userSettings["enabledTests"]["enabledMultipleChoice"] ? TestType.MULTIPLECHOICE : getRandomTest()
+                    testingContent[level].push(test)
                 }
+
+                var unorderedTests = []
+                for (var i = 0; i < 4; i++)
+                {
+                    for (id in itemArray)
+                    {
+                        test = {}
+                        test[itemArray[id]] = getRandomTest()
+                        unorderedTests.push(test)
+                    }
+                }
+
+                testingContent[level] = testingContent[level].concat(unorderedTests.sort(() => Math.random() - 0.5))
             }
 
-            unorderedTests.sort(() => Math.random() - 0.5) //Shuffle unorderedTests
-            tests = tests.concat(unorderedTests)
-            delete unorderedTests
+            //console.debug(JSON.stringify(testingContent, null, 4))
         }
         else if (actionType === "water")
         {
@@ -216,7 +221,7 @@ Item {
         Component.onCompleted:
         {
             globalBackend.setStartTime()
-            triggerNextItem()
+            //triggerNextItem()
         }
     }
 }
