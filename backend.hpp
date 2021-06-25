@@ -103,15 +103,16 @@ public:
     Q_INVOKABLE void androidOpenFileDialog();
     #endif
 
-    Q_INVOKABLE void getCourseList();
-    Q_INVOKABLE void getCourseLevels(QString directory);
-
     Q_INVOKABLE void setUserSettings(QVariantMap userSettings);
     Q_INVOKABLE QVariantMap getUserSettings();
 
+    Q_INVOKABLE void getCourseList();
+    Q_INVOKABLE void getCourseLevels(QString directory);
+    Q_INVOKABLE void loadSeedbox(QString courseDirectory);
+
     Q_INVOKABLE QString readMediaLevel(QString levelPath);
 
-    Q_INVOKABLE void getLevelItems(QString courseDirectory, QString levelPath);
+    Q_INVOKABLE void getLevelItems(QString levelPath);
 
     Q_INVOKABLE void readItem(QString itemId, QString testColumn, QString promptColumn);
 

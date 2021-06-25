@@ -56,6 +56,44 @@ void Backend::androidOpenFileDialog()
 }
 #endif
 
+void Backend::setUserSettings(QVariantMap userSettings)
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    settings.setValue("coursesLocation", userSettings["coursesLocation"]);
+    settings.setValue("countdownTimer", userSettings["countdownTimer"]);
+    settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
+    settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
+    settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
+    settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
+    settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
+    settings.setValue("showAutoLearnOnTests", userSettings["showAutoLearnOnTests"]);
+    settings.setValue("enabledTests", userSettings["enabledTests"]);
+}
+
+QVariantMap Backend::getUserSettings()
+{
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
+    userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
+    userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
+    userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
+    userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
+    userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
+    userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
+    userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
+    userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
+
+    QVariantMap testCheck = userSettings["enabledTests"].toMap();
+
+    if (!testCheck["enabledMultipleChoice"].toBool() && !testCheck["enabledTyping"].toBool() && !testCheck["enabledTapping"].toBool())
+    {
+        testCheck["enabledMultipleChoice"] = testCheck["enabledTyping"] = testCheck["enabledTapping"] = true;
+        userSettings["enabledTests"] = testCheck;
+    }
+
+    return userSettings;
+}
+
 void Backend::getCourseList()
 {
     QDir coursesDir(userSettings["coursesLocation"].toString());
@@ -129,42 +167,12 @@ void Backend::getCourseLevels(QString directory)
     }
 }
 
-void Backend::setUserSettings(QVariantMap userSettings)
+void Backend::loadSeedbox(QString courseDirectory)
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
-    settings.setValue("coursesLocation", userSettings["coursesLocation"]);
-    settings.setValue("countdownTimer", userSettings["countdownTimer"]);
-    settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
-    settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
-    settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
-    settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
-    settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
-    settings.setValue("showAutoLearnOnTests", userSettings["showAutoLearnOnTests"]);
-    settings.setValue("enabledTests", userSettings["enabledTests"]);
-}
-
-QVariantMap Backend::getUserSettings()
-{
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
-    userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
-    userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
-    userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
-    userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
-    userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
-    userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
-    userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
-    userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
-    userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
-
-    QVariantMap testCheck = userSettings["enabledTests"].toMap();
-
-    if (!testCheck["enabledMultipleChoice"].toBool() && !testCheck["enabledTyping"].toBool() && !testCheck["enabledTapping"].toBool())
-    {
-        testCheck["enabledMultipleChoice"] = testCheck["enabledTyping"] = testCheck["enabledTapping"] = true;
-        userSettings["enabledTests"] = testCheck;
-    }
-
-    return userSettings;
+    //Open the seedbox
+    std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
+    seedboxFile >> globalSeedbox;
+    seedboxFile.close();
 }
 
 QString Backend::readMediaLevel(QString levelPath)
@@ -174,17 +182,12 @@ QString Backend::readMediaLevel(QString levelPath)
     return mediaFile.readAll();
 }
 
-void Backend::getLevelItems(QString courseDirectory, QString levelPath)
+void Backend::getLevelItems(QString levelPath)
 {
     //Open the level
     std::ifstream levelFile(levelPath.toStdString());
     levelFile >> globalLevel;
     levelFile.close();
-
-    //Open the seedbox
-    std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
-    seedboxFile >> globalSeedbox;
-    seedboxFile.close();
 
     //Get testing direction
     String testColumn = globalLevel["test"].get<String>();

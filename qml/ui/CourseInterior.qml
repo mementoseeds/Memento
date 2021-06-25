@@ -37,11 +37,18 @@ Item {
     property int ignored: 0
     property bool completed: false
 
-    Component.onCompleted: globalBackend.getCourseLevels(directory)
+    Component.onCompleted:
+    {
+        globalBackend.getCourseLevels(directory)
+        globalBackend.loadSeedbox(directory)
+    }
+
     Component.onDestruction: mainToolbarTitle.text = root.title
 
     function plantAction()
     {
+        globalBackend.loadSeedbox(directory)
+
         var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
         if (Object.keys(levelVariables).length !== 0)
             rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)

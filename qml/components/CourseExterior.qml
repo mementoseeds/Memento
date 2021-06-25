@@ -28,6 +28,8 @@ Item {
 
     function plantAction()
     {
+        globalBackend.loadSeedbox(directory)
+
         var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
         if (Object.keys(levelVariables).length !== 0)
             rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)

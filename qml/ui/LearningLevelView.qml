@@ -44,7 +44,7 @@ Item {
 
     Component.onCompleted:
     {
-        globalBackend.getLevelItems(courseDirectory, levelPath)
+        globalBackend.getLevelItems(levelPath)
 
         levelCompleted = globalBackend.getLevelCompleted()
     }
