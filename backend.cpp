@@ -651,6 +651,7 @@ void Backend::ignoreItem(QString levelPath, QString itemId, bool ignored)
 
 void Backend::autoLearnItem(QString itemId, int streakCount)
 {
+    //Called from button during planting
     String id = itemId.toStdString();
     globalLevelSeeds[id]["planted"] = true;
     globalLevelSeeds[id]["nextWatering"] = getWateringTime(streakCount);
@@ -712,11 +713,14 @@ QVariantMap Backend::getFirstIncompleteLevel(QString courseDirectory)
 {
     QDir levelsDir(courseDirectory + "/levels");
     QString absolutePath = levelsDir.absolutePath() + "/";
-    QStringList levelList = levelsDir.entryList({"*.json"}, QDir::Files);
+    QStringList levelList = levelsDir.entryList(QDir::Files);
 
     for (int i = 0; i < levelList.size(); i++)
     {
         QString levelPath = absolutePath + levelList[i];
+        if (levelPath.endsWith(".md"))
+            continue;
+
         std::ifstream levelFile(levelPath.toStdString());
         Json levelJson;
         levelFile >> levelJson;
@@ -740,6 +744,37 @@ QVariantMap Backend::getFirstIncompleteLevel(QString courseDirectory)
             return levelVariables;
         }
     }
+
+    return QVariantMap();
+}
+
+QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
+{
+    count = 10;
+
+    std::ifstream reviewFile(QString(courseDirectory + "/review.json").toStdString());
+    Json review;
+    reviewFile >> review;
+    reviewFile.close();
+
+//    QVariantMap test{{"234798234", 2}};
+//    QVariantList tests = {test};
+//    QVariantMap testmap{{"1.json", tests}};
+//    qDebug() << testmap;
+
+    for (auto &levelName : review)
+    {
+        String name = levelName.get<String>();
+        std::ifstream levelFile(QString(courseDirectory + "/levels/").toStdString() + name);
+        Json levelJson;
+        levelFile >> levelJson;
+        levelFile.close();
+        jsonMap.insert(QString::fromStdString(name), levelJson);
+    }
+
+    //qDebug() << QString::fromStdString(jsonMap["00001.json"]["seeds"]["67742555"]["nextWatering"].get<String>());
+
+
 
     return QVariantMap();
 }

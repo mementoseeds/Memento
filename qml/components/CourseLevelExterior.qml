@@ -30,7 +30,7 @@ Item {
         id: cellBody
         width: 250
         height: cellColumnLayout.height + marginBase
-        x: platformIsMobile ? (root.width / 2 - width / 2) : 0
+        x: platformIsMobile ? (root.width / 2 - width / 2) : marginBase * 2
         color: "transparent"
         border.width: 1
         border.color: "gray"

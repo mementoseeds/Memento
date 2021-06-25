@@ -130,6 +130,10 @@ Item {
                                     plantAction()
                                     break
 
+                                case "Water":
+                                    globalBackend.getWateringItems(directory, 10)
+                                    break
+
                                 case "Auto learn":
                                     rootStackView.push("qrc:/AdvancedAutoLearn.qml", {"courseDirectory": directory})
                                     break

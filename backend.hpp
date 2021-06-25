@@ -152,6 +152,8 @@ public:
 
     Q_INVOKABLE QVariantMap getFirstIncompleteLevel(QString courseDirectory);
 
+    Q_INVOKABLE QVariantMap getWateringItems(QString courseDirectory, int count);
+
     enum TestType
     {
         PREVIEW,
@@ -200,6 +202,7 @@ private:
     Json globalLevel;
     Json globalLevelSeeds;
     Json globalInfo;
+    QMap<QString, Json> jsonMap;
     int globalSeedsAmount;
 
     bool manualReview = false;

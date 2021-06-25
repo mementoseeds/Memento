@@ -23,7 +23,6 @@ Item {
     property int marginBase: 10
 
     property string courseDirectory: ""
-    property string levelPath: ""
     property var itemArray: []
     property string testColumn: ""
     property string promptColumn: ""

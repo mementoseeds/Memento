@@ -203,7 +203,7 @@ Item {
         else
         {
             globalBackend.saveLevel(levelPath)
-            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "levelPath": levelPath, "itemArray": itemArray,
+            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "itemArray": itemArray,
                 "testColumn": stagingArea.testColumn, "promptColumn": stagingArea.promptColumn, "correctAnswerCounter": correctAnswerCounter,
                 "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }
