@@ -77,8 +77,6 @@ using String = std::string;
 #include <QThread>
 #include "worker.hpp"
 
-
-
 class Backend : public QObject
 {
     Q_OBJECT
@@ -158,7 +156,7 @@ public:
 
     Q_INVOKABLE QVariantList getLevelColumns(QString levelPath);
 
-    Q_INVOKABLE QVariantMap getWateringItems(QString courseDirectory, int count);
+    Q_INVOKABLE QVariantMap getCourseWideWateringItems(QString courseDirectory, int count);
 
     enum TestType
     {

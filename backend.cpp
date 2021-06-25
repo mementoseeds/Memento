@@ -794,19 +794,22 @@ QVariantList Backend::getLevelColumns(QString levelPath)
     return list;
 }
 
-QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
+QVariantMap Backend::getCourseWideWateringItems(QString courseDirectory, int count)
 {
     QVariantMap testingContentOriginal;
     QString levelsDir = courseDirectory + "/levels/";
     int totalItems = 0;
     bool manualReview = false;
 
-    //TODO make it pick random levels from review.json
-
     std::ifstream reviewFile(QString(courseDirectory + "/review.json").toStdString());
     Json review;
     reviewFile >> review;
     reviewFile.close();
+
+    //Randomize level selection for watering
+    std::random_device rd;
+    std::mt19937 g(rd());
+    std::shuffle(review.begin(), review.end(), g);
 
     for (auto &levelName : review)
     {
@@ -837,7 +840,40 @@ QVariantMap Backend::getWateringItems(QString courseDirectory, int count)
         }
     }
 
-    //TODO get random values from random levels if right here totalItems is still 0
+    if (totalItems == 0)
+    {
+        manualReview = true;
 
-    return QVariantMap {{"totalItems", totalItems}, {"manualReview", manualReview}, {"wateringItems", testingContentOriginal}};
+        QDir levelsDirectory(levelsDir);
+        QStringList levelList = levelsDirectory.entryList({"*.json"}, QDir::Files);
+
+        while (totalItems < count)
+        {
+            QString name = levelList[QRandomGenerator::global()->generate() % levelList.size()];
+            if (levelList.size() > count && levelList.contains(name))
+                continue;
+
+            std::ifstream levelFile(QString(levelsDir + name).toStdString());
+            Json levelJson;
+            levelFile >> levelJson;
+            levelFile.close();
+
+            QVariantList itemsToWater;
+            for (auto &item : levelJson["seeds"].items())
+            {
+                String id = item.key();
+
+                if (totalItems < count && levelJson["seeds"][id]["planted"].get<bool>())
+                {
+                    itemsToWater.append(QString::fromStdString(id));
+                    totalItems++;
+                }
+            }
+
+            testingContentOriginal.insert(levelsDir + name, itemsToWater);
+            itemsToWater.clear();
+        }
+    }
+
+    return QVariantMap {{"totalItems", totalItems}, {"manualReview", manualReview}, {"testingContentOriginal", testingContentOriginal}};
 }

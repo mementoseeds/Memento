@@ -58,8 +58,8 @@ Item {
 
     function waterAction()
     {
-        var wateringData = globalBackend.getWateringItems(directory, 10)
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["wateringItems"],
+        var wateringData = globalBackend.getCourseWideWateringItems(directory, 10)
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
             "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
     }
 
