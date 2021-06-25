@@ -89,17 +89,14 @@ Item {
 
     function scheduleTestAfterMistake(levelPath, id)
     {
-        var level = Object.keys(testingContent)[levelIndex]
-        //console.debug(JSON.stringify(testingContent[level], null, 4))
-        console.debug(JSON.stringify(testingContent[level][itemIndex], null, 4))
-//        var test = {}
-//        test[id] = TestType.PREVIEW
-//        tests.splice(itemIndex, 0, test)
+        var test = {}
+        test[id] = TestType.PREVIEW
+        testingContent[levelPath].splice(itemIndex, 0, test)
 
-//        var newRandomPosition = Math.floor((Math.random() * (tests.length - itemIndex)) + 1) + itemIndex
-//        test = {}
-//        test[id] = getRandomTest()
-//        tests.splice(newRandomPosition, 0, test)
+        var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
+        test = {}
+        test[id] = getRandomTest()
+        testingContent[levelPath].splice(newRandomPosition, 0, test)
     }
 
     function autoLearnItem(itemId)
