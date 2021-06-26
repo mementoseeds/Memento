@@ -30,6 +30,8 @@ class MemriseCourse():
     def __init__(self, url):
         # Setup
         print("Gathering preliminary data")
+
+        self.itemPools = {}
         self.level = []
         self.itemCount = 0
 
@@ -80,14 +82,15 @@ class MemriseCourse():
             exit("Is this a media only level?")
 
         poolId = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + randomThingId).json()["thing"]["pool_id"]
-        self.pool = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(poolId)).json()
+        self.pools = {}
+        self.pools[poolId] = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(poolId)).json()
 
         # Find which columns to show after tests
         print("Finding columns to show after tests")
         self.showAfterTests = []
-        for column in self.pool["pool"]["columns"]:
-            if self.pool["pool"]["columns"][column]["show_after_tests"] or self.pool["pool"]["columns"][column]["always_show"]:
-                self.showAfterTests.append(self.pool["pool"]["columns"][column]["label"])
+        for column in self.pools[poolId]["pool"]["columns"]:
+            if self.pools[poolId]["pool"]["columns"][column]["show_after_tests"] or self.pools[poolId]["pool"]["columns"][column]["always_show"]:
+                self.showAfterTests.append(self.pools[poolId]["pool"]["columns"][column]["label"])
 
     def scrapeLevels(self, start, stop):
         print()
@@ -206,24 +209,26 @@ class MemriseCourse():
             while restartLoop:
                 restartLoop = False
 
+                # Set pool ID for this item
+                self.itemPools[str(itemInfo["thing"]["id"])] = itemInfo["thing"]["pool_id"]
+
                 # Attributes
                 self.seedbox[key] = {}
                 self.seedbox[key]["attributes"] = {}
                 for number in itemInfo["thing"]["attributes"]:
-                    self.seedbox[key]["attributes"][number] = {}
-                    self.seedbox[key]["attributes"][number]["label"] = self.pool["pool"]["attributes"][number]["label"]
-                    self.seedbox[key]["attributes"][number]["showAtTests"] = self.pool["pool"]["attributes"][number]["show_at_tests"]
-                    self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
-
                     try:
+                        self.seedbox[key]["attributes"][number] = {}
+                        self.seedbox[key]["attributes"][number]["label"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["label"]
+                        self.seedbox[key]["attributes"][number]["showAtTests"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["show_at_tests"]
+                        self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
 
                         # Columns
                         for column in itemInfo["thing"]["columns"]:
 
                             # Audio column
                             if itemInfo["thing"]["columns"][column]["kind"] == "audio" and not skipAudio:
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "audio"
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "audio"
                                 audioArray = []
 
                                 for audio in itemInfo["thing"]["columns"][column]["val"]:
@@ -231,33 +236,32 @@ class MemriseCourse():
                                     open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
                                     audioArray.append("assets/audio/" + audioName)
 
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = ":".join(audioArray)
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = ":".join(audioArray)
 
                             # Image column
                             elif itemInfo["thing"]["columns"][column]["kind"] == "image":
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "image"
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "image"
 
                                 imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
                                 open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
 
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
 
                             # Text column
                             elif itemInfo["thing"]["columns"][column]["kind"] == "text":
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]] = {}
 
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "text"
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "text"
 
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = itemInfo["thing"]["columns"][column]["val"]
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = itemInfo["thing"]["columns"][column]["val"]
 
-                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
 
                     except KeyError:
                         print("\nSwitching database\n")
-                        newPoolId = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(itemInfo["thing"]["pool_id"])).json()
-                        self.pool["pool"]["columns"].update(newPoolId["pool"]["columns"])
-                        self.pool["pool"]["attributes"].update(newPoolId["pool"]["attributes"])
+                        newPoolId = itemInfo["thing"]["pool_id"]
+                        self.pools[newPoolId] = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(newPoolId)).json()
                         restartLoop = True # Restart from the beginning of the while loop without skipping the current item where the exception occurred
                         break
 
@@ -280,8 +284,8 @@ class MemriseCourse():
                 levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w")
                 levelInfo = {"title": self.level[i]["title"],
                     "completed": False,
-                    "test": self.pool["pool"]["columns"][self.level[i]["testColumn"]]["label"],
-                    "prompt": self.pool["pool"]["columns"][self.level[i]["promptColumn"]]["label"],
+                    "test": self.pools[self.itemPools[self.level[i]["items"][0]]]["pool"]["columns"][self.level[i]["testColumn"]]["label"],
+                    "prompt": self.pools[self.itemPools[self.level[i]["items"][0]]]["pool"]["columns"][self.level[i]["promptColumn"]]["label"],
                     "testType": self.level[i]["testColumnType"],
                     "promptType": self.level[i]["promptColumnType"]}
 
