@@ -177,9 +177,9 @@ Item {
                     test[itemArray[id]] = getRandomTest()
                     testingContent[level].push(test)
                 }
-            }
 
-            testingContent[level].sort(() => Math.random() - 0.5)
+                testingContent[level].sort(() => Math.random() - 0.5)
+            }
         }
     }
 
