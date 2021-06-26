@@ -3,6 +3,7 @@ import QtQuick.Controls 2.15
 
 Item {
     id: notification
+
     function show(text, duration = 3000)
     {
         y = root.height - 150

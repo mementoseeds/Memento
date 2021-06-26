@@ -36,6 +36,8 @@ ApplicationWindow {
         globalBackend.setGlobalBackendInstance()
     }
 
+    property bool _COURSES_REFRESHING_DO_NOT_CLOSE_: false
+
     property var userSettings: globalBackend.getUserSettings()
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
     property string fileUrlStart: Qt.platform.os === "windows" ? "file:///" : "file://"
@@ -128,6 +130,12 @@ ApplicationWindow {
                 return i
     }
 
+    onClosing:
+    {
+        if (_COURSES_REFRESHING_DO_NOT_CLOSE_)
+            close.accepted = false
+    }
+
     Backend {
         id: globalBackend
     }
@@ -199,13 +207,13 @@ ApplicationWindow {
                         if (rootStackView.depth > 1)
                             rootStackView.pop()
                         else if (rootStackView.depth === 1)
-                            if (!closeTimer.running)
+                            if (!closeTimer.running && !_COURSES_REFRESHING_DO_NOT_CLOSE_)
                             {
                                 closeTimer.start()
                                 showPassiveNotification("Press back again to quit", closeTimer.interval)
                             }
                             else
-                                Qt.quit()
+                                root.close()
                     }
                     else
                         rootStackView.pop()
@@ -296,6 +304,7 @@ ApplicationWindow {
         function onFinishedRefreshingCourses()
         {
             passiveNotification.reduceTimer()
+            _COURSES_REFRESHING_DO_NOT_CLOSE_ = false
         }
     }
 
@@ -305,6 +314,7 @@ ApplicationWindow {
         function onRefreshAllCourses()
         {
             passiveNotification.show("Please do not exit while refreshing courses", Number.MAX_SAFE_INTEGER)
+            _COURSES_REFRESHING_DO_NOT_CLOSE_ = true
         }
     }
 
