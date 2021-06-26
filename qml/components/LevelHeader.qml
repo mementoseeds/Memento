@@ -45,6 +45,18 @@ ColumnLayout {
             caller.enabled = false
     }
 
+    Shortcut {
+        sequence: "Left"
+        enabled: rootStackView.currentItem.objectName !== "StagingArea.qml" && rootStackView.currentItem.objectName !== "ResultSummary.qml"
+        onActivated: backButton.clicked()
+    }
+
+    Shortcut {
+        sequence: "Right"
+        enabled: rootStackView.currentItem.objectName !== "StagingArea.qml" && rootStackView.currentItem.objectName !== "ResultSummary.qml"
+        onActivated: forwardButton.clicked()
+    }
+
     RowLayout {
         Layout.preferredWidth: parent.width
 

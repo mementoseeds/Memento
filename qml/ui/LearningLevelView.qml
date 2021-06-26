@@ -237,6 +237,12 @@ Item {
                         }
                     }
 
+                    Shortcut {
+                        sequences: ["Enter", "Return"]
+                        enabled: rootStackView.currentItem.objectName !== "StagingArea.qml" && rootStackView.currentItem.objectName !== "ResultSummary.qml"
+                        onActivated: plantWaterButton.clicked()
+                    }
+
                     Button {
                         id: plantWaterButton
                         text: levelCompleted ? "Water" : "Plant"

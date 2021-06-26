@@ -46,6 +46,15 @@ ColumnLayout {
     Component.onCompleted: mainMenuBar.insertAction(0, pauseAction)
     Component.onDestruction: mainMenuBar.takeAction(0)
 
+    Shortcut {
+        sequence: "Alt+a"
+        onActivated:
+        {
+            if (userSettings["showAutoLearnOnTests"])
+                autoLearnItemButton.clicked()
+        }
+    }
+
     RowLayout {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignCenter
