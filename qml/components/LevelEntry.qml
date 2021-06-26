@@ -24,7 +24,10 @@ Item {
 
     function openOnePreview()
     {
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "itemArray": [id], "actionType": "preview", "testColumn": testColumn, "promptColumn": promptColumn})
+        var items = [id]
+        var levels = {}
+        levels[levelPath] = items
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": levels, "actionType": "preview"})
     }
 
     width: root.width
