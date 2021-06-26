@@ -202,50 +202,65 @@ class MemriseCourse():
             itemInfo = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + item).json()
             key = str(item)
 
-            # Attributes
-            self.seedbox[key] = {}
-            self.seedbox[key]["attributes"] = {}
-            for number in itemInfo["thing"]["attributes"]:
-                self.seedbox[key]["attributes"][number] = {}
-                self.seedbox[key]["attributes"][number]["label"] = self.pool["pool"]["attributes"][number]["label"]
-                self.seedbox[key]["attributes"][number]["showAtTests"] = self.pool["pool"]["attributes"][number]["show_at_tests"]
-                self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
+            restartLoop = True
+            while restartLoop:
+                restartLoop = False
 
-            # Columns
-            for column in itemInfo["thing"]["columns"]:
+                # Attributes
+                self.seedbox[key] = {}
+                self.seedbox[key]["attributes"] = {}
+                for number in itemInfo["thing"]["attributes"]:
+                    self.seedbox[key]["attributes"][number] = {}
+                    self.seedbox[key]["attributes"][number]["label"] = self.pool["pool"]["attributes"][number]["label"]
+                    self.seedbox[key]["attributes"][number]["showAtTests"] = self.pool["pool"]["attributes"][number]["show_at_tests"]
+                    self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
 
-                # Audio column
-                if itemInfo["thing"]["columns"][column]["kind"] == "audio" and not skipAudio:
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "audio"
-                    audioArray = []
+                    try:
 
-                    for audio in itemInfo["thing"]["columns"][column]["val"]:
-                        audioName = audio["url"].split("/")[-1]
-                        open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
-                        audioArray.append("assets/audio/" + audioName)
+                        # Columns
+                        for column in itemInfo["thing"]["columns"]:
 
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = ":".join(audioArray)
-                
-                # Image column
-                elif itemInfo["thing"]["columns"][column]["kind"] == "image":
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "image"
+                            # Audio column
+                            if itemInfo["thing"]["columns"][column]["kind"] == "audio" and not skipAudio:
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "audio"
+                                audioArray = []
 
-                    imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
-                    open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
+                                for audio in itemInfo["thing"]["columns"][column]["val"]:
+                                    audioName = audio["url"].split("/")[-1]
+                                    open(join(self.courseDir, "assets", "audio", audioName), "wb").write(requests.get(audio["url"]).content)
+                                    audioArray.append("assets/audio/" + audioName)
 
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
-                
-                # Text column
-                elif itemInfo["thing"]["columns"][column]["kind"] == "text":
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = ":".join(audioArray)
 
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "text"
-                    
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = itemInfo["thing"]["columns"][column]["val"]
+                            # Image column
+                            elif itemInfo["thing"]["columns"][column]["kind"] == "image":
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "image"
 
-                    self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
+                                imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
+                                open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
+
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
+
+                            # Text column
+                            elif itemInfo["thing"]["columns"][column]["kind"] == "text":
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]] = {}
+
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["type"] = "text"
+
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["primary"] = itemInfo["thing"]["columns"][column]["val"]
+
+                                self.seedbox[key][self.pool["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
+
+                    except KeyError:
+                        print("\nSwitching database\n")
+                        newPoolId = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(itemInfo["thing"]["pool_id"])).json()
+                        self.pool["pool"]["columns"].update(newPoolId["pool"]["columns"])
+                        self.pool["pool"]["attributes"].update(newPoolId["pool"]["attributes"])
+                        restartLoop = True # Restart from the beginning of the while loop without skipping the current item where the exception occurred
+                        break
+
 
     def writeSeedbox(self):
         print("Writing seedbox.json")
