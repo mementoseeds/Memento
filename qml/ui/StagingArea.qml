@@ -101,9 +101,12 @@ Item {
 
     function autoLearnItem(levelPath, itemId)
     {
-        autoLearned.push(itemId)
-        globalBackend.autoLearnItem(levelPath, itemId, 1)
-        triggerNextItem()
+        if (actionType === "plant")
+        {
+            autoLearned.push(itemId)
+            globalBackend.autoLearnItem(levelPath, itemId, 1)
+            triggerNextItem()
+        }
     }
 
     Component.onCompleted:
