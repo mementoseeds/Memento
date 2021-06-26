@@ -85,7 +85,7 @@ Item {
             SpinBox {
                 id: countdownTimerSpinBox
                 from: 1
-                to: 1000
+                to: 100000
                 editable: true
                 value: userSettings["countdownTimer"]
                 Material.accent: globalGreen
@@ -116,7 +116,7 @@ Item {
             SpinBox {
                 id: maxPlantingItems
                 from: 2
-                to: 1000
+                to: 100000
                 editable: true
                 value: userSettings["maxPlantingItems"]
                 Material.accent: globalGreen
@@ -131,7 +131,7 @@ Item {
             SpinBox {
                 id: maxWateringItems
                 from: 1
-                to: 1000
+                to: 100000
                 editable: true
                 value: userSettings["maxWateringItems"]
                 Material.accent: globalGreen
