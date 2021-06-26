@@ -110,7 +110,7 @@ Item {
             for (i = 0; i < levelEntryListModel.count; i++)
             {
                 item = levelEntryListModel.get(i)
-                if (!item.ignored)
+                if (item.planted && !item.ignored)
                     items.push(item.id)
             }
 

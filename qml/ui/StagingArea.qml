@@ -280,7 +280,7 @@ Item {
         else
         {
             globalBackend.saveLevels()
-            rootStackView.replace("qrc:/ResultSummary.qml", {"testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
+            rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }
     }
 

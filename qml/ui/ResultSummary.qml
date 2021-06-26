@@ -22,6 +22,7 @@ Item {
     objectName: "ResultSummary.qml"
     property int marginBase: 10
 
+    property string courseDirectory: ""
     property var testingContent: ({})
     property int correctAnswerCounter: 0
     property int totalTests: 0
