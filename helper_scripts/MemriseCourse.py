@@ -56,7 +56,11 @@ class MemriseCourse():
 
         # Course description
         print("Scraping course description")
-        self.description = soup.find("span", class_ = "course-description").string.strip()
+        try:
+            self.description = soup.find("span", class_ = "course-description").string.strip()
+        except AttributeError:
+            print("No description found")
+            self.description = ""
 
         # Course total levels
         print("Scraping level count")
@@ -125,8 +129,12 @@ class MemriseCourse():
             levelContent["isMultimedia"] = False
 
             # Get column types
-            levelContent["testColumnType"] = soup.find("div", class_ = MemriseCourse.testColumnTypePattern)["class"][-1]
-            levelContent["promptColumnType"] = soup.find("div", class_ = MemriseCourse.promptColumnTypePattern)["class"][-1]
+            try:
+                levelContent["testColumnType"] = soup.find("div", class_ = MemriseCourse.testColumnTypePattern)["class"][-1]
+                levelContent["promptColumnType"] = soup.find("div", class_ = MemriseCourse.promptColumnTypePattern)["class"][-1]
+            except TypeError:
+                print("***ERROR*** This level is empty")
+                continue
 
             # Gather item IDs in level
             levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = MemriseCourse.thingPattern)]
