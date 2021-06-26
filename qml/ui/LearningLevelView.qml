@@ -198,7 +198,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Mock water", "Refresh", "Ignore", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Mock water", "Ignore", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -218,9 +218,6 @@ Item {
                                     break
                                 case "Reset":
                                     confirmLevelReset.visible = true
-                                    break
-                                case "Refresh":
-                                    reloadLevel()
                                     break
                                 case "Ignore":
                                     signalSource.showIgnore()

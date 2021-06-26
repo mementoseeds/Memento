@@ -19,7 +19,7 @@ Item {
 
     function reduceTimer()
     {
-        notificationHideTimer.interval = 1000
+        notificationHideTimer.interval = 50
     }
 
     width: root.width / 2

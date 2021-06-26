@@ -41,7 +41,7 @@ Item {
         globalBackend.getCourseList()
 
         if (userSettings["autoRefreshCourses"])
-            refreshCourses()
+            signalSource.refreshAllCourses()
     }
 
     Label {
