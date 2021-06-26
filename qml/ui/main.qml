@@ -74,8 +74,6 @@ ApplicationWindow {
         signal resumeTest()
         signal stopAllAudio()
         signal showIgnore()
-        signal openPreviousLevel(int currentIndex)
-        signal openNextLevel(int currentIndex)
     }
 
     function showPassiveNotification(text, duration)

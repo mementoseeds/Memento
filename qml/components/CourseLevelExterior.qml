@@ -130,7 +130,7 @@ Item {
                     "itemAmount": itemAmount})
 
             else if (levelPath.endsWith(".md"))
-                rootStackView.push("qrc:/MediaLevel.qml", {"levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
+                rootStackView.push("qrc:/MediaLevel.qml", {"courseDirectory": directory, "levelTitle": levelTitle, "levelNumber": (index + 1), "levelContent": globalBackend.readMediaLevel(levelPath)})
         }
     }
 }

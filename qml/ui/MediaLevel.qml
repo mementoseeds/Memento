@@ -21,6 +21,7 @@ import QtQuick.Controls 2.15
 Item {
     property int marginBase: 10
 
+    property string courseDirectory: ""
     property string levelTitle: ""
     property int levelNumber: 0
     property string levelContent: ""

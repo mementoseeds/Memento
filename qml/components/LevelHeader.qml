@@ -19,7 +19,7 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Material 2.12
 
-RowLayout {
+ColumnLayout {
     width: parent.width
 
     property string levelHeaderTitle: ""
@@ -29,50 +29,89 @@ RowLayout {
     property int levelHeaderCompletedItemAmount: 0
     property bool headerIsLearning: true
 
-    ColumnLayout {
+    function changeLevel(levelIndex, caller)
+    {
+        var levelData = globalBackend.getAdjacentLevel(courseDirectory, levelIndex)
+        if (Object.keys(levelData).length !== 0)
+        {
+            if (levelData["type"] === "json")
+                var levelQml = "qrc:/LearningLevelView.qml"
+            else if (levelData["type"] === "md")
+                levelQml = "qrc:/MediaLevel.qml"
+
+            rootStackView.replace(levelQml, levelData["levelInfo"])
+        }
+        else
+            caller.enabled = false
+    }
+
+    RowLayout {
         Layout.preferredWidth: parent.width
 
-        Label {
-            text: "Level " + levelHeaderNumber
-            font.bold: true
-            Layout.alignment: Qt.AlignHCenter
+        Button {
+            id: backButton
+            Layout.alignment: Qt.AlignLeft
+            icon.source: "assets/actions/go-previous.svg"
+            display: AbstractButton.IconOnly
+            onClicked: changeLevel(levelNumber - 2, this)
         }
 
-        Image {
-            source: levelHeaderIcon
-            sourceSize.width: 80
-            sourceSize.height: typeof(levelCompleted) === "undefined" ? 80 : (levelCompleted ? 80 : 100)
-            Layout.alignment: Qt.AlignHCenter
+        Button {
+            id: forwardButton
+            Layout.alignment: Qt.AlignRight
+            icon.source: "assets/actions/go-next.svg"
+            display: AbstractButton.IconOnly
+            onClicked: changeLevel(levelNumber, this)
         }
     }
 
-    ColumnLayout {
-        Layout.preferredWidth: parent.width
+    RowLayout {
 
-        Label {
-            text: levelHeaderTitle
-            font.bold: true
-            horizontalAlignment: Text.AlignHCenter
-            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+        ColumnLayout {
             Layout.preferredWidth: parent.width
-            Layout.alignment: Qt.AlignCenter
+
+            Label {
+                text: "Level " + levelHeaderNumber
+                font.bold: true
+                Layout.alignment: Qt.AlignHCenter
+            }
+
+            Image {
+                source: levelHeaderIcon
+                sourceSize.width: 80
+                sourceSize.height: typeof(levelCompleted) === "undefined" ? 80 : (levelCompleted ? 80 : 100)
+                Layout.alignment: Qt.AlignHCenter
+            }
         }
 
-        ProgressBar {
-            id: levelProgressBar
-            from: 0
-            to: headerIsLearning ? levelHeaderItemAmount : 100
-            value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
-            indeterminate:  false
-            Material.accent: typeof(levelCompleted) === "undefined" ? defaultToolbarColor : (levelCompleted ? globalBlue : globalGreen)
+        ColumnLayout {
             Layout.preferredWidth: parent.width
-            Layout.alignment: Qt.AlignCenter
-        }
 
-        Label {
-            visible: headerIsLearning
-            text: Math.floor(levelProgressBar.value / levelProgressBar.to * 100) + "%"
-            Layout.alignment: Qt.AlignHCenter
+            Label {
+                text: levelHeaderTitle
+                font.bold: true
+                horizontalAlignment: Text.AlignHCenter
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            ProgressBar {
+                id: levelProgressBar
+                from: 0
+                to: headerIsLearning ? levelHeaderItemAmount : 100
+                value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
+                indeterminate:  false
+                Material.accent: typeof(levelCompleted) === "undefined" ? defaultToolbarColor : (levelCompleted ? globalBlue : globalGreen)
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                visible: headerIsLearning
+                text: Math.floor(levelProgressBar.value / levelProgressBar.to * 100) + "%"
+                Layout.alignment: Qt.AlignHCenter
+            }
         }
     }
 }

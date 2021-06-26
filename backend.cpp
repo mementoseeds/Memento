@@ -880,3 +880,58 @@ QVariantMap Backend::getCourseWideWateringItems(QString courseDirectory, int cou
     else
         return QVariantMap();
 }
+
+QVariantMap Backend::getAdjacentLevel(QString courseDirectory, int levelIndex)
+{
+    QDir levelsDir(courseDirectory + "/levels");
+    QStringList levelList = levelsDir.entryList(QDir::Files);
+
+    if (levelIndex < 0 || levelIndex >= levelList.size())
+        return QVariantMap();
+    else
+    {
+        QString fullPath = levelsDir.absolutePath() + "/" + levelList[levelIndex];
+        std::ifstream levelFile(fullPath.toStdString());
+
+        if (levelList[levelIndex].endsWith(".json"))
+        {
+            Json levelJson;
+            levelFile >> levelJson;
+
+            QVariantMap levelInfo
+            {
+                {"courseDirectory", courseDirectory},
+                {"levelPath", fullPath},
+                {"levelNumber", levelIndex + 1},
+                {"levelTitle", QString::fromStdString(levelJson["title"].get<String>())},
+                {"testColumn", QString::fromStdString(levelJson["test"].get<String>())},
+                {"promptColumn", QString::fromStdString(levelJson["prompt"].get<String>())},
+                {"testColumnType", QString::fromStdString(levelJson["testType"].get<String>())},
+                {"promptColumnType", QString::fromStdString(levelJson["promptType"].get<String>())},
+                {"itemAmount", QVariant::fromValue(levelJson["seeds"].size())}
+            };
+
+            return QVariantMap {{"type", "json"}, {"levelInfo", levelInfo}};
+        }
+        else if (levelList[levelIndex].endsWith(".md"))
+        {
+            String info;
+            std::getline(levelFile, info);
+            QString levelTitle = QRegularExpression("\\(.*\\)$").match(QString::fromStdString(info)).captured().replace(QRegularExpression("^\\(|\\)$"), "");
+
+            QVariantMap levelInfo
+            {
+                {"courseDirectory", courseDirectory},
+                {"levelTitle", levelTitle},
+                {"levelNumber", levelIndex + 1},
+                {"levelContent", readMediaLevel(fullPath)}
+            };
+
+            return QVariantMap {{"type", "md"}, {"levelInfo", levelInfo}};
+        }
+
+        levelFile.close();
+    }
+
+    return QVariantMap();
+}

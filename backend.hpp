@@ -158,6 +158,8 @@ public:
 
     Q_INVOKABLE QVariantMap getCourseWideWateringItems(QString courseDirectory, int count);
 
+    Q_INVOKABLE QVariantMap getAdjacentLevel(QString courseDirectory, int levelIndex);
+
     enum TestType
     {
         PREVIEW,
