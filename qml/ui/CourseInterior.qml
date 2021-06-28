@@ -83,6 +83,7 @@ Item {
                 Label {
                     id: courseTitleHeading
                     text: courseTitle
+                    font.pointSize: userSettings["defaultFontSize"]
                     font.bold: true
                     Layout.fillWidth: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -91,6 +92,7 @@ Item {
 
                 Label {
                     text: "Created by " + author
+                    font.pointSize: userSettings["defaultFontSize"]
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -98,6 +100,7 @@ Item {
 
                 Label {
                     text: category
+                    font.pointSize: userSettings["defaultFontSize"]
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -112,6 +115,7 @@ Item {
 
                 Label {
                     text: description
+                    font.pointSize: userSettings["defaultFontSize"]
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
                     horizontalAlignment: Text.AlignHCenter
@@ -127,6 +131,7 @@ Item {
 
                 Label {
                     text: "Levels (" + courseLevelsListModel.count + ")"
+                    font.pointSize: userSettings["defaultFontSize"]
                     font.bold: true
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     Layout.fillWidth: true
@@ -176,6 +181,7 @@ Item {
 
                     Label {
                         text: planted + " / " + items + " planted | " + water + " water | " + difficult + " difficult"
+                        font.pointSize: userSettings["defaultFontSize"]
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -184,6 +190,7 @@ Item {
 
                     Label {
                         text: ignored + " ignored"
+                        font.pointSize: userSettings["defaultFontSize"]
                         font.bold: true
                         horizontalAlignment: Text.AlignRight
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -204,6 +211,7 @@ Item {
 
                 Label {
                     text: Math.floor(courseProgressBar.value / courseProgressBar.to * 100) + "%"
+                    font.pointSize: userSettings["defaultFontSize"]
                     Layout.alignment: Qt.AlignCenter
                     Layout.bottomMargin: 40
                 }

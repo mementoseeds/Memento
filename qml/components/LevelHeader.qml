@@ -84,6 +84,7 @@ ColumnLayout {
 
             Label {
                 text: "Level " + levelHeaderNumber
+                font.pointSize: userSettings["defaultFontSize"]
                 font.bold: true
                 Layout.alignment: Qt.AlignHCenter
             }
@@ -101,6 +102,7 @@ ColumnLayout {
 
             Label {
                 text: levelHeaderTitle
+                font.pointSize: userSettings["defaultFontSize"]
                 font.bold: true
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -122,6 +124,7 @@ ColumnLayout {
             Label {
                 visible: headerIsLearning
                 text: Math.floor(levelProgressBar.value / levelProgressBar.to * 100) + "%"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignHCenter
             }
         }

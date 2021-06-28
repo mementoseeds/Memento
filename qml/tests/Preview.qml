@@ -187,7 +187,7 @@ Item {
                 visible: text.length > 0
                 text: content
                 font.bold: type !== "alternative"
-                font.pointSize: type === "attributes" || type === "alternative" ? 12 : 20
+                font.pointSize: type === "attributes" || type === "alternative" ? userSettings["testAttributesFontSize"] : userSettings["previewTextFontSize"]
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 horizontalAlignment: Text.AlignHCenter
                 Layout.preferredWidth: parent.width

@@ -37,6 +37,14 @@ Item {
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
         userSettings["showAutoLearnOnTests"] = showAutoLearnOnTests.checked
         userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
+
+        userSettings["defaultFontSize"] = defaultFontSizeSpinBox.value
+        userSettings["mediaFontSize"] = mediaFontSizeSpinBox.value
+        userSettings["levelColumnFontSize"] = levelColumnFontSizeSpinBox.value
+        userSettings["previewTextFontSize"] = previewTextFontSizeSpinBox.value
+        userSettings["testTextFontSize"] = testTextFontSizeSpinBox.value
+        userSettings["testAttributesFontSize"] = testAttributesFontSizeSpinBox.value
+
         globalBackend.setUserSettings(userSettings)
     }
 
@@ -56,6 +64,7 @@ Item {
 
                 Label {
                     text: "Courses location"
+                    font.pointSize: userSettings["defaultFontSize"]
                 }
 
                 Button {
@@ -73,12 +82,14 @@ Item {
             TextField {
                 id: coursesLocationTextField
                 text: userSettings["coursesLocation"]
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.fillWidth: true
                 Material.accent: globalGreen
             }
 
             Label {
                 text: "Test countdown timer"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
 
@@ -94,6 +105,7 @@ Item {
 
             Label {
                 text: "Post-test cooldown timer ms"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
 
@@ -110,6 +122,7 @@ Item {
 
             Label {
                 text: "Items per planting session"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
 
@@ -125,6 +138,7 @@ Item {
 
             Label {
                 text: "Items per watering session"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
 
@@ -141,6 +155,7 @@ Item {
             CheckBox {
                 id: autoRefreshCourses
                 text: "Auto refresh courses on startup"
+                font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["autoRefreshCourses"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
@@ -149,6 +164,7 @@ Item {
             CheckBox {
                 id: autoAcceptAnswerCheckBox
                 text: "Auto accept answer on typing tests"
+                font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["autoAcceptAnswer"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
@@ -157,6 +173,7 @@ Item {
             CheckBox {
                 id: enableTestPromptSwitch
                 text: "Allow test prompt switch on multiple choices"
+                font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["enableTestPromptSwitch"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
@@ -165,6 +182,7 @@ Item {
             CheckBox {
                 id: showAutoLearnOnTests
                 text: "Show auto learn button on planting tests"
+                font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["showAutoLearnOnTests"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
@@ -187,6 +205,7 @@ Item {
                 CheckBox {
                     id: parentBox
                     text: qsTr("Enabled tests")
+                    font.pointSize: userSettings["defaultFontSize"]
                     checkState: enabledTestsGroup.checkState
                     Material.accent: globalGreen
                 }
@@ -194,6 +213,7 @@ Item {
                 CheckBox {
                     id: enabledMultipleChoice
                     checked: userSettings["enabledTests"]["enabledMultipleChoice"]
+                    font.pointSize: userSettings["defaultFontSize"]
                     text: qsTr("Multiple Choice")
                     leftPadding: indicator.width
                     ButtonGroup.group: enabledTestsGroup
@@ -203,6 +223,7 @@ Item {
                 CheckBox {
                     id: enabledTyping
                     checked: userSettings["enabledTests"]["enabledTyping"]
+                    font.pointSize: userSettings["defaultFontSize"]
                     text: qsTr("Typing")
                     leftPadding: indicator.width
                     ButtonGroup.group: enabledTestsGroup
@@ -212,11 +233,120 @@ Item {
                 CheckBox {
                     id: enabledTapping
                     checked: userSettings["enabledTests"]["enabledTapping"]
+                    font.pointSize: userSettings["defaultFontSize"]
                     text: qsTr("Tapping")
                     leftPadding: indicator.width
                     ButtonGroup.group: enabledTestsGroup
                     Material.accent: globalGreen
                 }
+            }
+
+            Rectangle {
+                height: 1
+                color: "gray"
+                Layout.fillWidth: true
+            }
+
+            Label {
+                text: "Sizes"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Default font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: defaultFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["defaultFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Media level font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: mediaFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["mediaFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Level column font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: levelColumnFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["levelColumnFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Preview text font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: previewTextFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["previewTextFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Test text font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: testTextFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["testTextFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Test attributes font size"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: testAttributesFontSizeSpinBox
+                from: 5
+                to: 100
+                editable: true
+                value: userSettings["testAttributesFontSize"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
             }
         }
 

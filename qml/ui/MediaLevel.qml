@@ -50,6 +50,7 @@ Item {
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
                 onLinkActivated: Qt.openUrlExternally(link)
+                font.pointSize: userSettings["mediaFontSize"]
             }
         }
     }

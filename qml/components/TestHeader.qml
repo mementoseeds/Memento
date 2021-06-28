@@ -86,7 +86,7 @@ ColumnLayout {
         id: testHeaderMainLoader
         Layout.fillWidth: true
         property var columnData: globalBackend.readItemColumn(itemId, promptColumn)
-        property int textSize: 20
+        property int textSize: userSettings["testTextFontSize"]
         property int audioSize: 40
         sourceComponent:
         {
@@ -108,7 +108,7 @@ ColumnLayout {
         Loader {
             Layout.fillWidth: true
             property var columnData: showAfterTestsData.split(";")
-            property int textSize: 15
+            property int textSize: userSettings["testAttributesFontSize"]
             property int audioSize: 20
             sourceComponent:
             {
@@ -144,7 +144,7 @@ ColumnLayout {
                 Label {
                     id: attributes
                     text: modelData
-                    font.pointSize: platformIsMobile ? 15 : 10
+                    font.pointSize: userSettings["testAttributesFontSize"]
                     anchors.centerIn: parent
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                     horizontalAlignment: Text.AlignHCenter

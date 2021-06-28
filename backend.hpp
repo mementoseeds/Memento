@@ -222,6 +222,25 @@ private:
 
     //Constants
     const int jsonIndent = 4;
+
+    //Font sizes
+    const int levelColumnFontSize = 12;
+    const int testTextFontSize = 20;
+    const int previewTextFontSize = 20;
+
+    #ifdef PLATFORM_IS_DESKTOP
+
+    const int defaultFontSize = 8;
+    const int mediaFontSize = 8;
+    const int testAttributesFontSize = 10;
+
+    #elif defined PLATFORM_IS_MOBILE
+
+    const int defaultFontSize = 16;
+    const int mediaFontSize = 16;
+    const int testAttributesFontSize = 15;
+
+    #endif
 };
 
 #endif // BACKEND_H

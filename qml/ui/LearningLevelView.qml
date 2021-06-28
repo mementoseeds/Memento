@@ -265,12 +265,14 @@ Item {
 
                     Label {
                         text: itemAmount + " Items"
+                        font.pointSize: userSettings["defaultFontSize"]
                         Layout.alignment: Qt.AlignLeft
                     }
 
                     Label {
                         id: ignoredAmountHeading
                         text: "N Ignored"
+                        font.pointSize: userSettings["defaultFontSize"]
                         Layout.alignment: Qt.AlignRight
 
                         Connections {

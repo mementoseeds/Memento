@@ -58,6 +58,8 @@ void Backend::androidOpenFileDialog()
 
 void Backend::setUserSettings(QVariantMap userSettings)
 {
+    this->userSettings = userSettings;
+
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
@@ -69,6 +71,13 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
     settings.setValue("showAutoLearnOnTests", userSettings["showAutoLearnOnTests"]);
     settings.setValue("enabledTests", userSettings["enabledTests"]);
+
+    settings.setValue("defaultFontSize", userSettings["defaultFontSize"]);
+    settings.setValue("mediaFontSize", userSettings["mediaFontSize"]);
+    settings.setValue("levelColumnFontSize", userSettings["levelColumnFontSize"]);
+    settings.setValue("previewTextFontSize", userSettings["previewTextFontSize"]);
+    settings.setValue("testTextFontSize", userSettings["testTextFontSize"]);
+    settings.setValue("testAttributesFontSize", userSettings["testAttributesFontSize"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -84,6 +93,13 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
     userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
+
+    userSettings.insert("defaultFontSize", settings.value("defaultFontSize", defaultFontSize).toInt());
+    userSettings.insert("mediaFontSize", settings.value("mediaFontSize", mediaFontSize).toInt());
+    userSettings.insert("levelColumnFontSize", settings.value("levelColumnFontSize", levelColumnFontSize).toInt());
+    userSettings.insert("previewTextFontSize", settings.value("previewTextFontSize", previewTextFontSize).toInt());
+    userSettings.insert("testTextFontSize", settings.value("testTextFontSize", testTextFontSize).toInt());
+    userSettings.insert("testAttributesFontSize", settings.value("testAttributesFontSize", testAttributesFontSize).toInt());
 
     QVariantMap testCheck = userSettings["enabledTests"].toMap();
 

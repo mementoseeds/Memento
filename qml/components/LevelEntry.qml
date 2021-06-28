@@ -138,7 +138,7 @@ Item {
         Label {
             text: columnEntry
             color: ignored ? "gray" : "white"
-            font.pointSize: 12
+            font.pointSize: userSettings["levelColumnFontSize"]
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignLeft
 

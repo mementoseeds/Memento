@@ -71,6 +71,7 @@ Item {
 
             Label {
                 text: title
+                font.pointSize: userSettings["defaultFontSize"]
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.topMargin: marginBase
@@ -80,6 +81,7 @@ Item {
 
             Label {
                 text: planted + " / " + items + " " + plantIcon + " | " + water + " " + waterIcon + " " + difficult + " " + difficultIcon
+                font.pointSize: userSettings["defaultFontSize"]
                 font.family: "Icons"
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
@@ -100,6 +102,7 @@ Item {
 
             Label {
                 text: Math.floor(courseProgressBar.value / courseProgressBar.to * 100) + "%"
+                font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
 
