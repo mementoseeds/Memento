@@ -77,6 +77,9 @@ using String = std::string;
 #include <QThread>
 #include "worker.hpp"
 
+//For setting app icon
+#include <QIcon>
+
 class Backend : public QObject
 {
     Q_OBJECT

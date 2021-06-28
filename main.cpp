@@ -71,6 +71,7 @@ int main(int argc, char *argv[])
 
     QCoreApplication::setApplicationName(QLatin1String("Memento"));
     QCoreApplication::setOrganizationName(QLatin1String("Memento Seeds"));
+    QApplication::setWindowIcon(QIcon(":/assets/icons/icon.svg"));
 
     QQuickStyle::setStyle("Material");
 
