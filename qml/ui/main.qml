@@ -242,6 +242,12 @@ ApplicationWindow {
                 enabled: rootStackView.depth === 1
                 onTriggered: signalSource.refreshAllCourses()
             }
+
+            Action {
+                text: "&Help"
+                icon.source: "assets/actions/help.svg"
+                onTriggered: console.debug("Open help")
+            }
         }
     }
 

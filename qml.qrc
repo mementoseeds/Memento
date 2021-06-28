@@ -37,5 +37,6 @@
         <file>assets/actions/autoLearn.svg</file>
         <file alias="AdvancedAutoLearn.qml">qml/ui/AdvancedAutoLearn.qml</file>
         <file>assets/icons/icon.svg</file>
+        <file>assets/actions/help.svg</file>
     </qresource>
 </RCC>
