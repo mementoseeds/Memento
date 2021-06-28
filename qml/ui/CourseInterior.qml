@@ -175,7 +175,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     Label {
-                        text: planted + " / " + items + " seeds planted"
+                        text: planted + " / " + items + " planted | " + water + " water | " + difficult + " difficult"
                         font.bold: true
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
