@@ -38,5 +38,7 @@
         <file alias="AdvancedAutoLearn.qml">qml/ui/AdvancedAutoLearn.qml</file>
         <file>assets/icons/icon.svg</file>
         <file>assets/actions/help.svg</file>
+        <file alias="AboutPage.qml">qml/ui/AboutPage.qml</file>
+        <file>assets/icons/Qt.svg</file>
     </qresource>
 </RCC>

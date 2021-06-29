@@ -244,9 +244,9 @@ ApplicationWindow {
             }
 
             Action {
-                text: "&Help"
+                text: "&About / Help"
                 icon.source: "assets/actions/help.svg"
-                onTriggered: console.debug("Open help")
+                onTriggered: rootStackView.push("qrc:/AboutPage.qml")
             }
         }
     }
