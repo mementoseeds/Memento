@@ -102,7 +102,13 @@ Item {
             testingContent[levelPath].splice(newRandomPosition, 0, test)
         }
         else
+        {
             skippedItems.push(id)
+
+            for (var i = 0; i < testingContentOriginal[levelPath].length; i++)
+                if (testingContentOriginal[levelPath][i] === id)
+                    testingContentOriginal[levelPath].splice(i, 1)
+        }
     }
 
     function autoLearnItem(levelPath, itemId)
@@ -312,6 +318,9 @@ Item {
         }
         else
         {
+            if (actionType === "difficult")
+                globalBackend.unmarkDifficult(testingContentOriginal)
+
             globalBackend.saveLevels()
             rootStackView.replace("qrc:/ResultSummary.qml", {"courseDirectory": courseDirectory, "testingContent": testingContentOriginal, "correctAnswerCounter": correctAnswerCounter, "totalTests": (correctAnswerCounter + wrongAnswerCounter)})
         }

@@ -1000,3 +1000,17 @@ void Backend::setDifficult(QString levelPath, QString itemId, bool difficult)
     std::ofstream levelFile(levelPath.toStdString());
     levelFile << levelJson.dump(jsonIndent) << std::endl;
 }
+
+void Backend::unmarkDifficult(QVariantMap difficultItems)
+{
+    foreach (QString levelPath, difficultItems.keys())
+    {
+        QVariantList idList = difficultItems[levelPath].toList();
+
+        if (idList.isEmpty())
+            continue;
+
+        foreach (QVariant itemIdVar, idList)
+            jsonMap[levelPath]["seeds"][itemIdVar.toString().toStdString()]["difficult"] = false;
+    }
+}

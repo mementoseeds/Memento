@@ -46,18 +46,12 @@ Item {
         {
             var item = difficultListModel.get(i)
 
-            var restartLoop = true
-            while (restartLoop)
+            if (testingContentOriginal.hasOwnProperty(item.levelPath))
+                testingContentOriginal[item.levelPath].push(item.id)
+            else
             {
-                restartLoop = false
-
-                if (testingContentOriginal.hasOwnProperty(item.levelPath))
-                    testingContentOriginal[item.levelPath].push(item.id)
-                else
-                {
-                    testingContentOriginal[item.levelPath] = []
-                    restartLoop = true
-                }
+                testingContentOriginal[item.levelPath] = []
+                testingContentOriginal[item.levelPath].push(item.id)
             }
         }
 

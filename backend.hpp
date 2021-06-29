@@ -169,6 +169,8 @@ public:
 
     Q_INVOKABLE void setDifficult(QString levelPath, QString itemId, bool difficult);
 
+    Q_INVOKABLE void unmarkDifficult(QVariantMap difficultItems);
+
     enum TestType
     {
         PREVIEW,
