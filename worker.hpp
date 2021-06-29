@@ -31,6 +31,8 @@ public slots:
 
     void doCourseRefresh(QVariantList courses);
 
+    void doGetCourseDifficultItems(QString courseDirectory);
+
 private:
 
     //Constants
@@ -38,6 +40,8 @@ private:
 
 signals:
     void refreshFinished();
+
+    void workerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
 };
 
 #endif // WORKER_H

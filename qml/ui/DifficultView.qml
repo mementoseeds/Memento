@@ -29,6 +29,8 @@ Item {
     property int items: 0
     property int difficult: 0
 
+    Component.onCompleted: globalBackend.getCourseDifficultItems(courseDirectory)
+
     ListView {
         anchors.fill: parent
         spacing: 20
@@ -59,7 +61,7 @@ Item {
                     to: items
                     value: difficult
                     indeterminate:  false
-                    Material.accent: globalOrange
+                    Material.accent: globalAmber
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignCenter
                 }
@@ -69,9 +71,68 @@ Item {
                     font.pointSize: userSettings["defaultFontSize"]
                     Layout.alignment: Qt.AlignHCenter
                 }
+
+                Button {
+                    id: reviewButton
+                    text: "Review"
+                    icon.source: "assets/icons/difficult.svg"
+                    Material.background: Material.color(Material.Amber, Material.Shade700)
+                    Layout.alignment: Qt.AlignRight
+                    onClicked:
+                    {
+                        console.debug("Review")
+                    }
+                }
+
+                RowLayout {
+                    Layout.preferredWidth: parent.width
+                    Layout.topMargin: marginBase
+
+                    Label {
+                        text: "Test"
+                        font.pointSize: 12
+                        font.bold: true
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        horizontalAlignment: Text.AlignLeft
+                        Layout.leftMargin: marginBase
+                        Layout.preferredWidth: parent.Layout.preferredWidth / 3
+                    }
+
+                    Label {
+                        text: "Prompt"
+                        font.pointSize: 12
+                        font.bold: true
+                        wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                        horizontalAlignment: Text.AlignLeft
+                        Layout.preferredWidth: parent.Layout.preferredWidth / 3
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    height: 1
+                    Layout.bottomMargin: marginBase
+                }
             }
         }
 
         model: ListModel {id: difficultListModel}
+
+        delegate: DifficultEntry {}
+    }
+
+    Connections {
+        target: globalBackend
+
+        function onAddDifficultItem(levelPath, id, test, prompt, testColumnType, promptColumnType)
+        {
+            difficultListModel.append({
+                "levelPath": levelPath,
+                "id": id,
+                "test": test,
+                "prompt": prompt,
+                "testColumnType": testColumnType,
+                "promptColumnType": promptColumnType})
+        }
     }
 }

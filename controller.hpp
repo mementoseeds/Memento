@@ -36,7 +36,11 @@ public:
 
         //Courses refresh
         connect(this, &Controller::requestCourseRefresh, worker, &Worker::doCourseRefresh);
-        connect(worker, &Worker::refreshFinished, this, &Controller::workFinished);
+        connect(worker, &Worker::refreshFinished, this, &Controller::courseRefreshFinished);
+
+        //Get difficult items
+        connect(this, &Controller::requestGetCourseDifficultItems, worker, &Worker::doGetCourseDifficultItems);
+        connect(worker, &Worker::workerGetDifficultItemInfo, this, &Controller::controllerGetDifficultItemInfo);
 
         workerThread.start();
     }
@@ -54,7 +58,10 @@ public slots:
 
 signals:
     void requestCourseRefresh(QVariantList courses);
-    void workFinished();
+    void courseRefreshFinished();
+
+    void requestGetCourseDifficultItems(QString courseDirectory);
+    void controllerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
 };
 
 

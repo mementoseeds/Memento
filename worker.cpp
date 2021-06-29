@@ -105,3 +105,26 @@ void Worker::doCourseRefresh(QVariantList courses)
 
     emit refreshFinished();
 }
+
+void Worker::doGetCourseDifficultItems(QString courseDirectory)
+{
+    QDir courseDir(courseDirectory + "/levels");
+    QString absolutePath = courseDir.absolutePath() + "/";
+    foreach (QString lvl, courseDir.entryList({"*.json"}, QDir::Files))
+    {
+        QString levelPath = absolutePath + lvl;
+
+        std::ifstream levelFile(levelPath.toStdString());
+        Json levelJson;
+        levelFile >> levelJson;
+        levelFile.close();
+
+        for (auto &item : levelJson["seeds"].items())
+        {
+            String id = item.key();
+
+            if (levelJson["seeds"][id]["difficult"].get<bool>())
+                emit workerGetDifficultItemInfo(levelPath, QString::fromStdString(id), QString::fromStdString(levelJson["test"].get<String>()), QString::fromStdString(levelJson["prompt"].get<String>()));
+        }
+    }
+}

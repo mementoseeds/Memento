@@ -165,6 +165,8 @@ public:
 
     Q_INVOKABLE QString readText(QString path);
 
+    Q_INVOKABLE void getCourseDifficultItems(QString courseDirectory);
+
     enum TestType
     {
         PREVIEW,
@@ -196,6 +198,12 @@ signals:
     void addItemResults(QString testData, QString testDataType, QString promptData, QString promptDataType, int successes, int failures, int streak);
 
     void finishedRefreshingCourses();
+
+    void addDifficultItem(QString levelPath, QString id, QString test, QString prompt, QString testColumnType, QString promptColumnType);
+
+private slots:
+
+    void getDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
 
 private:
     static Backend *m_instance;

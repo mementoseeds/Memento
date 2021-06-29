@@ -608,7 +608,7 @@ void Backend::refreshCourses(QVariantList courses)
 {
     //Pass this operation to another thread
     Controller *threadController = new Controller;
-    connect(threadController, &Controller::workFinished, this, &Backend::finishedRefreshingCourses);
+    connect(threadController, &Controller::courseRefreshFinished, this, &Backend::finishedRefreshingCourses);
     emit threadController->requestCourseRefresh(courses);
 }
 
@@ -964,4 +964,22 @@ QString Backend::readText(QString path)
     }
     else
         return QString();
+}
+
+void Backend::getCourseDifficultItems(QString courseDirectory)
+{
+    //Pass this operation to another thread
+    Controller *threadController = new Controller;
+    connect(threadController, &Controller::controllerGetDifficultItemInfo, this, &Backend::getDifficultItemInfo);
+    emit threadController->requestGetCourseDifficultItems(courseDirectory);
+}
+
+void Backend::getDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn)
+{
+    String id = itemId.toStdString();
+    String stdTestColumn = testColumn.toStdString();
+    String stdPromptColumn= promptColumn.toStdString();
+    emit addDifficultItem(levelPath, itemId,
+        QString::fromStdString(globalSeedbox[id][stdTestColumn]["primary"].get<String>()), QString::fromStdString(globalSeedbox[id][stdPromptColumn]["primary"].get<String>()),
+        QString::fromStdString(globalSeedbox[id][stdTestColumn]["type"].get<String>()), QString::fromStdString(globalSeedbox[id][stdPromptColumn]["type"].get<String>()));
 }
