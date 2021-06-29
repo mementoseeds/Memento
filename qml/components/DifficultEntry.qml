@@ -81,17 +81,27 @@ Item {
                 }
             }
 
-//            Label {
-//                text: ignored ? ignoreIcon : progress
-//                color: ignored ? "yellow" : "white"
-//                font.pointSize: 10
-//                font.family: "Icons"
-//                textFormat: Text.RichText
-//                horizontalAlignment: Text.AlignRight
-//                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-//                Layout.alignment: Qt.AlignRight
-//                Layout.preferredWidth: difficultTestColumn.Layout.preferredWidth / 2
-//            }
+            Label {
+                text: difficultIcon
+                color: difficult ? "yellow" : "white"
+                font.pointSize: 15
+                font.family: "Icons"
+                textFormat: Text.RichText
+                horizontalAlignment: Text.AlignRight
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: difficultTestColumn.Layout.preferredWidth / 2
+
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked:
+                    {
+                        difficult = !difficult
+                        globalBackend.setDifficult(levelPath, id, difficult)
+                    }
+                }
+            }
         }
 
         Rectangle {

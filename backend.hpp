@@ -167,6 +167,8 @@ public:
 
     Q_INVOKABLE void getCourseDifficultItems(QString courseDirectory);
 
+    Q_INVOKABLE void setDifficult(QString levelPath, QString itemId, bool difficult);
+
     enum TestType
     {
         PREVIEW,

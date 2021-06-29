@@ -132,7 +132,8 @@ Item {
                 "test": test,
                 "prompt": prompt,
                 "testColumnType": testColumnType,
-                "promptColumnType": promptColumnType})
+                "promptColumnType": promptColumnType,
+                "difficult": true})
         }
     }
 }

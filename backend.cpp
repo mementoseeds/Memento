@@ -983,3 +983,17 @@ void Backend::getDifficultItemInfo(QString levelPath, QString itemId, QString te
         QString::fromStdString(globalSeedbox[id][stdTestColumn]["primary"].get<String>()), QString::fromStdString(globalSeedbox[id][stdPromptColumn]["primary"].get<String>()),
         QString::fromStdString(globalSeedbox[id][stdTestColumn]["type"].get<String>()), QString::fromStdString(globalSeedbox[id][stdPromptColumn]["type"].get<String>()));
 }
+
+void Backend::setDifficult(QString levelPath, QString itemId, bool difficult)
+{
+    Json levelJson;
+    {
+        std::ifstream levelFile(levelPath.toStdString());
+        levelFile >> levelJson;
+        levelFile.close();
+        levelJson["seeds"][itemId.toStdString()]["difficult"] = difficult;
+    }
+
+    std::ofstream levelFile(levelPath.toStdString());
+    levelFile << levelJson.dump(jsonIndent) << std::endl;
+}
