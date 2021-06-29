@@ -31,6 +31,39 @@ Item {
 
     Component.onCompleted: globalBackend.getCourseDifficultItems(courseDirectory)
 
+    function difficultAction()
+    {
+        var testingContentOriginal = {}
+        var totalItems = Math.min(userSettings["maxDifficultItems"], difficultListModel.count)
+
+        if (totalItems === 0)
+        {
+            showPassiveNotification("There are no difficult items")
+            return
+        }
+
+        for (var i = 0;  i < totalItems; i++)
+        {
+            var item = difficultListModel.get(i)
+
+            var restartLoop = true
+            while (restartLoop)
+            {
+                restartLoop = false
+
+                if (testingContentOriginal.hasOwnProperty(item.levelPath))
+                    testingContentOriginal[item.levelPath].push(item.id)
+                else
+                {
+                    testingContentOriginal[item.levelPath] = []
+                    restartLoop = true
+                }
+            }
+        }
+
+        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": testingContentOriginal, "actionType": "difficult", "difficultReview": true, "totalWateringItems": totalItems})
+    }
+
     ListView {
         anchors.fill: parent
         spacing: 20
@@ -78,10 +111,7 @@ Item {
                     icon.source: "assets/icons/difficult.svg"
                     Material.background: Material.color(Material.Amber, Material.Shade700)
                     Layout.alignment: Qt.AlignRight
-                    onClicked:
-                    {
-                        console.debug("Review")
-                    }
+                    onClicked: difficultAction()
                 }
 
                 RowLayout {

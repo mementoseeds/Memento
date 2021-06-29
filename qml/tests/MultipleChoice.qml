@@ -43,7 +43,7 @@ Item {
     {
         wrongAnswerCounter++
         testHeader.radialBarText = "Fail"
-        scheduleTestAfterMistake(levelPath, itemId)
+        mistakenTest(levelPath, itemId)
     }
 
     ScrollView {

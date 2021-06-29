@@ -66,6 +66,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
     settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
     settings.setValue("maxWateringItems", userSettings["maxWateringItems"]);
+    settings.setValue("maxDifficultItems", userSettings["maxDifficultItems"]);
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
     settings.setValue("autoAcceptAnswer", userSettings["autoAcceptAnswer"]);
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
@@ -89,6 +90,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
     userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
     userSettings.insert("maxWateringItems", settings.value("maxWateringItems", 50).toInt());
+    userSettings.insert("maxDifficultItems", settings.value("maxDifficultItems", 10).toInt());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
@@ -336,10 +338,11 @@ bool Backend::getLevelCompleted()
     return globalLevel["completed"].get<bool>();
 }
 
-void Backend::setReviewType(bool manualReview, bool mockWater)
+void Backend::setReviewType(bool manualReview, bool mockWater, bool difficultReview)
 {
     this->manualReview = manualReview;
     this->mockWater = mockWater;
+    this->difficultReview = difficultReview;
     unlockedItems.clear();
 }
 
@@ -370,7 +373,7 @@ bool Backend::checkAnswer(QString levelPath, QString itemId, QString column, QSt
         }
     }
 
-    if (!mockWater)
+    if (!mockWater && !difficultReview)
     {
         if (result)
             correctAnswer(levelPath, itemId);

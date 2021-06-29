@@ -100,7 +100,7 @@ Item {
                         {
                             wrongAnswerCounter++
                             textfieldBackground.color = "red"
-                            scheduleTestAfterMistake(levelPath, itemId)
+                            mistakenTest(levelPath, itemId)
                         }
 
                         testHeader.cooldownTimer.running = true

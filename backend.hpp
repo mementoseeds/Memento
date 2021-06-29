@@ -124,7 +124,7 @@ public:
 
     Q_INVOKABLE bool getLevelCompleted();
 
-    Q_INVOKABLE void setReviewType(bool manualReview, bool mockWater);
+    Q_INVOKABLE void setReviewType(bool manualReview, bool mockWater, bool difficultReview);
     Q_INVOKABLE void loadCourseInfo(QString courseDirectory);
     Q_INVOKABLE bool checkAnswer(QString levelPath, QString itemId, QString column, QString answer);
     Q_INVOKABLE void getShowAfterTests(QString itemId, QString testColumn, QString promptColumn);
@@ -226,6 +226,7 @@ private:
 
     bool manualReview = false;
     bool mockWater = false;
+    bool difficultReview = false;
     QMap<QString, QMap<QString, bool>> unlockedItems;
 
     QVariantMap userSettings;

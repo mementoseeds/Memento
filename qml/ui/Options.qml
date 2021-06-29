@@ -32,6 +32,7 @@ Item {
         userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
         userSettings["maxPlantingItems"] = maxPlantingItems.value
         userSettings["maxWateringItems"] = maxWateringItems.value
+        userSettings["maxDifficultItems"] = maxDifficultItems.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
@@ -149,6 +150,22 @@ Item {
                 to: 100000
                 editable: true
                 value: userSettings["maxWateringItems"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Items per difficult review session"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: maxDifficultItems
+                from: 1
+                to: 100000
+                editable: true
+                value: userSettings["maxDifficultItems"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

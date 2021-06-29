@@ -99,13 +99,20 @@ ApplicationWindow {
             case "preview":
                 toolbarProgressBar.Material.accent = "#00FFE7"
                 break
+
             case "plant":
                 toolbarBackground.color = globalGreen
                 toolbarProgressBar.Material.accent = "#00FB0A"
                 break
+
             case "water":
                 toolbarBackground.color = globalBlue
                 toolbarProgressBar.Material.accent = "#00BCD4"
+                break
+
+            case "difficult":
+                toolbarBackground.color = globalOrange
+                toolbarProgressBar.Material.accent = globalAmber
                 break
         }
     }

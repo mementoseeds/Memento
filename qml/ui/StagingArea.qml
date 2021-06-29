@@ -29,6 +29,7 @@ Item {
     property bool manualReview: false
     property int totalWateringItems: 0
     property bool mockWater: false
+    property bool difficultReview: false
 
     property var testingContent: ({})
     property var levels: []
@@ -38,7 +39,7 @@ Item {
     property int itemIndex: 0
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
-    property var autoLearned: []
+    property var skippedItems: []
 
     // testingContent structure -->
     // dictionary of lists of dictionaries
@@ -87,23 +88,28 @@ Item {
         testLoader.active = true
     }
 
-    function scheduleTestAfterMistake(levelPath, id)
+    function mistakenTest(levelPath, id)
     {
-        var test = {}
-        test[id] = TestType.PREVIEW
-        testingContent[levelPath].splice(itemIndex, 0, test)
+        if (actionType !== "difficult")
+        {
+            var test = {}
+            test[id] = TestType.PREVIEW
+            testingContent[levelPath].splice(itemIndex, 0, test)
 
-        var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
-        test = {}
-        test[id] = getRandomTest()
-        testingContent[levelPath].splice(newRandomPosition, 0, test)
+            var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
+            test = {}
+            test[id] = getRandomTest()
+            testingContent[levelPath].splice(newRandomPosition, 0, test)
+        }
+        else
+            skippedItems.push(id)
     }
 
     function autoLearnItem(levelPath, itemId)
     {
         if (actionType === "plant")
         {
-            autoLearned.push(itemId)
+            skippedItems.push(itemId)
             globalBackend.autoLearnItem(levelPath, itemId, 1)
             triggerNextItem()
         }
@@ -112,7 +118,7 @@ Item {
     Component.onCompleted:
     {
         signalSource.stopAllAudio()
-        globalBackend.setReviewType(manualReview, mockWater)
+        globalBackend.setReviewType(manualReview, mockWater, difficultReview)
         globalBackend.loadCourseInfo(courseDirectory)
 
         levels = Object.keys(testingContentOriginal)
@@ -184,6 +190,27 @@ Item {
                 testingContent[level].sort(() => Math.random() - 0.5)
             }
         }
+        else if (actionType === "difficult")
+        {
+            for (level in testingContentOriginal)
+            {
+                itemArray = testingContentOriginal[level]
+                uniqueItemCount = itemArray.length
+                testingContent[level] = []
+
+                for (i = 0; i < 3; i++)
+                {
+                    for (id in itemArray)
+                    {
+                        test = {}
+                        test[itemArray[id]] = getRandomTest()
+                        testingContent[level].push(test)
+                    }
+                }
+
+                testingContent[level].sort(() => Math.random() - 0.5)
+            }
+        }
     }
 
     function triggerNextItem()
@@ -213,13 +240,15 @@ Item {
             {
                 replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
             }
-            else if (actionType === "water")
+            else if (actionType === "water" || actionType === "difficult")
             {
                 var total = 0
                 for (var testLevel in testingContent)
                     total += testingContent[testLevel].length
 
-                replaceToolbar("Watering ", totalWateringItems, total, totalWateringIndex, actionType)
+                var title = actionType === "water" ? "Watering " : "Reviewing "
+
+                replaceToolbar(title, totalWateringItems, total, totalWateringIndex, actionType)
             }
 
             if (itemIndex < testingContent[level].length)
@@ -227,10 +256,11 @@ Item {
                 var itemId = Object.keys(testingContent[level][itemIndex]).toString()
 
                 //Skip over this item if the user has requested a skip
-                if (autoLearned.includes(itemId))
+                if (skippedItems.includes(itemId))
                 {
                     itemIndex++
                     triggerNextItem()
+                    //Return otherwise crashes at the result
                     return
                 }
 
@@ -275,7 +305,7 @@ Item {
             else
             {
                 levelIndex++
-                autoLearned = []
+                skippedItems = []
                 itemIndex = 0
                 triggerNextItem()
             }
