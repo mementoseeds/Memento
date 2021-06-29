@@ -72,6 +72,7 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
             Label {
                 text: aboutMemento
                 font.pointSize: userSettings["defaultFontSize"]
+                horizontalAlignment: Text.AlignHCenter
                 textFormat: Text.MarkdownText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
@@ -90,6 +91,26 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
             Label {
                 text: aboutQt
                 font.pointSize: userSettings["defaultFontSize"]
+                horizontalAlignment: Text.AlignHCenter
+                textFormat: Text.MarkdownText
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Image {
+                Layout.topMargin: marginBase
+                source: "assets/icons/gpl-v3-logo.svg"
+                sourceSize.height: 200
+                fillMode: Image.PreserveAspectFit
+                Layout.preferredWidth: parent.width
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Memento is licensed under the GNU General Public License v3\n" + globalBackend.readText(":/COPYING")
+                font.pointSize: userSettings["defaultFontSize"]
+                horizontalAlignment: Text.AlignHCenter
                 textFormat: Text.MarkdownText
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width

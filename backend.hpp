@@ -163,6 +163,8 @@ public:
 
     Q_INVOKABLE QVariantMap getAdjacentLevel(QString courseDirectory, int levelIndex);
 
+    Q_INVOKABLE QString readText(QString path);
+
     enum TestType
     {
         PREVIEW,

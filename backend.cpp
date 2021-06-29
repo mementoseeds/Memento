@@ -951,3 +951,15 @@ QVariantMap Backend::getAdjacentLevel(QString courseDirectory, int levelIndex)
 
     return QVariantMap();
 }
+
+QString Backend::readText(QString path)
+{
+    QFile file(path);
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        QTextStream text(&file);
+        return text.readAll();
+    }
+    else
+        return QString();
+}

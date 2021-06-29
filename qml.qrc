@@ -40,5 +40,7 @@
         <file>assets/actions/help.svg</file>
         <file alias="AboutPage.qml">qml/ui/AboutPage.qml</file>
         <file>assets/icons/Qt.svg</file>
+        <file>assets/icons/gpl-v3-logo.svg</file>
+        <file>COPYING</file>
     </qresource>
 </RCC>
