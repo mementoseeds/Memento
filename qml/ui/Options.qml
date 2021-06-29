@@ -36,6 +36,7 @@ Item {
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
         userSettings["showAutoLearnOnTests"] = showAutoLearnOnTests.checked
+        userSettings["hideHelpAboutPages"] = hideHelpAboutPages.checked
         userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
 
         userSettings["defaultFontSize"] = defaultFontSizeSpinBox.value
@@ -188,6 +189,15 @@ Item {
                 Layout.alignment: Qt.AlignCenter
             }
 
+            CheckBox {
+                id: hideHelpAboutPages
+                text: "Hide help and about pages"
+                font.pointSize: userSettings["defaultFontSize"]
+                checked: userSettings["hideHelpAboutPages"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
             Column {
                 Layout.alignment: Qt.AlignCenter
 
@@ -240,6 +250,8 @@ Item {
                     Material.accent: globalGreen
                 }
             }
+
+            /*----------------------------------------------------------------------------------------------------------------*/
 
             Rectangle {
                 height: 1

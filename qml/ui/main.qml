@@ -247,12 +247,22 @@ ApplicationWindow {
                 text: "&Help"
                 icon.source: "assets/actions/help.svg"
                 onTriggered: rootStackView.push("qrc:/HelpPage.qml")
+                Component.onCompleted:
+                {
+                    if (userSettings["hideHelpAboutPages"])
+                        mainMenuBar.removeAction(this)
+                }
             }
 
             Action {
                 text: "&About"
                 icon.source: "assets/actions/about.svg"
                 onTriggered: rootStackView.push("qrc:/AboutPage.qml")
+                Component.onCompleted:
+                {
+                    if (userSettings["hideHelpAboutPages"])
+                        mainMenuBar.removeAction(this)
+                }
             }
         }
     }
