@@ -70,6 +70,8 @@ Item {
                     {
                         if (!tappingEnabled || !platformIsMobile)
                             textfield.forceActiveFocus()
+                        else
+                            focus = true
                     }
 
                     onTextChanged:

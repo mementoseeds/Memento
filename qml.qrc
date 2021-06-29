@@ -37,10 +37,12 @@
         <file>assets/actions/autoLearn.svg</file>
         <file alias="AdvancedAutoLearn.qml">qml/ui/AdvancedAutoLearn.qml</file>
         <file>assets/icons/icon.svg</file>
-        <file>assets/actions/help.svg</file>
         <file alias="AboutPage.qml">qml/ui/AboutPage.qml</file>
         <file>assets/icons/Qt.svg</file>
         <file>assets/icons/gpl-v3-logo.svg</file>
         <file>COPYING</file>
+        <file>assets/actions/about.svg</file>
+        <file>assets/actions/help.svg</file>
+        <file alias="HelpPage.qml">qml/ui/HelpPage.qml</file>
     </qresource>
 </RCC>

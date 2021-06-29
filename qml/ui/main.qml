@@ -244,8 +244,14 @@ ApplicationWindow {
             }
 
             Action {
-                text: "&About / Help"
+                text: "&Help"
                 icon.source: "assets/actions/help.svg"
+                onTriggered: rootStackView.push("qrc:/HelpPage.qml")
+            }
+
+            Action {
+                text: "&About"
+                icon.source: "assets/actions/about.svg"
                 onTriggered: rootStackView.push("qrc:/AboutPage.qml")
             }
         }
