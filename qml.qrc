@@ -44,5 +44,6 @@
         <file>assets/actions/about.svg</file>
         <file>assets/actions/help.svg</file>
         <file alias="HelpPage.qml">qml/ui/HelpPage.qml</file>
+        <file alias="DifficultView.qml">qml/ui/DifficultView.qml</file>
     </qresource>
 </RCC>

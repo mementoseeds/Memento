@@ -47,8 +47,6 @@ Item {
 
     function plantAction()
     {
-        globalBackend.loadSeedbox(directory)
-
         var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
         if (Object.keys(levelVariables).length !== 0)
             rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
@@ -143,7 +141,7 @@ Item {
                     Layout.bottomMargin: 20
 
                     ComboBox {
-                        model: ["Plant", "Water", "Auto learn", "Reset"]
+                        model: ["Plant", "Water", "Difficult", "Auto learn", "Reset"]
                         onActivated:
                         {
                             switch (currentText)
@@ -154,6 +152,10 @@ Item {
 
                                 case "Water":
                                     waterAction()
+                                    break
+
+                                case "Difficult":
+                                    rootStackView.push("qrc:/DifficultView.qml", {"courseDirectory": directory, "courseTitle": courseTitle, "items": items, "difficult": difficult})
                                     break
 
                                 case "Auto learn":
