@@ -198,7 +198,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Mock water", "Ignore", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Mock water", "Difficult", "Ignore", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -207,21 +207,31 @@ Item {
                                 case "Preview":
                                     rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getAllItems(), "actionType": "preview"})
                                     break
+
                                 case "Plant":
                                     plantAction()
                                     break
+
                                 case "Water":
                                     waterAction()
                                     break
+
                                 case "Mock water":
                                     mockWaterAction()
                                     break
+
                                 case "Reset":
                                     confirmLevelReset.visible = true
                                     break
+
+                                case "Difficult":
+                                    signalSource.showDifficult()
+                                    break
+
                                 case "Ignore":
                                     signalSource.showIgnore()
                                     break
+
                                 case "Auto learn":
                                     if (!levelCompleted)
                                     {
@@ -330,7 +340,7 @@ Item {
 
     Connections {
         target: globalBackend
-        function onAddLevelItem(id, test, prompt, planted, progress, ignored, difficult)
+        function onAddLevelItem(id, test, prompt, planted, progress, difficult, ignored)
         {
             levelEntryListModel.append({
                 "id": id,
@@ -339,7 +349,9 @@ Item {
                 "planted": planted,
                 "progress": planted ? progress + " <span style=font-size:" + iconSize + "pt style=color:" + globalBlue + ">" + waterIcon + "</span>"
                                                            : "<span style=font-size:" + iconSize + "pt style=color:" + globalGreen + ">" + plantIcon + "</span>",
+                "difficult": difficult,
                 "ignored": ignored,
+                "difficultVisible": false,
                 "ignoreVisible": false
                                        })
         }
@@ -353,7 +365,18 @@ Item {
             for (var i = 0; i < levelEntryListModel.count; i++)
             {
                 var item = levelEntryListModel.get(i)
+                item.difficultVisible = false
                 item.ignoreVisible = !item.ignoreVisible
+            }
+        }
+
+        function onShowDifficult()
+        {
+            for (var i = 0; i < levelEntryListModel.count; i++)
+            {
+                var item = levelEntryListModel.get(i)
+                item.ignoreVisible = false
+                item.difficultVisible = !item.difficultVisible
             }
         }
     }

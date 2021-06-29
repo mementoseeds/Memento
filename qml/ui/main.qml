@@ -76,6 +76,7 @@ ApplicationWindow {
         signal resumeTest()
         signal stopAllAudio()
         signal showIgnore()
+        signal showDifficult()
     }
 
     function showPassiveNotification(text, duration)

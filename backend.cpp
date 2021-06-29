@@ -226,8 +226,8 @@ void Backend::getLevelItems(QString levelPath)
             prompt,
             globalLevel["seeds"][id]["planted"].get<bool>(),
             getReviewTime(QString::fromStdString(globalLevel["seeds"][id]["nextWatering"].get<String>())),
-            globalLevel["seeds"][id]["ignored"].get<bool>(),
-            globalLevel["seeds"][id]["difficult"].get<bool>()
+            globalLevel["seeds"][id]["difficult"].get<bool>(),
+            globalLevel["seeds"][id]["ignored"].get<bool>()
                     );
     }
 

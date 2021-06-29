@@ -189,7 +189,7 @@ signals:
     void finishedAddingCourses();
 
     void addCourseLevel(QString levelPath, QString levelTitle, QString testColumn, QString promptColumn, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
-    void addLevelItem(QString id, QString test, QString prompt, bool planted, QString progress, bool ignored, bool difficult);
+    void addLevelItem(QString id, QString test, QString prompt, bool planted, QString progress, bool difficult, bool ignored);
     void finishedAddingLevel();
 
     void addItemDetails(QString type, QString name, QString content);

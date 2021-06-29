@@ -123,7 +123,7 @@ void Worker::doGetCourseDifficultItems(QString courseDirectory)
         {
             String id = item.key();
 
-            if (levelJson["seeds"][id]["difficult"].get<bool>())
+            if (levelJson["seeds"][id]["difficult"].get<bool>() && !levelJson["seeds"][id]["ignored"].get<bool>())
                 emit workerGetDifficultItemInfo(levelPath, QString::fromStdString(id), QString::fromStdString(levelJson["test"].get<String>()), QString::fromStdString(levelJson["prompt"].get<String>()));
         }
     }

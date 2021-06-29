@@ -47,11 +47,19 @@ Item {
             spacing: marginBase
 
             Button {
-                visible: ignoreVisible
+                visible: ignoreVisible || difficultVisible
                 width: this.Layout.preferredWidth
                 height: this.Layout.preferredHeight
-                text: ignoreIcon
-                font.pointSize: platformIsMobile ? 15 : 10
+
+                text:
+                {
+                    if (ignoreVisible)
+                        return ignoreIcon
+                    else if (difficultVisible)
+                        return difficultIcon
+                }
+
+                font.pointSize: 15
                 font.family: "Icons"
                 Layout.alignment: Qt.AlignLeft
                 Layout.preferredWidth: ignoreButtonContentItem.contentWidth * 2
@@ -62,17 +70,35 @@ Item {
                     text: parent.text
                     font: parent.font
                     opacity: enabled ? 1.0 : 0.3
-                    color: ignored ? "red" : "white"
+
+                    color:
+                    {
+                        if (ignoreVisible && ignored)
+                            return "red"
+                        else if (difficultVisible && difficult)
+                            return "yellow"
+                        else
+                            return "white"
+                    }
+
                     textFormat: Text.RichText
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
-                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 }
 
                 onClicked:
                 {
-                    ignored = !ignored
-                    globalBackend.ignoreItem(levelPath, id, ignored)
+                    if (ignoreVisible)
+                    {
+                        ignored = !ignored
+                        globalBackend.ignoreItem(levelPath, id, ignored)
+                    }
+
+                    else if (difficultVisible)
+                    {
+                        difficult = !difficult
+                        globalBackend.setDifficult(levelPath, id, difficult)
+                    }
                 }
             }
 
