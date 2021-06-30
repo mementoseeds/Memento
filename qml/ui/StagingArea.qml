@@ -252,9 +252,7 @@ Item {
                 for (var testLevel in testingContent)
                     total += testingContent[testLevel].length
 
-                var title = actionType === "water" ? "Watering " : "Reviewing "
-
-                replaceToolbar(title, totalWateringItems, total, totalWateringIndex, actionType)
+                replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
             }
 
             if (itemIndex < testingContent[level].length)

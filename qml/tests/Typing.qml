@@ -64,15 +64,7 @@ Item {
                     font.pointSize: 15
                     horizontalAlignment: TextInput.AlignHCenter
                     width: parent.width
-                    Material.accent: testColor[actionType]
-
-                    Component.onCompleted:
-                    {
-                        if (!tappingEnabled || !platformIsMobile)
-                            textfield.forceActiveFocus()
-                        else
-                            focus = true
-                    }
+                    Material.accent: toolbarBackground.color
 
                     onTextChanged:
                     {
@@ -190,6 +182,17 @@ Item {
             testHeader.answered()
 
             textfield.accepted()
+        }
+    }
+
+    Timer {
+        interval: 50
+        running: true
+        repeat: false
+        onTriggered:
+        {
+            if (!platformIsMobile || !tappingEnabled)
+                textfield.forceActiveFocus()
         }
     }
 }

@@ -803,6 +803,8 @@ QVariantMap Backend::getFirstIncompleteLevel(QString courseDirectory)
 
 void Backend::loadLevelJsons(QVariantList levels)
 {
+    jsonMap.clear();
+
     foreach (QVariant levelVar, levels)
     {
         QString levelPath = levelVar.toString();
