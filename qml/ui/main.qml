@@ -24,8 +24,8 @@ import QtQuick.Dialogs 1.3
 ApplicationWindow {
     id: root
     visible: true
-    width: !platformIsMobile ? 1500 : undefined
-    height: !platformIsMobile ? 1000 : undefined
+    width: userSettings["windowWidth"]
+    height: userSettings["windowHeight"]
     title: "Memento"
     color: "#333333"
     Material.theme: Material.Dark
@@ -142,6 +142,10 @@ ApplicationWindow {
     {
         if (_COURSES_REFRESHING_DO_NOT_CLOSE_)
             close.accepted = false
+
+        userSettings["windowHeight"] = root.height
+        userSettings["windowWidth"] = root.width
+        globalBackend.setUserSettings(userSettings)
     }
 
     Backend {

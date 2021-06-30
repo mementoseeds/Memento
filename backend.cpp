@@ -80,6 +80,9 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("previewTextFontSize", userSettings["previewTextFontSize"]);
     settings.setValue("testTextFontSize", userSettings["testTextFontSize"]);
     settings.setValue("testAttributesFontSize", userSettings["testAttributesFontSize"]);
+
+    settings.setValue("windowHeight", userSettings["windowHeight"]);
+    settings.setValue("windowWidth", userSettings["windowWidth"]);
 }
 
 QVariantMap Backend::getUserSettings()
@@ -104,6 +107,9 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("previewTextFontSize", settings.value("previewTextFontSize", previewTextFontSize).toInt());
     userSettings.insert("testTextFontSize", settings.value("testTextFontSize", testTextFontSize).toInt());
     userSettings.insert("testAttributesFontSize", settings.value("testAttributesFontSize", testAttributesFontSize).toInt());
+
+    userSettings.insert("windowHeight", settings.value("windowHeight", 1000).toInt());
+    userSettings.insert("windowWidth", settings.value("windowWidth", 1500).toInt());
 
     QVariantMap testCheck = userSettings["enabledTests"].toMap();
 
