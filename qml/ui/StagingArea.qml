@@ -35,11 +35,11 @@ Item {
     property var levels: []
     property int uniqueItemCount: 0
     property int totalWateringIndex: 0
-    property int levelIndex: 0
+    //property int levelIndex: 0
     property int itemIndex: 0
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
-    property var skippedItems: []
+    property var skippedItems: ({})
 
     // testingContent structure -->
     // outermost part - array
@@ -68,17 +68,21 @@ Item {
 
     function mistakenTest(levelPath, id)
     {
-//        if (actionType !== "difficult")
-//        {
-//            var test = {}
-//            test[id] = TestType.PREVIEW
-//            testingContent[levelPath].splice(itemIndex, 0, test)
+        if (actionType !== "difficult")
+        {
+            var test = {}
+            test[id] = TestType.PREVIEW
+            var levelItem = {}
+            levelItem[levelPath] = test
+            testingContent.splice(itemIndex, 0, levelItem)
 
-//            var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
-//            test = {}
-//            test[id] = getRandomTest()
-//            testingContent[levelPath].splice(newRandomPosition, 0, test)
-//        }
+            var newRandomPosition = Math.floor((Math.random() * (testingContent.length - itemIndex)) + 1) + itemIndex
+            test = {}
+            test[id] = getRandomTest()
+            levelItem = {}
+            levelItem[levelPath] = test
+            testingContent.splice(newRandomPosition, 0, levelItem)
+        }
 //        else
 //        {
 //            skippedItems.push(id)
@@ -91,12 +95,13 @@ Item {
 
     function autoLearnItem(levelPath, itemId)
     {
-//        if (actionType === "plant")
-//        {
-//            skippedItems.push(itemId)
-//            globalBackend.autoLearnItem(levelPath, itemId, 1)
-//            triggerNextItem()
-//        }
+        if (actionType === "plant")
+        {
+            skippedItems[levelPath].push(itemId)
+
+            globalBackend.autoLearnItem(levelPath, itemId, 1)
+            triggerNextItem()
+        }
     }
 
     Component.onCompleted:
@@ -129,33 +134,37 @@ Item {
             for (level in testingContentOriginal)
             {
                 itemArray = testingContentOriginal[level]
-                uniqueItemCount = itemArray.length
-                testingContent[level] = []
 
                 for (id in itemArray)
                 {
                     test = {}
                     test[itemArray[id]] = TestType.PREVIEW
-                    testingContent[level].push(test)
+                    levelItem = {}
+                    levelItem[level] = test
+                    testingContent.push(levelItem)
 
                     test = {}
                     test[itemArray[id]] = userSettings["enabledTests"]["enabledMultipleChoice"] ? TestType.MULTIPLECHOICE : getRandomTest()
-                    testingContent[level].push(test)
+                    levelItem = {}
+                    levelItem[level] = test
+                    testingContent.push(levelItem)
                 }
-
-                var unorderedTests = []
-                for (var i = 0; i < 4; i++)
-                {
-                    for (id in itemArray)
-                    {
-                        test = {}
-                        test[itemArray[id]] = getRandomTest()
-                        unorderedTests.push(test)
-                    }
-                }
-
-                testingContent[level] = testingContent[level].concat(unorderedTests.sort(() => Math.random() - 0.5))
             }
+
+            var unorderedTests = []
+            for (var i = 0; i < 4; i++)
+            {
+                for (id in itemArray)
+                {
+                    test = {}
+                    test[itemArray[id]] = getRandomTest()
+                    levelItem = {}
+                    levelItem[level] = test
+                    testingContent.push(levelItem)
+                }
+            }
+
+            testingContent = testingContent.concat(unorderedTests.sort(() => Math.random() - 0.5))
         }
         else if (actionType === "water")
         {
@@ -219,27 +228,32 @@ Item {
 
             return
         }
-        else if (actionType === "plant")
-        {
-            replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
-        }
-        else if (actionType === "water" || actionType === "difficult")
-        {
-            var total = 0
-            for (var testLevel in testingContent)
-                total += testingContent[testLevel].length
 
-            replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
-        }
-
-        if (itemIndex < testingContent[level].length)
+        if (itemIndex < testingContent.length)
         {
             level = Object.keys(testingContent[itemIndex]).toString()
             columns = globalBackend.getLevelColumns(level)
-            var itemId = Object.keys(testingContent[level][itemIndex]).toString()
+            var itemId = Object.keys(testingContent[itemIndex][level]).toString()
+
+            //Setup skipped items container
+            if (!Array.isArray(skippedItems[level]))
+                skippedItems[level] = []
+
+            if (actionType === "plant")
+            {
+                replaceToolbar("Planting ", testingContentOriginal[level].length, testingContent.length, itemIndex, actionType)
+            }
+            else if (actionType === "water" || actionType === "difficult")
+            {
+                var total = 0
+                for (var testLevel in testingContent)
+                    total += testingContent[testLevel].length
+
+                replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
+            }
 
             //Skip over this item if the user has requested a skip
-            if (skippedItems.includes(itemId))
+            if (skippedItems[level].includes(itemId))
             {
                 itemIndex++
                 triggerNextItem()
@@ -248,7 +262,7 @@ Item {
             }
 
             //Random chance to switch test and prompt columns if the next test is multiple choice
-            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
+            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[itemIndex][level][itemId] === TestType.MULTIPLECHOICE)
             {
                 var tempColumn = columns[0]
                 var testColumn = columns[1]
@@ -264,7 +278,7 @@ Item {
             var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
 
             testLoader.active = false
-            switch (testingContent[level][itemIndex][itemId])
+            switch (testingContent[itemIndex][level][itemId])
             {
                 case TestType.PREVIEW:
                     testLoader.setSource("qrc:/Preview.qml", variables)
@@ -283,7 +297,7 @@ Item {
 
             testLoader.active = true
             itemIndex++
-            totalWateringIndex++
+            //totalWateringIndex++
         }
         else
         {
