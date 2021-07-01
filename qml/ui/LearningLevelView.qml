@@ -174,7 +174,20 @@ Item {
             "itemAmount": itemAmount})
     }
 
+    Shortcut {
+        sequence: "Home"
+        enabled: rootStackView.currentItem.objectName === "LearningLevelView.qml"
+        onActivated: itemsListView.positionViewAtBeginning()
+    }
+
+    Shortcut {
+        sequence: "End"
+        enabled: rootStackView.currentItem.objectName === "LearningLevelView.qml"
+        onActivated: itemsListView.positionViewAtEnd()
+    }
+
     ListView {
+        id: itemsListView
         anchors.fill: parent
         spacing: 20
         ScrollBar.vertical: ScrollBar {width: 10}

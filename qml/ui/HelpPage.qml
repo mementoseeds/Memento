@@ -27,7 +27,9 @@ Item {
     property string helpText: "## Useful shortcuts for PC\n
 Escape - same as pressing back button in top right corner\n
 Ctrl + p - open settings\n
-Alt + r - refresh course list\n\n
+Alt + r - refresh course list\n
+Home - move scrollable page to top\n
+End - move scrollable page to bottom\n\n
 
 ### In any level\n
 Left / Right arrow keys - move levels back and forward\n\n

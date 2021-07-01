@@ -64,7 +64,20 @@ Item {
             showPassiveNotification("This course has no planted items")
     }
 
+    Shortcut {
+        sequence: "Home"
+        enabled: rootStackView.currentItem.objectName === "CourseInterior.qml"
+        onActivated: levelsGridView.positionViewAtBeginning()
+    }
+
+    Shortcut {
+        sequence: "End"
+        enabled: rootStackView.currentItem.objectName === "CourseInterior.qml"
+        onActivated: levelsGridView.positionViewAtEnd()
+    }
+
     GridView {
+        id: levelsGridView
         anchors.fill: parent
         ScrollBar.vertical: ScrollBar{width: 10}
         maximumFlickVelocity: 6000

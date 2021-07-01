@@ -44,6 +44,18 @@ Item {
             signalSource.refreshAllCourses()
     }
 
+    Shortcut {
+        sequence: "Home"
+        enabled: rootStackView.currentItem.objectName === "CourseList.qml"
+        onActivated: courseList.positionViewAtBeginning()
+    }
+
+    Shortcut {
+        sequence: "End"
+        enabled: rootStackView.currentItem.objectName === "CourseList.qml"
+        onActivated: courseList.positionViewAtEnd()
+    }
+
     Label {
         id: courseListEmptyHeading
         text: "Your course list is empty. Download some courses or set your courses directory from the settings"
