@@ -31,7 +31,7 @@ Item {
     property bool mockWater: false
     property bool difficultReview: false
 
-    property var testingContent: ({})
+    property var testingContent: []
     property var levels: []
     property int uniqueItemCount: 0
     property int totalWateringIndex: 0
@@ -42,31 +42,9 @@ Item {
     property var skippedItems: []
 
     // testingContent structure -->
-    // dictionary of lists of dictionaries
-    // outer dictionary has level paths as keys and lists as values
-    // lists contain dictionaries
-    // inner dictionary has seed IDs as keys and enumerated test types as values
-    // example
-    /*
-{
-    "path/to/course/levels/00001.json": [
-        {
-            "67742594": 1
-        },
-        {
-            "67742595": 2
-        }
-    ],
-    "path/to/course/levels/00002.json": [
-        {
-            "67742596": 1
-        },
-        {
-            "67742597": 3
-        }
-    ]
-}
-    */
+    // outermost part - array
+    // array holds dictionary of level path + dictionary
+    // second dictionary holds item ID + test ID
 
     Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle())
 
@@ -90,35 +68,35 @@ Item {
 
     function mistakenTest(levelPath, id)
     {
-        if (actionType !== "difficult")
-        {
-            var test = {}
-            test[id] = TestType.PREVIEW
-            testingContent[levelPath].splice(itemIndex, 0, test)
+//        if (actionType !== "difficult")
+//        {
+//            var test = {}
+//            test[id] = TestType.PREVIEW
+//            testingContent[levelPath].splice(itemIndex, 0, test)
 
-            var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
-            test = {}
-            test[id] = getRandomTest()
-            testingContent[levelPath].splice(newRandomPosition, 0, test)
-        }
-        else
-        {
-            skippedItems.push(id)
+//            var newRandomPosition = Math.floor((Math.random() * (testingContent[levelPath].length - itemIndex)) + 1) + itemIndex
+//            test = {}
+//            test[id] = getRandomTest()
+//            testingContent[levelPath].splice(newRandomPosition, 0, test)
+//        }
+//        else
+//        {
+//            skippedItems.push(id)
 
-            for (var i = 0; i < testingContentOriginal[levelPath].length; i++)
-                if (testingContentOriginal[levelPath][i] === id)
-                    testingContentOriginal[levelPath].splice(i, 1)
-        }
+//            for (var i = 0; i < testingContentOriginal[levelPath].length; i++)
+//                if (testingContentOriginal[levelPath][i] === id)
+//                    testingContentOriginal[levelPath].splice(i, 1)
+//        }
     }
 
     function autoLearnItem(levelPath, itemId)
     {
-        if (actionType === "plant")
-        {
-            skippedItems.push(itemId)
-            globalBackend.autoLearnItem(levelPath, itemId, 1)
-            triggerNextItem()
-        }
+//        if (actionType === "plant")
+//        {
+//            skippedItems.push(itemId)
+//            globalBackend.autoLearnItem(levelPath, itemId, 1)
+//            triggerNextItem()
+//        }
     }
 
     Component.onCompleted:
@@ -135,13 +113,14 @@ Item {
             for (var level in testingContentOriginal)
             {
                 var itemArray = testingContentOriginal[level]
-                testingContent[level] = []
 
                 for (var id in itemArray)
                 {
                     var test = {}
                     test[itemArray[id]] = TestType.PREVIEW
-                    testingContent[level].push(test)
+                    var levelItem = {}
+                    levelItem[level] = test
+                    testingContent.push(levelItem)
                 }
             }
         }
@@ -221,98 +200,90 @@ Item {
 
     function triggerNextItem()
     {
-        if (levelIndex < levels.length)
+        if (actionType === "preview")
         {
-            var level = levels[levelIndex]
-            var columns = globalBackend.getLevelColumns(level)
+            replaceToolbar("Previewing ", testingContent.length, testingContent.length, itemIndex, actionType)
 
-            if (actionType === "preview")
-            {
-                replaceToolbar("Previewing ", testingContent[level].length, testingContent[level].length, itemIndex, actionType)
-
-                if (itemIndex < testingContent[level].length)
+                if (itemIndex < testingContent.length)
                 {
+                    var level = Object.keys(testingContent[itemIndex]).toString()
+                    var columns = globalBackend.getLevelColumns(level)
+
                     testLoader.active = false
-                    testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[level][itemIndex]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
+                    testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
                     testLoader.active = true
                     itemIndex++
                 }
                 else
                     rootStackView.pop()
 
+            return
+        }
+        else if (actionType === "plant")
+        {
+            replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
+        }
+        else if (actionType === "water" || actionType === "difficult")
+        {
+            var total = 0
+            for (var testLevel in testingContent)
+                total += testingContent[testLevel].length
+
+            replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
+        }
+
+        if (itemIndex < testingContent[level].length)
+        {
+            level = Object.keys(testingContent[itemIndex]).toString()
+            columns = globalBackend.getLevelColumns(level)
+            var itemId = Object.keys(testingContent[level][itemIndex]).toString()
+
+            //Skip over this item if the user has requested a skip
+            if (skippedItems.includes(itemId))
+            {
+                itemIndex++
+                triggerNextItem()
+                //Return otherwise crashes at the result
                 return
             }
-            else if (actionType === "plant")
+
+            //Random chance to switch test and prompt columns if the next test is multiple choice
+            if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
             {
-                replaceToolbar("Planting ", uniqueItemCount, testingContent[level].length, itemIndex, actionType)
-            }
-            else if (actionType === "water" || actionType === "difficult")
-            {
-                var total = 0
-                for (var testLevel in testingContent)
-                    total += testingContent[testLevel].length
-
-                replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
-            }
-
-            if (itemIndex < testingContent[level].length)
-            {
-                var itemId = Object.keys(testingContent[level][itemIndex]).toString()
-
-                //Skip over this item if the user has requested a skip
-                if (skippedItems.includes(itemId))
-                {
-                    itemIndex++
-                    triggerNextItem()
-                    //Return otherwise crashes at the result
-                    return
-                }
-
-                //Random chance to switch test and prompt columns if the next test is multiple choice
-                if (Math.random() < 0.5 && userSettings["enableTestPromptSwitch"] && testingContent[level][itemIndex][itemId] === TestType.MULTIPLECHOICE)
-                {
-                    var tempColumn = columns[0]
-                    var testColumn = columns[1]
-                    var promptColumn = tempColumn
-                    delete tempColumn
-                }
-                else
-                {
-                    testColumn = columns[0]
-                    promptColumn = columns[1]
-                }
-
-                var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
-
-                testLoader.active = false
-                switch (testingContent[level][itemIndex][itemId])
-                {
-                    case TestType.PREVIEW:
-                        testLoader.setSource("qrc:/Preview.qml", variables)
-                        break
-
-                    case TestType.MULTIPLECHOICE:
-                        testLoader.setSource("qrc:/MultipleChoice.qml", variables)
-                        break
-
-                    case TestType.TAPPING:
-                        variables["tappingEnabled"] = true
-                    case TestType.TYPING:
-                        testLoader.setSource("qrc:/Typing.qml", variables)
-                        break
-                }
-
-                testLoader.active = true
-                itemIndex++
-                totalWateringIndex++
+                var tempColumn = columns[0]
+                var testColumn = columns[1]
+                var promptColumn = tempColumn
+                delete tempColumn
             }
             else
             {
-                levelIndex++
-                skippedItems = []
-                itemIndex = 0
-                triggerNextItem()
+                testColumn = columns[0]
+                promptColumn = columns[1]
             }
+
+            var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
+
+            testLoader.active = false
+            switch (testingContent[level][itemIndex][itemId])
+            {
+                case TestType.PREVIEW:
+                    testLoader.setSource("qrc:/Preview.qml", variables)
+                    break
+
+                case TestType.MULTIPLECHOICE:
+                    testLoader.setSource("qrc:/MultipleChoice.qml", variables)
+                    break
+
+                case TestType.TAPPING:
+                    variables["tappingEnabled"] = true
+                case TestType.TYPING:
+                    testLoader.setSource("qrc:/Typing.qml", variables)
+                    break
+            }
+
+            testLoader.active = true
+            itemIndex++
+            totalWateringIndex++
         }
         else
         {
