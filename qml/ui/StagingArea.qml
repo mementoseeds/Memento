@@ -32,7 +32,6 @@ Item {
     property bool difficultReview: false
 
     property var testingContent: []
-    property var levels: []
     property int itemIndex: 0
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
@@ -80,14 +79,14 @@ Item {
             levelItem[levelPath] = test
             testingContent.splice(newRandomPosition, 0, levelItem)
         }
-//        else
-//        {
-//            skippedItems.push(id)
+        else
+        {
+            skippedItems[levelPath].push(id)
 
-//            for (var i = 0; i < testingContentOriginal[levelPath].length; i++)
-//                if (testingContentOriginal[levelPath][i] === id)
-//                    testingContentOriginal[levelPath].splice(i, 1)
-//        }
+            for (var i = 0; i < testingContentOriginal[levelPath].length; i++)
+                if (testingContentOriginal[levelPath][i] === id)
+                    testingContentOriginal[levelPath].splice(i, 1)
+        }
     }
 
     function autoLearnItem(levelPath, itemId)
@@ -107,8 +106,7 @@ Item {
         globalBackend.setReviewType(manualReview, mockWater, difficultReview)
         globalBackend.loadCourseInfo(courseDirectory)
 
-        levels = Object.keys(testingContentOriginal)
-        globalBackend.loadLevelJsons(levels)
+        globalBackend.loadLevelJsons(Object.keys(testingContentOriginal))
 
         if (actionType === "preview")
         {
@@ -186,8 +184,6 @@ Item {
             for (level in testingContentOriginal)
             {
                 itemArray = testingContentOriginal[level]
-                uniqueItemCount = itemArray.length
-                testingContent[level] = []
 
                 for (i = 0; i < 3; i++)
                 {
@@ -195,11 +191,13 @@ Item {
                     {
                         test = {}
                         test[itemArray[id]] = getRandomTest()
-                        testingContent[level].push(test)
+                        levelItem = {}
+                        levelItem[level] = test
+                        testingContent.push(levelItem)
                     }
                 }
 
-                testingContent[level].sort(() => Math.random() - 0.5)
+                testingContent.sort(() => Math.random() - 0.5)
             }
         }
     }
