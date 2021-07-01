@@ -33,9 +33,6 @@ Item {
 
     property var testingContent: []
     property var levels: []
-    property int uniqueItemCount: 0
-    property int totalWateringIndex: 0
-    //property int levelIndex: 0
     property int itemIndex: 0
     property int correctAnswerCounter: 0
     property int wrongAnswerCounter: 0
@@ -171,17 +168,17 @@ Item {
             for (level in testingContentOriginal)
             {
                 itemArray = testingContentOriginal[level]
-                uniqueItemCount = itemArray.length
-                testingContent[level] = []
 
                 for (id in itemArray)
                 {
                     test = {}
                     test[itemArray[id]] = getRandomTest()
-                    testingContent[level].push(test)
+                    levelItem = {}
+                    levelItem[level] = test
+                    testingContent.push(levelItem)
                 }
 
-                testingContent[level].sort(() => Math.random() - 0.5)
+                testingContent.sort(() => Math.random() - 0.5)
             }
         }
         else if (actionType === "difficult")
@@ -245,11 +242,7 @@ Item {
             }
             else if (actionType === "water" || actionType === "difficult")
             {
-                var total = 0
-                for (var testLevel in testingContent)
-                    total += testingContent[testLevel].length
-
-                replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, total, totalWateringIndex, actionType)
+                replaceToolbar(actionType === "water" ? "Watering " : "Reviewing ", totalWateringItems, testingContent.length, itemIndex, actionType)
             }
 
             //Skip over this item if the user has requested a skip
@@ -297,7 +290,6 @@ Item {
 
             testLoader.active = true
             itemIndex++
-            //totalWateringIndex++
         }
         else
         {
