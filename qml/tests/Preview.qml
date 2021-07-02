@@ -90,8 +90,13 @@ Item {
         }
 
         footer: ListView {
-            width: root.width / 2
-            height: 500
+            id: mnemonicsListView
+
+            property real mnemonicWidth: platformIsMobile ? (root.width - marginBase * 2) : (root.width / 2)
+            property real mnemonicHeight: platformIsMobile ? 200 : 500
+
+            width: mnemonicWidth
+            height: mnemonicHeight
             ScrollBar.horizontal: ScrollBar {height: 10}
             anchors {left: parent.left; right: parent.right}
             orientation: ListView.Horizontal
@@ -99,7 +104,7 @@ Item {
             model: ListModel{id: mnemonicsPreviewListModel}
             spacing: marginBase
 
-            delegate: MnemonicEntry {width: root.width / 2; height: 500}
+            delegate: MnemonicEntry {width: mnemonicWidth; height: mnemonicHeight}
 
             Component.onCompleted: globalBackend.getAllMnemonics(itemId)
 

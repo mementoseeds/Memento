@@ -23,6 +23,8 @@ import QtQuick.Controls.Material.impl 2.12
 Item {
     property int marginBase: 10
 
+    property bool mouseAreaEnabled: true
+
     property bool textPresent: mnemonicText.length > 0
     property bool imagePresent: mnemonicImagePath.length > 0
 
@@ -34,7 +36,7 @@ Item {
             id: mnemonicImage
             anchors {top: parent.top; left: parent.left; right: parent.right}
             source: imagePresent ? Qt.resolvedUrl("file:/" + courseDirectory + "/" + mnemonicImagePath) : ""
-            sourceSize.height: parent.height - (textPresent ? parent.height / 2 : 0)
+            height: parent.height - (textPresent ? parent.height / 2 : 0)
             fillMode: Image.PreserveAspectFit
         }
 
@@ -69,6 +71,7 @@ Item {
     MouseArea {
         id: mnemonicMouseArea
         anchors.fill: parent
+        enabled: mouseAreaEnabled
         onClicked: signalSource.setMnemonic(mnemonicId)
     }
 }

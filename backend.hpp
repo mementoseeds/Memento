@@ -173,6 +173,7 @@ public:
 
     Q_INVOKABLE void getAllMnemonics(QString itemId);
     Q_INVOKABLE void setMnemonic(QString levelPath, QString itemId, QString mnemonicId);
+    Q_INVOKABLE QVariantMap getMnemonic(QString levelPath, QString itemId);
 
     enum TestType
     {

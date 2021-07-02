@@ -1076,3 +1076,24 @@ void Backend::setMnemonic(QString levelPath, QString itemId, QString mnemonicId)
 
     emit showPassiveNotification(message);
 }
+
+QVariantMap Backend::getMnemonic(QString levelPath, QString itemId)
+{
+    String id = itemId.toStdString();
+    QString mnemonicId = QString::fromStdString(jsonMap[levelPath]["seeds"][id]["mnemonic"].get<String>());
+    if (!mnemonicId.isEmpty())
+    {
+        String stdMnemonicId = mnemonicId.toStdString();
+        QVariantMap mnemonicData
+        {
+            {"mnemonicId", mnemonicId},
+            {"mnemonicAuthor", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["author"].get<String>())},
+            {"mnemonicText", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["text"].get<String>())},
+            {"mnemonicImagePath", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["image"].get<String>())}
+        };
+
+        return mnemonicData;
+    }
+    else
+        return QVariantMap();
+}

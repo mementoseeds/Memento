@@ -21,13 +21,14 @@ import QtMultimedia 5.15
 
 ColumnLayout {
     id: testHeader
-    signal stopHeaderAudio()
+
     property alias cooldownTimer: cooldownTimer
     property alias countdownTimer: countdownTimer
     property alias radialBarText: radialBar.showText
     property int testHeaderHeight: 0
     property bool testRunning: true
 
+    signal stopHeaderAudio()
     signal countdownReached()
 
     spacing: 20
@@ -56,8 +57,29 @@ ColumnLayout {
     }
 
     RowLayout {
-        Layout.fillWidth: true
+        Layout.preferredWidth: parent.width
         Layout.alignment: Qt.AlignCenter
+
+        Repeater {
+            id: mnemonicRepeater
+            Layout.alignment: Qt.AlignLeft
+            Layout.preferredWidth: root.width / 3
+
+            property var mnemonicData: globalBackend.getMnemonic(levelPath, itemId)
+
+            model: ListModel {id: mnemonicModel}
+
+            delegate: MnemonicEntry {width: radialBar.width; height: radialBar.height; mouseAreaEnabled: false}
+
+            Component.onCompleted:
+            {
+                if (Object.keys(mnemonicData).length !== 0)
+                    mnemonicModel.append({"mnemonicId": mnemonicData["mnemonicId"], "mnemonicAuthor": mnemonicData["mnemonicAuthor"],
+                        "mnemonicText": mnemonicData["mnemonicText"], "mnemonicImagePath": mnemonicData["mnemonicImagePath"]})
+                else
+                    mnemonicModel.append({"mnemonicId": "", "mnemonicAuthor": "", "mnemonicText": "", "mnemonicImagePath": ""})
+            }
+        }
 
         RadialBar {
             id: radialBar
@@ -67,18 +89,24 @@ ColumnLayout {
             showText: "Countdown"
             Layout.topMargin: 10
             Layout.alignment: Qt.AlignCenter
-            Layout.leftMargin: autoLearnItemButton.visible ? autoLearnItemButton.width : 0
+            Layout.preferredWidth: root.width / 3
+            Layout.leftMargin: marginBase * -1
+
         }
 
-        RoundButton {
-            id: autoLearnItemButton
-            visible: actionType === "plant" && userSettings["showAutoLearnOnTests"]
-            radius: 5
-            text: "Auto learn"
-            icon.source: "assets/actions/autoLearn.svg"
-            font.capitalization: Font.MixedCase
+        RowLayout {
             Layout.alignment: Qt.AlignRight
-            onClicked: autoLearnItem(levelPath, itemId)
+            Layout.preferredWidth: root.width / 3
+
+            RoundButton {
+                id: autoLearnItemButton
+                visible: actionType === "plant" && userSettings["showAutoLearnOnTests"]
+                radius: 5
+                text: "Auto learn"
+                icon.source: "assets/actions/autoLearn.svg"
+                font.capitalization: Font.MixedCase
+                onClicked: autoLearnItem(levelPath, itemId)
+            }
         }
     }
 
