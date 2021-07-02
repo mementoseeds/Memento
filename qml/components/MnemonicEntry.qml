@@ -56,6 +56,7 @@ Item {
             minimumPointSize: 5
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
         }
 
         Ripple {
