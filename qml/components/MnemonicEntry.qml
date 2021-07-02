@@ -17,6 +17,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
+import QtQuick.Controls.Material 2.12
+import QtQuick.Controls.Material.impl 2.12
 
 Item {
     property int marginBase: 10
@@ -31,7 +33,7 @@ Item {
         Image {
             id: mnemonicImage
             anchors {top: parent.top; left: parent.left; right: parent.right}
-            source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + mnemonicImagePath)
+            source: imagePresent ? Qt.resolvedUrl("file:/" + courseDirectory + "/" + mnemonicImagePath) : ""
             sourceSize.height: parent.height - (textPresent ? parent.height / 2 : 0)
             fillMode: Image.PreserveAspectFit
         }
@@ -53,10 +55,20 @@ Item {
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
         }
+
+        Ripple {
+            id: ripple
+            anchors.fill: parent
+            clipRadius: 4
+            active: mnemonicMouseArea.containsMouse
+            pressed: mnemonicMouseArea.pressed
+            color: "#20FFFFFF"
+        }
     }
 
     MouseArea {
+        id: mnemonicMouseArea
         anchors.fill: parent
-        onClicked: console.debug("Chosen")
+        onClicked: signalSource.setMnemonic(mnemonicId)
     }
 }

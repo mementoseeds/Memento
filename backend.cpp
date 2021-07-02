@@ -1041,3 +1041,38 @@ void Backend::getAllMnemonics(QString itemId)
             QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["text"].get<String>()), QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["image"].get<String>()));
     }
 }
+
+void Backend::setMnemonic(QString levelPath, QString itemId, QString mnemonicId)
+{
+    String stdItemId = itemId.toStdString();
+    Json levelJson;
+    {
+        std::ifstream levelFile(levelPath.toStdString());
+        levelFile >> levelJson;
+        levelFile.close();
+    }
+
+    QString existingMnemonic = QString::fromStdString(levelJson["seeds"][stdItemId]["mnemonic"].get<String>());
+
+    String newMnemonic;
+    QString message;
+    if (existingMnemonic.compare(mnemonicId) != 0)
+    {
+        newMnemonic = mnemonicId.toStdString();
+        message = "Set mnemonic";
+    }
+    else
+    {
+        newMnemonic = "";
+        message = "Unset mnemonic";
+    }
+
+    levelJson["seeds"][itemId.toStdString()]["mnemonic"] = newMnemonic;
+    jsonMap[levelPath]["seeds"][itemId.toStdString()]["mnemonic"] = newMnemonic;
+
+    std::ofstream levelFile(levelPath.toStdString());
+    levelFile << levelJson.dump(jsonIndent) << std::endl;
+    levelFile.close();
+
+    emit showPassiveNotification(message);
+}

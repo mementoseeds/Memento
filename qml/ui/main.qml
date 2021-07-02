@@ -76,6 +76,7 @@ ApplicationWindow {
         signal stopAllAudio()
         signal showIgnore()
         signal showDifficult()
+        signal setMnemonic(string mnemonicId)
     }
 
     function showPassiveNotification(text, duration)

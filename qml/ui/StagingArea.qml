@@ -100,6 +100,17 @@ Item {
         }
     }
 
+    Connections {
+        target: signalSource
+
+        function onSetMnemonic(mnemonicId)
+        {
+            var index = itemIndex - 1
+            var level = Object.keys(testingContent[index]).toString()
+            globalBackend.setMnemonic(level, Object.keys(testingContent[index][level]).toString(), mnemonicId)
+        }
+    }
+
     Component.onCompleted:
     {
         signalSource.stopAllAudio()
