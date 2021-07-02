@@ -24,18 +24,22 @@ Item {
 
     objectName: "HelpPage.qml"
 
-    property string helpText: "## Useful shortcuts for PC\n
+    property string helpText: "## Useful shortcuts for PC\n\n
+
+### Global\n
 Escape - same as pressing back button in top right corner\n
 Ctrl + p - open settings\n
-Alt + r - refresh course list\n
 Home - move scrollable page to top\n
 End - move scrollable page to bottom\n\n
+
+### In course list\n
+Alt + r - refresh course list\n\n
 
 ### In any level\n
 Left / Right arrow keys - move levels back and forward\n\n
 
-### In learning levels\n
-Enter / Return - start planting or watering session\n\n
+### In learning levels or difficult review page\n
+Enter / Return - start planting, watering, or difficult review session\n\n
 
 ### In preview
 Left arrow - go back\n
@@ -63,14 +67,14 @@ An item's streak counter determines its next watering (review) date in the follo
 10 = 270 days\n
 11 = 1 year\n
 12 and above will result in 1 year again\n
-When an item's review date arrives, answering it correctly will increment its streak and push back its next review date. If you choose incorrectly its streak will be reset to 1.
+When an item's watering date arrives, answering it correctly will increment its streak and push back its next watering date. If you choose incorrectly its streak will be reset to 1.
 If you initiate a watering session while there are no items that need watering, choosing correctly will not increment the streak counter, but choosing incorrectly will still reset it to 1.\n
 It is possible to initiate a \"Mock water\" session which starts a test for all items in a level, whether they are planted or not, and no progress is saved.\n\n
 
 ## Difficult items\n
 You can see which items throughout an entire course are difficult by pressing the dropdown menu in a course and pressing \"Difficult\".
  In this page you can initiate a review of all difficult items or remove them.\n
-It is also possible to view, mark and unmark certain items as difficult from the level themselves.\n
+It is also possible to view, mark and unmark certain items as difficult from the levels themselves.\n
 During a review of all difficult items, you must answer correctly 3 times for the item to be unmarked as difficult.
  If you answer incorrectly it will remain marked difficult until you start another review session."
 

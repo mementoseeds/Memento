@@ -66,6 +66,12 @@ Item {
         header: ColumnLayout {
             width: parent.width
 
+            Shortcut {
+                sequences: ["Enter", "Return"]
+                enabled: rootStackView.currentItem.objectName !== "StagingArea.qml" && rootStackView.currentItem.objectName !== "ResultSummary.qml"
+                onActivated: reviewButton.clicked()
+            }
+
             ColumnLayout {
                 Layout.topMargin: marginBase
                 Layout.leftMargin: marginBase
