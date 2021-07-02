@@ -74,5 +74,5 @@ if len(args) == 0:
 
 for a in args:
     course = MemriseCourse(a)
-    course.autoScrape(destination, minLevel, maxLevel, skipAudio)
+    course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
     print()

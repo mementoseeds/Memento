@@ -19,12 +19,14 @@ from os.path import join
 import re
 import json
 import requests
+from pprint import pprint
 from bs4 import BeautifulSoup
 
 class MemriseCourse():
 
     memriseApi = "https://app.memrise.com/api/"
     memriseImages = "https://static.memrise.com/"
+    memriseUrl = "https://app.memrise.com"
 
     thingPattern = re.compile("thing \w+-\w+")
     testColumnTypePattern = re.compile("col_a col \w+")
@@ -35,6 +37,7 @@ class MemriseCourse():
         print("Gathering preliminary data")
 
         self.itemPools = {}
+        self.itemLearnables = {}
         self.level = []
         self.itemCount = 0
 
@@ -139,8 +142,12 @@ class MemriseCourse():
                 print("***ERROR*** This level is empty")
                 continue
 
-            # Gather item IDs in level
-            levelContent["items"] = [div["data-thing-id"] for div in soup.find_all("div", class_ = MemriseCourse.thingPattern)]
+            # Gather item IDs
+            levelContent["items"] = []
+            for item in soup.find_all("div", class_ = MemriseCourse.thingPattern):
+                levelContent["items"].append(item["data-thing-id"])
+                self.itemLearnables[item["data-thing-id"]] = item["data-learnable-id"]
+
             self.itemCount += len(levelContent["items"])
 
             # Get level columns
@@ -194,9 +201,10 @@ class MemriseCourse():
         json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w"), indent = 4, ensure_ascii = False)
 
     
-    def buildSeedbox(self, skipAudio):
+    def buildSeedbox(self, skipAudio, skipMnemonics):
         print("Finding unique items across all levels")
 
+        self.mnemonics = {}
         self.seedbox = {}
         uniqueItems = []
         for lvl in self.level:
@@ -269,6 +277,27 @@ class MemriseCourse():
 
                             self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["alternative"] = [alt["val"] for alt in itemInfo["thing"]["columns"][column]["alts"]] if len(itemInfo["thing"]["columns"][column]["alts"]) > 0 else []
 
+                    # Mnemonics
+                    if not skipMnemonics:
+                        print("Scraping mnemonics")
+                        mnemonicsJson = requests.get(MemriseCourse.memriseApi + "mem/get_many_for_thing/?thing_id=" + key + "&learnable_id=" + self.itemLearnables[key]).json()
+                        
+                        self.mnemonics[key] = {}
+                        for mem in mnemonicsJson["mems"]:
+                            memId = str(mem["id"])
+
+                            self.mnemonics[key][memId] = {}
+                            self.mnemonics[key][memId]["author"] = mem["author"]["username"]
+                            self.mnemonics[key][memId]["text"] = mem["text"]
+
+                            if mem["image_original"]:
+                                imageTitle = "mnemonic-" + key + "-" + memId + ".jpg"
+                                open(join(self.courseDir, "assets", "images", imageTitle), "wb").write(requests.get(MemriseCourse.memriseUrl + mem["image_original"]).content)
+                                self.mnemonics[key][memId]["image"] = "assets/images/" + imageTitle
+                            else:
+                                self.mnemonics[key][memId]["image"] = ""
+
+
                 except KeyError:
                     print("\nSwitching database\n")
                     newPoolId = itemInfo["thing"]["pool_id"]
@@ -279,6 +308,7 @@ class MemriseCourse():
     def writeSeedbox(self):
         print("Writing seedbox.json")
         json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w"), indent = 4, ensure_ascii = False)
+        json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w"), indent = 4, ensure_ascii = False)
 
     def createLevels(self):
         print("Creating level files")
@@ -301,23 +331,23 @@ class MemriseCourse():
 
                 seeds = {}
                 for item in self.level[i]["items"]:
-                    seeds[item] = {}
-                    seeds[item]["planted"] = False
-                    seeds[item]["nextWatering"] = ""
-                    seeds[item]["ignored"] = False
-                    seeds[item]["difficult"] = False
-                    seeds[item]["successes"] = 0
-                    seeds[item]["failures"] = 0
-                    seeds[item]["streak"] = 0
+                    seeds[item] = {"planted": False,
+                    "nextWatering": "",
+                    "ignored": False,
+                    "difficult": False,
+                    "successes": 0,
+                    "failures": 0,
+                    "streak": 0,
+                    "mnemonic": ""}
                 
                 levelInfo["seeds"] = seeds
 
                 json.dump(levelInfo, levelFile, indent = 4, ensure_ascii = False)
                 levelFile.close()
 
-    def autoScrape(self, destination, minLevel, maxLevel, skipAudio):
+    def autoScrape(self, destination, minLevel, maxLevel, skipAudio, skipMnemonics):
         self.scrapeLevels(minLevel, maxLevel)
         self.writeCourseInfo(destination)
-        self.buildSeedbox(skipAudio)
+        self.buildSeedbox(skipAudio, skipMnemonics)
         self.writeSeedbox()
         self.createLevels()
