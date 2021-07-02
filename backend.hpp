@@ -171,6 +171,8 @@ public:
 
     Q_INVOKABLE void unmarkDifficult(QVariantMap difficultItems);
 
+    Q_INVOKABLE void getAllMnemonics(QString itemId);
+
     enum TestType
     {
         PREVIEW,
@@ -205,6 +207,8 @@ signals:
 
     void addDifficultItem(QString levelPath, QString id, QString test, QString prompt, QString testColumnType, QString promptColumnType);
 
+    void addMnemonic(QString mnemonicId, QString author, QString text, QString imagePath);
+
 private slots:
 
     void getDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
@@ -222,6 +226,7 @@ private:
 
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!
     Json globalSeedbox;
+    Json globalMnemonics;
     Json globalLevel;
     Json globalInfo;
     QMap<QString, Json> jsonMap;

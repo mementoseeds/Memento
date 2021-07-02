@@ -198,9 +198,16 @@ void Backend::getCourseLevels(QString directory)
 void Backend::loadSeedbox(QString courseDirectory)
 {
     //Open the seedbox
+    globalSeedbox.clear();
     std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
     seedboxFile >> globalSeedbox;
     seedboxFile.close();
+
+    //Open mnemonics
+    globalMnemonics.clear();
+    std::ifstream mnemonicsFile(QString(courseDirectory + "/mnemonics.json").toStdString());
+    mnemonicsFile >> globalMnemonics;
+    mnemonicsFile.close();
 }
 
 QString Backend::readMediaLevel(QString levelPath)
@@ -1020,5 +1027,17 @@ void Backend::unmarkDifficult(QVariantMap difficultItems)
 
         foreach (QVariant itemIdVar, idList)
             jsonMap[levelPath]["seeds"][itemIdVar.toString().toStdString()]["difficult"] = false;
+    }
+}
+
+void Backend::getAllMnemonics(QString itemId)
+{
+    String stdItemId = itemId.toStdString();
+
+    for (auto &item : globalMnemonics[stdItemId].items())
+    {
+        String mnemonicId = item.key();
+        emit addMnemonic(QString::fromStdString(mnemonicId), QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["author"].get<String>()),
+            QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["text"].get<String>()), QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["image"].get<String>()));
     }
 }

@@ -46,5 +46,6 @@
         <file alias="HelpPage.qml">qml/ui/HelpPage.qml</file>
         <file alias="DifficultView.qml">qml/ui/DifficultView.qml</file>
         <file alias="DifficultEntry.qml">qml/components/DifficultEntry.qml</file>
+        <file alias="MnemonicEntry.qml">qml/components/MnemonicEntry.qml</file>
     </qresource>
 </RCC>

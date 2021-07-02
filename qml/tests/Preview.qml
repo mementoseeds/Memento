@@ -88,6 +88,25 @@ Item {
                     case "separator": return separatorComponent
                 }
         }
+
+        footer: ListView {
+            orientation: ListView.Horizontal
+
+            model: ListModel{id: mnemonicsPreviewListModel}
+
+            delegate: MnemonicEntry {}
+
+            Component.onCompleted: globalBackend.getAllMnemonics(itemId)
+
+            Connections {
+                target: globalBackend
+
+                function onAddMnemonic(mnemonicId, author, text, imagePath)
+                {
+                    mnemonicsPreviewListModel.append({"mnemonicId": mnemonicId, "author": author, "text": text, "imagePath": imagePath})
+                }
+            }
+        }
     }
 
     Connections {
