@@ -90,9 +90,14 @@ Item {
         }
 
         footer: ListView {
+            width: root.width / 2
+            height: 300
+            ScrollBar.horizontal: ScrollBar {height: 5}
+            anchors {left: parent.left; right: parent.right}
             orientation: ListView.Horizontal
 
             model: ListModel{id: mnemonicsPreviewListModel}
+            spacing: marginBase
 
             delegate: MnemonicEntry {}
 
@@ -103,7 +108,7 @@ Item {
 
                 function onAddMnemonic(mnemonicId, author, text, imagePath)
                 {
-                    mnemonicsPreviewListModel.append({"mnemonicId": mnemonicId, "author": author, "text": text, "imagePath": imagePath})
+                    mnemonicsPreviewListModel.append({"mnemonicId": mnemonicId, "mnemonicAuthor": author, "mnemonicText": text, "mnemonicImagePath": imagePath})
                 }
             }
         }

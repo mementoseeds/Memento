@@ -19,5 +19,36 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
+    id: mnemonic
 
+    width: root.width / 2
+    height: 300
+
+    Rectangle {
+        anchors.fill: parent
+        color: "red"
+
+        Image {
+            id: mnemonicImage
+            anchors {top: parent.top; left: parent.left; right: parent.right}
+            source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + mnemonicImagePath)
+            sourceSize.height: parent.height - 100
+            fillMode: Image.PreserveAspectFit
+        }
+
+        Label {
+            anchors {top: mnemonicImage.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
+            text: mnemonicText
+            font.pointSize: 40
+            fontSizeMode: Text.Fit
+            minimumPointSize: 5
+            wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+            horizontalAlignment: Text.AlignHCenter
+        }
+    }
+
+    MouseArea {
+        anchors.fill: parent
+        onClicked: console.debug("Chosen")
+    }
 }
