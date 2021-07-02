@@ -19,25 +19,33 @@ import QtQuick.Layouts 1.3
 import QtQuick.Controls 2.15
 
 Item {
-    id: mnemonic
+    property int marginBase: 10
 
-    width: root.width / 2
-    height: 300
+    property bool textPresent: mnemonicText.length > 0
+    property bool imagePresent: mnemonicImagePath.length > 0
 
     Rectangle {
         anchors.fill: parent
-        color: "red"
+        color: "transparent"
 
         Image {
             id: mnemonicImage
             anchors {top: parent.top; left: parent.left; right: parent.right}
             source: Qt.resolvedUrl("file:/" + courseDirectory + "/" + mnemonicImagePath)
-            sourceSize.height: parent.height - 100
+            sourceSize.height: parent.height - (textPresent ? parent.height / 2 : 0)
             fillMode: Image.PreserveAspectFit
         }
 
+        Rectangle {
+            id: separator
+            visible: textPresent && imagePresent
+            anchors {top: mnemonicImage.bottom; left: parent.left; right: parent.right}
+            height: 2
+            color: "gray"
+        }
+
         Label {
-            anchors {top: mnemonicImage.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
+            anchors {top: separator.bottom; left: parent.left; right: parent.right; bottom: parent.bottom}
             text: mnemonicText
             font.pointSize: 40
             fontSizeMode: Text.Fit

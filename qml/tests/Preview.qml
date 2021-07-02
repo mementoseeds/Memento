@@ -91,15 +91,15 @@ Item {
 
         footer: ListView {
             width: root.width / 2
-            height: 300
-            ScrollBar.horizontal: ScrollBar {height: 5}
+            height: 500
+            ScrollBar.horizontal: ScrollBar {height: 10}
             anchors {left: parent.left; right: parent.right}
             orientation: ListView.Horizontal
 
             model: ListModel{id: mnemonicsPreviewListModel}
             spacing: marginBase
 
-            delegate: MnemonicEntry {}
+            delegate: MnemonicEntry {width: root.width / 2; height: 500}
 
             Component.onCompleted: globalBackend.getAllMnemonics(itemId)
 
