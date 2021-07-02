@@ -28,6 +28,7 @@ minLevel = 0
 maxLevel = 9999999
 destination = os.getcwd()
 skipAudio = False
+skipMnemonics = False
 
 def showHelp():
     print("This is a script to scrape Memrise courses and convert them to Mememto-compatible ones. It first gathers general information from the course's home page. Afterwards it visits each level to get its title and the items in it. Finally it will call the Memrise API to extract extra information about an item, such as its attributes or audio.")
@@ -37,13 +38,14 @@ def showHelp():
     print("\t-t --to --> Set the level when to stop downloading")
     print("\t-d --destination --> Set the download destination")
     print("\t-n --no-audio --> Do not download any audio columns")
+    print("\t-m --no-mnemonics --> Do not download any mnemonics")
     print("Examples:")
     print("\tScrape capitals up to level 3 --> python scrape_memrise.py -t 3 https://app.memrise.com/course/63061/capital-cities-2/")
     print("\tScrape capitals from level 3 to the end --> python scrape_memrise.py -f 3 https://app.memrise.com/course/63061/capital-cities-2/")
     print("\tScrape capitals only between levels 2 and 4 --> python scrape_memrise.py -f 2 -t 4 https://app.memrise.com/course/63061/capital-cities-2/")
 
 try:
-    opts, args = getopt(sys.argv[1:], "f:t:d:n", ["from=", "to=", "destination=", "no-audio"])
+    opts, args = getopt(sys.argv[1:], "f:t:d:nm", ["from=", "to=", "destination=", "no-audio", "no-mnemonics"])
     for o, a in opts:
 
         if (o in ("-f", "--from")):
@@ -57,6 +59,9 @@ try:
 
         if (o in ("-n", "--no-audio")):
             skipAudio = True
+
+        if (o in ("-m", "--no-mnemonics")):
+            skipMnemonics = True
 
 except GetoptError as e:
     print(e)

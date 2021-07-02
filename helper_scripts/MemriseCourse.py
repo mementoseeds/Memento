@@ -23,6 +23,9 @@ from bs4 import BeautifulSoup
 
 class MemriseCourse():
 
+    memriseApi = "https://app.memrise.com/api/"
+    memriseImages = "https://static.memrise.com/"
+
     thingPattern = re.compile("thing \w+-\w+")
     testColumnTypePattern = re.compile("col_a col \w+")
     promptColumnTypePattern = re.compile("col_b col \w+")
@@ -85,9 +88,9 @@ class MemriseCourse():
         if randomThingId == None:
             exit("Is this a media only level?")
 
-        poolId = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + randomThingId).json()["thing"]["pool_id"]
+        poolId = requests.get(MemriseCourse.memriseApi + "thing/get/?thing_id=" + randomThingId).json()["thing"]["pool_id"]
         self.pools = {}
-        self.pools[poolId] = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(poolId)).json()
+        self.pools[poolId] = requests.get(MemriseCourse.memriseApi + "pool/get/?pool_id=" + str(poolId)).json()
 
         # Find which columns to show after tests
         print("Finding columns to show after tests")
@@ -210,7 +213,7 @@ class MemriseCourse():
             print("Scraping item", counter, "of", totalUniqueItems)
             counter += 1
 
-            itemInfo = requests.get("https://app.memrise.com/api/thing/get/?thing_id=" + item).json()
+            itemInfo = requests.get(MemriseCourse.memriseApi + "thing/get/?thing_id=" + item).json()
             key = str(item)
 
             restartLoop = True
@@ -252,7 +255,7 @@ class MemriseCourse():
                             self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "image"
 
                             imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
-                            open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get("https://static.memrise.com/" + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
+                            open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get(MemriseCourse.memriseImages + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
 
                             self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
 
@@ -269,7 +272,7 @@ class MemriseCourse():
                 except KeyError:
                     print("\nSwitching database\n")
                     newPoolId = itemInfo["thing"]["pool_id"]
-                    self.pools[newPoolId] = requests.get("https://app.memrise.com/api/pool/get/?pool_id=" + str(newPoolId)).json()
+                    self.pools[newPoolId] = requests.get(MemriseCourse.memriseApi + "pool/get/?pool_id=" + str(newPoolId)).json()
                     restartLoop = True # Restart from the beginning of the while loop without skipping the current item where the exception occurred
 
 
