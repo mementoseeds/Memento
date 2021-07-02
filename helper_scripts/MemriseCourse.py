@@ -354,6 +354,16 @@ class MemriseCourse():
                 levelFile.close()
 
     def autoScrape(self, destination, minLevel, maxLevel, skipAudio, skipMnemonics):
+        print()
+        print("Download audio -", not skipAudio)
+        print("Download mnemonics -", not skipMnemonics)
+        
+        if not skipAudio:
+            print("***Warning*** downloading audio can affect download duration and course size")
+
+        if not skipMnemonics:
+            print("***Warning*** downloading mnemonics can significantly affect download duration")
+
         self.scrapeLevels(minLevel, maxLevel)
         self.writeCourseInfo(destination)
         self.buildSeedbox(skipAudio, skipMnemonics)
