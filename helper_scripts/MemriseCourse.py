@@ -28,11 +28,13 @@ class MemriseCourse():
     memriseImages = "https://static.memrise.com/"
     memriseUrl = "https://app.memrise.com"
 
+    forbiddenFileCharacters = "[<>:\"\'|?*]"
+
     thingPattern = re.compile("thing \w+-\w+")
     testColumnTypePattern = re.compile("col_a col \w+")
     promptColumnTypePattern = re.compile("col_b col \w+")
 
-    def __init__(self, url):
+    def __init__(self, url, destination):
         # Setup
         print("Gathering preliminary data")
 
@@ -102,6 +104,12 @@ class MemriseCourse():
             if self.pools[poolId]["pool"]["columns"][column]["show_after_tests"] or self.pools[poolId]["pool"]["columns"][column]["always_show"]:
                 self.showAfterTests.append(self.pools[poolId]["pool"]["columns"][column]["label"])
 
+        # Cancel if course dir already exists
+        __title = re.sub(MemriseCourse.forbiddenFileCharacters, "", join(destination, self.title))
+        if os.path.isdir(__title):
+            print("***ERROR*** directory for course", __title, "already exists. Exiting...")
+            exit()
+
     def scrapeLevels(self, start, stop):
         print()
 
@@ -159,7 +167,7 @@ class MemriseCourse():
             self.level.append(levelContent)
     
     def writeCourseInfo(self, destination):
-        self.courseDir = re.sub("[<>:\"\'|?*]", "", join(destination, self.title))
+        self.courseDir = re.sub(MemriseCourse.forbiddenFileCharacters, "", join(destination, self.title))
         
         try:
             os.mkdir(self.courseDir)
@@ -306,7 +314,7 @@ class MemriseCourse():
 
 
     def writeSeedbox(self):
-        print("Writing seedbox.json")
+        print("Writing seedbox.json and mnemonics.json")
         json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w"), indent = 4, ensure_ascii = False)
         json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w"), indent = 4, ensure_ascii = False)
 

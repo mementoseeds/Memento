@@ -18,10 +18,7 @@ import os
 from os.path import join
 import re
 import sys
-import json
 from getopt import getopt, GetoptError
-import requests
-from bs4 import BeautifulSoup
 from MemriseCourse import MemriseCourse
 
 minLevel = 0
@@ -73,6 +70,6 @@ if len(args) == 0:
     exit()
 
 for a in args:
-    course = MemriseCourse(a)
+    course = MemriseCourse(a, destination)
     course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
     print()
