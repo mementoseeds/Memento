@@ -37,6 +37,9 @@ Item {
     property int wrongAnswerCounter: 0
     property var skippedItems: ({})
 
+    // testingContentOriginal structure -->
+    // dictionary of level paths that hold an array of item IDs
+
     // testingContent structure -->
     // outermost part - array
     // array holds dictionary of level path + dictionary
@@ -166,11 +169,12 @@ Item {
                     test[itemArray[id]] = getRandomTest()
                     levelItem = {}
                     levelItem[level] = test
-                    testingContent.push(levelItem)
+                    unorderedTests.push(levelItem)
                 }
             }
 
             testingContent = testingContent.concat(unorderedTests.sort(() => Math.random() - 0.5))
+            console.debug(JSON.stringify(testingContent, null, 4))
         }
         else if (actionType === "water")
         {
