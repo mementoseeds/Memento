@@ -32,6 +32,8 @@ Item {
 
     property var itemData: globalBackend.readItemColumn(itemId, testColumn)
     property int numberTappingButtons: Math.floor(Math.random() * 6) + 5
+    property int hintIndex: 1
+
 
     Component.onCompleted:
     {
@@ -130,12 +132,30 @@ Item {
                 RoundButton {
                     visible: flowLayout.visible
                     radius: 5
+                    text: hintIcon
+                    font.family: "Icons"
+                    font.capitalization: Font.MixedCase
+                    font.pointSize: 15
+                    Material.background: globalBlueGrey
+                    onClicked:
+                    {
+                        if (hintIndex <= itemData[1].length)
+                        {
+                            textfield.text = itemData[1].slice(0, hintIndex)
+                            hintIndex++
+                        }
+                    }
+                }
+
+                RoundButton {
+                    visible: flowLayout.visible
+                    radius: 5
                     text: spacebarIcon
                     font.family: "Icons"
-                    implicitWidth: root.width / 3
                     font.capitalization: Font.MixedCase
                     font.pointSize: 12
                     Material.background: globalBlueGrey
+                    Layout.preferredWidth: root.width / 3
                     onClicked: textfield.text += " "
                 }
 
@@ -144,10 +164,10 @@ Item {
                     radius: 5
                     text: backspaceIcon
                     font.family: "Icons"
-                    implicitWidth: root.width / 3
                     font.capitalization: Font.MixedCase
                     font.pointSize: 20
                     Material.background: globalBlueGrey
+                    Layout.preferredWidth: root.width / 3
                     onClicked: textfield.remove(textfield.length - 1, textfield.length)
                 }
             }

@@ -174,7 +174,6 @@ Item {
             }
 
             testingContent = testingContent.concat(unorderedTests.sort(() => Math.random() - 0.5))
-            console.debug(JSON.stringify(testingContent, null, 4))
         }
         else if (actionType === "water")
         {

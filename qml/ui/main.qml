@@ -56,10 +56,11 @@ ApplicationWindow {
     property string audioIcon: "\ue900"
     property string backspaceIcon: "\ue901"
     property string difficultIcon: "\ue902"
-    property string ignoreIcon: "\ue903"
-    property string plantIcon: "\ue904"
-    property string spacebarIcon: "\ue905"
-    property string waterIcon: "\ue906"
+    property string hintIcon: "\ue903"
+    property string ignoreIcon: "\ue904"
+    property string plantIcon: "\ue905"
+    property string spacebarIcon: "\ue906"
+    property string waterIcon: "\ue907"
 
     FontLoader {
         source: "assets/icons-font/Icons.ttf"
