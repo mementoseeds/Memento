@@ -72,6 +72,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("enableTestPromptSwitch", userSettings["enableTestPromptSwitch"]);
     settings.setValue("showAutoLearnOnTests", userSettings["showAutoLearnOnTests"]);
     settings.setValue("hideHelpAboutPages", userSettings["hideHelpAboutPages"]);
+    settings.setValue("enableTestChangeAnimation", userSettings["enableTestChangeAnimation"]);
     settings.setValue("enabledTests", userSettings["enabledTests"]);
 
     settings.setValue("defaultFontSize", userSettings["defaultFontSize"]);
@@ -99,6 +100,9 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
     userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
     userSettings.insert("hideHelpAboutPages", settings.value("hideHelpAboutPages", false).toBool());
+
+    userSettings.insert("enableTestChangeAnimation", settings.value("enableTestChangeAnimation", true).toBool());
+
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
 
     userSettings.insert("defaultFontSize", settings.value("defaultFontSize", defaultFontSize).toInt());

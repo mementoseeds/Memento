@@ -38,6 +38,7 @@ Item {
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
         userSettings["showAutoLearnOnTests"] = showAutoLearnOnTests.checked
         userSettings["hideHelpAboutPages"] = hideHelpAboutPages.checked
+        userSettings["enableTestChangeAnimation"] = enableTestChangeAnimation.checked
         userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
 
         userSettings["defaultFontSize"] = defaultFontSizeSpinBox.value
@@ -211,6 +212,15 @@ Item {
                 text: "Hide help and about pages"
                 font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["hideHelpAboutPages"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
+                id: enableTestChangeAnimation
+                text: "Enable test change animation"
+                font.pointSize: userSettings["defaultFontSize"]
+                checked: userSettings["enableTestChangeAnimation"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

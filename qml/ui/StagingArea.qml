@@ -37,6 +37,8 @@ Item {
     property int wrongAnswerCounter: 0
     property var skippedItems: ({})
 
+    property int testChangeTransition: userSettings["enableTestChangeAnimation"] ? StackView.Transition : StackView.Immediate
+
     // testingContentOriginal structure -->
     // dictionary of level paths that hold an array of item IDs
 
@@ -60,7 +62,7 @@ Item {
 
     function manuallyChangeTest(test, variables)
     {
-        testStackView.replace(test, variables)
+        testStackView.replace(test, variables, testChangeTransition)
     }
 
     function mistakenTest(levelPath, id)
@@ -227,7 +229,7 @@ Item {
                     var level = Object.keys(testingContent[itemIndex]).toString()
                     var columns = globalBackend.getLevelColumns(level)
 
-                    testStackView.replace("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
+                    testStackView.replace("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]}, testChangeTransition)
                     itemIndex++
                 }
                 else
@@ -283,17 +285,17 @@ Item {
             switch (testingContent[itemIndex][level][itemId])
             {
                 case TestType.PREVIEW:
-                    testStackView.replace("qrc:/Preview.qml", variables)
+                    testStackView.replace("qrc:/Preview.qml", variables, testChangeTransition)
                     break
 
                 case TestType.MULTIPLECHOICE:
-                    testStackView.replace("qrc:/MultipleChoice.qml", variables)
+                    testStackView.replace("qrc:/MultipleChoice.qml", variables, testChangeTransition)
                     break
 
                 case TestType.TAPPING:
                     variables["tappingEnabled"] = true
                 case TestType.TYPING:
-                    testStackView.replace("qrc:/Typing.qml", variables)
+                    testStackView.replace("qrc:/Typing.qml", variables, testChangeTransition)
                     break
             }
 
