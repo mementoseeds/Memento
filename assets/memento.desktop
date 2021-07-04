@@ -1,0 +1,7 @@
+[Desktop Entry]
+Exec=/usr/bin/memento
+Icon=/usr/share/icons/hicolor/scalable/apps/memento.svg
+Name=Memento
+StartupNotify=true
+Terminal=false
+Type=Application
