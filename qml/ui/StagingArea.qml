@@ -60,9 +60,9 @@ Item {
 
     function manuallyChangeTest(test, variables)
     {
-        testLoader.active = false
+        //testLoader.active = false
         testLoader.setSource(test, variables)
-        testLoader.active = true
+        //testLoader.active = true
     }
 
     function mistakenTest(levelPath, id)
@@ -227,9 +227,9 @@ Item {
                     var level = Object.keys(testingContent[itemIndex]).toString()
                     var columns = globalBackend.getLevelColumns(level)
 
-                    testLoader.active = false
+                    //testLoader.active = false
                     testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
-                    testLoader.active = true
+                    //testLoader.active = true
                     itemIndex++
                 }
                 else
@@ -282,7 +282,7 @@ Item {
 
             var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
 
-            testLoader.active = false
+            //testLoader.active = false
             switch (testingContent[itemIndex][level][itemId])
             {
                 case TestType.PREVIEW:
@@ -300,7 +300,7 @@ Item {
                     break
             }
 
-            testLoader.active = true
+            //testLoader.active = true
             itemIndex++
         }
         else
@@ -316,7 +316,7 @@ Item {
     Loader {
         id: testLoader
         anchors.fill: parent
-        active: false
+        //active: false
         Component.onCompleted:
         {
             globalBackend.setStartTime()
