@@ -24,7 +24,8 @@ Item {
 
     objectName: "AboutPage.qml"
 
-    property string aboutMemento: "### About Memento\n
+    property string aboutMemento: "## About Memento\n
+### Version 0.5\n
 Memento is a cross-platform, offline, spaced-repetition learning application. It is made with the intent to be clean, simple to use and easily configurable to one's needs.\n
 It uses courses stored locally on the user's device. These courses are comprised of plaintext json or markdown files that are easy to edit or share.\n
 There are two types of levels in every course - learning levels and media levels.\n
@@ -39,7 +40,7 @@ Every time the user answers correctly on an item's review, the subsequent review
 
 ## Third-party credits\n
 - [Nlohmann](https://github.com/nlohmann/json) for his fantastic C++ Json library
-- [Svg repo](https://www.svgrepo.com) for beautiful, free vector graphics art"
+- [Svgrepo](https://www.svgrepo.com) for beautiful, free vector graphics art"
 
     property string aboutQt: "### About Qt\n
 This program uses Qt version 5.15.2.\n
