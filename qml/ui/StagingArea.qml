@@ -60,9 +60,7 @@ Item {
 
     function manuallyChangeTest(test, variables)
     {
-        //testLoader.active = false
-        testLoader.setSource(test, variables)
-        //testLoader.active = true
+        testStackView.replace(test, variables)
     }
 
     function mistakenTest(levelPath, id)
@@ -227,9 +225,7 @@ Item {
                     var level = Object.keys(testingContent[itemIndex]).toString()
                     var columns = globalBackend.getLevelColumns(level)
 
-                    //testLoader.active = false
-                    testLoader.setSource("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
-                    //testLoader.active = true
+                    testStackView.replace("qrc:/Preview.qml", {"itemId": Object.keys(testingContent[itemIndex][level]).toString(), "testColumn": columns[0], "promptColumn": columns[1]})
                     itemIndex++
                 }
                 else
@@ -282,25 +278,23 @@ Item {
 
             var variables = {"itemId": itemId, "levelPath": level, "testColumn": testColumn, "promptColumn": promptColumn}
 
-            //testLoader.active = false
             switch (testingContent[itemIndex][level][itemId])
             {
                 case TestType.PREVIEW:
-                    testLoader.setSource("qrc:/Preview.qml", variables)
+                    testStackView.replace("qrc:/Preview.qml", variables)
                     break
 
                 case TestType.MULTIPLECHOICE:
-                    testLoader.setSource("qrc:/MultipleChoice.qml", variables)
+                    testStackView.replace("qrc:/MultipleChoice.qml", variables)
                     break
 
                 case TestType.TAPPING:
                     variables["tappingEnabled"] = true
                 case TestType.TYPING:
-                    testLoader.setSource("qrc:/Typing.qml", variables)
+                    testStackView.replace("qrc:/Typing.qml", variables)
                     break
             }
 
-            //testLoader.active = true
             itemIndex++
         }
         else
@@ -313,10 +307,9 @@ Item {
         }
     }
 
-    Loader {
-        id: testLoader
+    StackView {
+        id: testStackView
         anchors.fill: parent
-        //active: false
         Component.onCompleted:
         {
             globalBackend.setStartTime()
