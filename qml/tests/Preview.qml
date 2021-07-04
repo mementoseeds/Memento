@@ -120,6 +120,7 @@ Item {
     }
 
     Connections {
+        id: previewGlobalBackendConncetions
         target: globalBackend
         function onAddItemDetails(type, name, content)
         {
@@ -129,6 +130,15 @@ Item {
         function onAddItemSeparator()
         {
             previewListModel.append({"type": "separator", "name": "", "content": ""})
+        }
+    }
+
+    Connections {
+        target: signalSource
+
+        function onDisablePreviousPageConnections()
+        {
+            previewGlobalBackendConncetions.enabled = false
         }
     }
 

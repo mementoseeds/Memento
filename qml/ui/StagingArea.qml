@@ -216,6 +216,8 @@ Item {
 
     function triggerNextItem()
     {
+        signalSource.disablePreviousPageConnections()
+
         if (actionType === "preview")
         {
             replaceToolbar("Previewing ", testingContent.length, testingContent.length, itemIndex, actionType)

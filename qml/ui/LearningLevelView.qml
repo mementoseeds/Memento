@@ -352,6 +352,7 @@ Item {
     }
 
     Connections {
+        id: learningLevelGlobalBackendConnections
         target: globalBackend
         function onAddLevelItem(id, test, prompt, planted, progress, difficult, ignored)
         {
@@ -391,6 +392,11 @@ Item {
                 item.ignoreVisible = false
                 item.difficultVisible = !item.difficultVisible
             }
+        }
+
+        function onDisablePreviousPageConnections()
+        {
+            learningLevelGlobalBackendConnections.enabled = false
         }
     }
 

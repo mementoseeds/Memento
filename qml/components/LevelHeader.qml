@@ -31,6 +31,8 @@ ColumnLayout {
 
     function changeLevel(levelIndex, caller)
     {
+        signalSource.disablePreviousPageConnections()
+
         var levelData = globalBackend.getAdjacentLevel(courseDirectory, levelIndex)
         if (Object.keys(levelData).length !== 0)
         {

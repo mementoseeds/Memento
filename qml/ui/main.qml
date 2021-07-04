@@ -78,6 +78,7 @@ ApplicationWindow {
         signal showIgnore()
         signal showDifficult()
         signal setMnemonic(string mnemonicId)
+        signal disablePreviousPageConnections()
     }
 
     function showPassiveNotification(text, duration)
