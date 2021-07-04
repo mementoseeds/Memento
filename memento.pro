@@ -25,7 +25,6 @@ QML_IMPORT_MAJOR_VERSION = 1
 
 # Set name
 TARGET = Memento
-unix:!android: TARGET = memento
 
 # Set windows icon
 win32: RC_ICONS = assets/icons/winicon.ico
@@ -55,4 +54,20 @@ android {
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
-!isEmpty(target.path): INSTALLS += target
+
+unix:!android
+{
+    # Set path
+    TARGET = memento
+    OUTPUT_TARGET = output/$$TARGET
+    target.path = $$OUTPUT_TARGET
+
+    # Copy desktop file and icon
+    linuxDesktopFile.path = $$OUTPUT_TARGET
+    linuxDesktopFile.files = assets/memento.desktop
+
+    linuxIcon.path = $$OUTPUT_TARGET
+    linuxIcon.files = assets/icons/icon.svg
+}
+
+!isEmpty(target.path): INSTALLS += target linuxDesktopFile linuxIcon
