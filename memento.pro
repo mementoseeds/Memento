@@ -68,6 +68,8 @@ unix:!android
 
     linuxIcon.path = $$OUTPUT_TARGET
     linuxIcon.files = assets/icons/icon.svg
+
+    INSTALLS += linuxDesktopFile linuxIcon
 }
 
-!isEmpty(target.path): INSTALLS += target linuxDesktopFile linuxIcon
+!isEmpty(target.path): INSTALLS += target
