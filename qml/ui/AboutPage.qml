@@ -35,7 +35,11 @@ The user initiates a learning session by pressing the \"Plant\" button in a lear
 This repeates for as many items as the user has specified to learn in the application's settings.\n
 After they are shown at least one preview and test for all unique items in a session, they will be repeatedly tested on those items in a random order until they answer each one correctly at least 5 times.\n
 Afterwards the items will be marked as planted (learned). The user will then be shown the time remaining until they have to water (review) those items.\n
-Every time the user answers correctly on an item's review, the subsequent review will be pushed back further and further from the last.\n"
+Every time the user answers correctly on an item's review, the subsequent review will be pushed back further and further from the last.\n\n
+
+## Third-party credits\n
+- [Nlohmann](https://github.com/nlohmann/json) for his fantastic C++ Json library
+- [Svg repo](https://www.svgrepo.com) for beautiful, free vector graphics art"
 
     property string aboutQt: "### About Qt\n
 This program uses Qt version 5.15.2.\n
@@ -77,6 +81,7 @@ Qt is The Qt Company Ltd product developed as an open source project. See qt.io 
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 Layout.preferredWidth: parent.width
                 Layout.alignment: Qt.AlignCenter
+                onLinkActivated: Qt.openUrlExternally(link)
             }
 
             Image {
