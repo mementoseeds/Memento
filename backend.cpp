@@ -692,7 +692,16 @@ QVariantList Backend::getRandomCharacters(QString itemId, QString column, int co
     while (answerChars.size() < count)
     {
         String key = getRandom(globalSeedbox, true);
-        QStringList randomChars = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>()).remove(" ").toLower().split("", Qt::SkipEmptyParts);
+        QStringList randomChars;
+        try
+        {
+            randomChars = QString::fromStdString(globalSeedbox[key][itemColumn]["primary"].get<String>()).remove(" ").toLower().split("", Qt::SkipEmptyParts);
+        }
+        catch (Json::type_error &e)
+        {
+            //Requested column does not exist for this item
+            continue;
+        }
 
         foreach (QString randChar, randomChars)
             if (!answerChars.contains(randChar))
