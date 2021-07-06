@@ -55,8 +55,7 @@ android {
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 
-unix:!android
-{
+unix:!android {
     # Set path
     TARGET = memento
     OUTPUT_TARGET = output/$$TARGET

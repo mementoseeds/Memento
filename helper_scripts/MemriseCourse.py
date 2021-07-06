@@ -105,9 +105,9 @@ class MemriseCourse():
                 self.showAfterTests.append(self.pools[poolId]["pool"]["columns"][column]["label"])
 
         # Cancel if course dir already exists
-        __title = re.sub(MemriseCourse.forbiddenFileCharacters, "", join(destination, self.title))
-        if os.path.isdir(__title):
-            print("***ERROR*** directory for course", __title, "already exists. Exiting...")
+        self.cleanedTitle = re.sub(MemriseCourse.forbiddenFileCharacters, "", self.title)
+        if os.path.isdir(join(destination, self.cleanedTitle)):
+            print("***ERROR*** directory for course", self.cleanedTitle, "already exists. Exiting...")
             exit()
 
     def scrapeLevels(self, start, stop):
@@ -167,7 +167,7 @@ class MemriseCourse():
             self.level.append(levelContent)
     
     def writeCourseInfo(self, destination):
-        self.courseDir = re.sub(MemriseCourse.forbiddenFileCharacters, "", join(destination, self.title))
+        self.courseDir = join(destination, self.cleanedTitle)
         
         try:
             os.mkdir(self.courseDir)
