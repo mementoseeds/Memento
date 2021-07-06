@@ -10,8 +10,12 @@ To download a Memrise course and convert it to a Mememto-compatible format, you 
 1. Install Python for your PC
 - Windows or OS X - https://www.python.org/downloads
 - Linux - install it from your distro's package manager
-2. Install the Python dependencies `requests` and `beautifulsoup4` for example from pip.
+2. Install the Python dependencies `requests`, `lxml` and `beautifulsoup4` for example from pip.
 - How to get pip for Windows if you do not have it already - [https://phoenixnap.com/kb/install-pip-windows](https://phoenixnap.com/kb/install-pip-windows)
+- Install dependencies like this
+```bash
+python -m pip install requests lxml beautifulsoup4
+```
 3. Download the two Python scripts in the `helper_scripts` folder, run the script called `scrape_memrise.py` and follow its instructions.
 
 # Build instructions:
