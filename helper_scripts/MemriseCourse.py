@@ -206,7 +206,7 @@ class MemriseCourse():
             "completed": False}
         
         # Write course info json
-        json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w"), indent = 4, ensure_ascii = False)
+        json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
 
     
     def buildSeedbox(self, skipAudio, skipMnemonics):
@@ -315,21 +315,21 @@ class MemriseCourse():
 
     def writeSeedbox(self):
         print("Writing seedbox.json and mnemonics.json")
-        json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w"), indent = 4, ensure_ascii = False)
-        json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w"), indent = 4, ensure_ascii = False)
+        json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
+        json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
 
     def createLevels(self):
         print("Creating level files")
         
         for i in range(0, len(self.level)):
             if self.level[i]["isMultimedia"]:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w", encoding="utf-8")
                 levelFile.write("[comment]: <> (" + self.level[i]["title"] + ")\n")
                 levelFile.write(self.level[i]["mediaContent"])
                 levelFile.close()
             
             else:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w", encoding="utf-8")
                 levelInfo = {"title": self.level[i]["title"],
                     "completed": False,
                     "test": self.pools[self.itemPools[self.level[i]["items"][0]]]["pool"]["columns"][self.level[i]["testColumn"]]["label"],
