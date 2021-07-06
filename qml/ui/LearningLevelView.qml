@@ -126,7 +126,15 @@ Item {
     function plantAction()
     {
         if (!levelCompleted)
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": getPlantingItems(userSettings["maxPlantingItems"]), "actionType": "plant"})
+        {
+            var plantingItems = getPlantingItems(userSettings["maxPlantingItems"])
+
+            if (plantingItems[levelPath].length === 0)
+                showPassiveNotification("There are no items to plant")
+            else
+                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": plantingItems, "actionType": "plant"})
+        }
+
         else
             showPassiveNotification("This level is already completed")
     }
@@ -136,8 +144,12 @@ Item {
         if (plantedItems !== 0)
         {
             var wateringItems = getWateringItems(userSettings["maxWateringItems"])
-            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": wateringItems,
-                "actionType": "water", "manualReview": manualReview, "totalWateringItems": wateringItems[levelPath].length})
+
+            if (wateringItems[levelPath].length === 0)
+                showPassiveNotification("There are no items to water")
+            else
+                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory, "testingContentOriginal": wateringItems,
+                    "actionType": "water", "manualReview": manualReview, "totalWateringItems": wateringItems[levelPath].length})
         }
 
         else
