@@ -223,7 +223,7 @@ private:
     void wrongAnswer(QString levelPath, QString itemId);
     String getWateringTime(int streak);
     QString parseTime(uint seconds, bool fullTime = false);
-    const Json getRandom(const Json json, bool returnKey);
+    const Json getRandom(const Json &json, bool returnKey);
     QString getReviewTime(QString date);
 
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!

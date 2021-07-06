@@ -521,7 +521,7 @@ void Backend::saveLevels()
     }
 }
 
-const Json Backend::getRandom(const Json json, bool returnKey)
+const Json Backend::getRandom(const Json &json, bool returnKey)
 {
     auto it = json.cbegin();
     int random = QRandomGenerator::global()->generate() % json.size();
