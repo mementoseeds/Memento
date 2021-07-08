@@ -54,7 +54,7 @@ class MemriseCourse():
         # Course title and creator
         print("Scraping course title and creator")
         top = soup.head.title.string.strip().split(" - ")
-        self.title = top[0].strip().replace("/", "∕")
+        self.title = soup.find("h1", class_ = "course-name sel-course-name").text.strip().replace("/", "∕")
         self.creator = re.sub("^by ", "", top[1].strip())
         del top
 
