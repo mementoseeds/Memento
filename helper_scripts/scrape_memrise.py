@@ -70,6 +70,12 @@ if len(args) == 0:
     exit()
 
 for a in args:
-    course = MemriseCourse(a, destination)
-    course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
-    print()
+    try:
+        course = MemriseCourse(a, destination)
+        course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
+        print()
+    except KeyboardInterrupt:
+        exit("\n\nAborting")
+    except Exception as e:
+        print("\n\nCaught exception\n", str(e), "\nContinuing to next course\n\n")
+        continue
