@@ -27,6 +27,7 @@ Item {
     property string aboutMemento: "## About Memento\n
 ### Version 0.5\n
 Memento is a cross-platform, offline, spaced-repetition learning application. It is made with the intent to be clean, simple to use and easily configurable to one's needs.\n
+Its source code is available at [https://github.com/mementoseeds/Memento](https://github.com/mementoseeds/Memento)\n
 It uses courses stored locally on the user's device. These courses are comprised of plaintext json or markdown files that are easy to edit or share.\n
 There are two types of levels in every course - learning levels and media levels.\n
 Media: simple reading levels stored as markdown files\n
