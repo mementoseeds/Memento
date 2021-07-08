@@ -31,6 +31,7 @@ Item {
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
         userSettings["maxPlantingItems"] = maxPlantingItems.value
+        userSettings["plantingItemTests"] = plantingItemTestsSpinBox.value
         userSettings["maxWateringItems"] = maxWateringItems.value
         userSettings["maxDifficultItems"] = maxDifficultItems.value
         userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
@@ -131,10 +132,26 @@ Item {
 
             SpinBox {
                 id: maxPlantingItems
-                from: 2
+                from: 1
                 to: 100000
                 editable: true
                 value: userSettings["maxPlantingItems"]
+                Material.accent: globalGreen
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            Label {
+                text: "Tests per planting item"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            SpinBox {
+                id: plantingItemTestsSpinBox
+                from: 1
+                to: 100
+                editable: true
+                value: userSettings["plantingItemTests"]
                 Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }

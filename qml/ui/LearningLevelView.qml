@@ -435,10 +435,8 @@ Item {
         onYes:
         {
             globalBackend.ignoreLevel(levelPath)
-            for (var i = 0; i < levelEntryListModel.count; i++)
-                levelEntryListModel.get(i).ignored = true
-
             signalSource.refreshCourseLevels()
+            reloadLevel()
         }
     }
 

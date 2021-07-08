@@ -65,6 +65,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
     settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
     settings.setValue("maxPlantingItems", userSettings["maxPlantingItems"]);
+    settings.setValue("plantingItemTests", userSettings["plantingItemTests"]);
     settings.setValue("maxWateringItems", userSettings["maxWateringItems"]);
     settings.setValue("maxDifficultItems", userSettings["maxDifficultItems"]);
     settings.setValue("autoRefreshCourses", userSettings["autoRefreshCourses"]);
@@ -93,6 +94,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
     userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
+    userSettings.insert("plantingItemTests", settings.value("plantingItemTests", 5).toInt());
     userSettings.insert("maxWateringItems", settings.value("maxWateringItems", 50).toInt());
     userSettings.insert("maxDifficultItems", settings.value("maxDifficultItems", 10).toInt());
     userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", true).toBool());
@@ -410,7 +412,7 @@ void Backend::correctAnswer(QString levelPath, QString itemId)
     int successes = item["successes"].get<int>() + 1;
     item["successes"] = successes;
 
-    if (successes >= 5 && (unlockedItems[levelPath][itemId] || !manualReview))
+    if ((item["planted"].get<bool>() || successes >= userSettings["plantingItemTests"].toInt()) && (unlockedItems[levelPath][itemId] || !manualReview))
     {
         unlockedItems[levelPath][itemId] = !manualReview;
 
@@ -496,8 +498,7 @@ void Backend::saveLevel(QString levelPath)
     {
         if (globalLevel["seeds"][item.key()]["planted"].get<bool>())
             completedSeeds++;
-
-        if (globalLevel["seeds"][item.key()]["ignored"].get<bool>())
+        else if (globalLevel["seeds"][item.key()]["ignored"].get<bool>())
             ignoredSeeds++;
     }
 
@@ -512,14 +513,20 @@ void Backend::saveLevels()
 {
     foreach (QString levelPath, jsonMap.keys())
     {
-        ulong completedSeeds = 0;
+        uint completedSeeds = 0;
+        uint ignoredSeeds = 0;
+        uint seedAmount = jsonMap[levelPath]["seeds"].size();
         for (auto &item : jsonMap[levelPath]["seeds"].items())
         {
-            if (jsonMap[levelPath]["seeds"][item.key()]["planted"].get<bool>())
+            String id = item.key();
+
+            if (jsonMap[levelPath]["seeds"][id]["planted"].get<bool>())
                 completedSeeds++;
+            else if (jsonMap[levelPath]["seeds"][id]["ignored"].get<bool>())
+                ignoredSeeds++;
         }
 
-        jsonMap[levelPath]["completed"] = (completedSeeds == jsonMap[levelPath]["seeds"].size());
+        jsonMap[levelPath]["completed"] = ((completedSeeds + ignoredSeeds) == seedAmount);
 
         std::ofstream level(levelPath.toStdString());
         level << jsonMap[levelPath].dump(jsonIndent) << std::endl;
@@ -622,7 +629,7 @@ void Backend::autoLearn(QVariantMap levelAndItems)
         globalLevel["seeds"][id]["nextWatering"] = getWateringTime(1);
         globalLevel["seeds"][id]["ignored"] = false;
         globalLevel["seeds"][id]["difficult"] = false;
-        globalLevel["seeds"][id]["successes"] = 5;
+        globalLevel["seeds"][id]["successes"] = userSettings["plantingItemTests"].toInt();
         globalLevel["seeds"][id]["failures"] = 0;
         globalLevel["seeds"][id]["streak"] = 1;
     }
@@ -744,7 +751,7 @@ void Backend::autoLearnItem(QString levelPath, QString itemId, int streakCount)
     jsonMap[levelPath]["seeds"][id]["nextWatering"] = getWateringTime(streakCount);
     jsonMap[levelPath]["seeds"][id]["ignored"] = false;
     jsonMap[levelPath]["seeds"][id]["difficult"] = false;
-    jsonMap[levelPath]["seeds"][id]["successes"] = 5;
+    jsonMap[levelPath]["seeds"][id]["successes"] = userSettings["plantingItemTests"].toInt();
     jsonMap[levelPath]["seeds"][id]["failures"] = 0;
     jsonMap[levelPath]["seeds"][id]["streak"] = streakCount;
 }
@@ -760,6 +767,8 @@ void Backend::advancedAutoLevelAdjust(bool learn, QString courseDirectory, int s
     QDir levelsDir(courseDirectory + "/levels");
     QString absolutePath = levelsDir.absolutePath() + "/";
     QStringList levelList = levelsDir.entryList({"*.json", "*.md"}, QDir::Files | QDir::NoDotAndDotDot);
+
+    int successAmount = userSettings["plantingItemTests"].toInt() + streak;
 
     for (int i = start - 1; i < stop; i++)
     {
@@ -785,7 +794,7 @@ void Backend::advancedAutoLevelAdjust(bool learn, QString courseDirectory, int s
             levelJson["seeds"][id]["nextWatering"] = learn ? (waterRightNow ? QDateTime::currentDateTime().toString().toStdString() : getWateringTime(streak)) : "";
             levelJson["seeds"][id]["ignored"] = learn ? levelJson["seeds"][id]["ignored"].get<bool>() : false;
             levelJson["seeds"][id]["difficult"] = learn ? levelJson["seeds"][id]["difficult"].get<bool>() : false;
-            levelJson["seeds"][id]["successes"] = learn ? 5 + streak : 0;
+            levelJson["seeds"][id]["successes"] = learn ? successAmount : 0;
             levelJson["seeds"][id]["failures"] = learn ? levelJson["seeds"][id]["failures"].get<int>() : 0;
             levelJson["seeds"][id]["streak"] = learn ? streak : 0;
         }

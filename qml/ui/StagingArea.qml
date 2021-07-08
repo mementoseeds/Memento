@@ -161,7 +161,7 @@ Item {
             }
 
             var unorderedTests = []
-            for (var i = 0; i < 4; i++)
+            for (var i = 0; i < userSettings["plantingItemTests"] - 1; i++)
             {
                 for (id in itemArray)
                 {
