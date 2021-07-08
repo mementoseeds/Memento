@@ -293,7 +293,7 @@ ApplicationWindow {
     StackView {
         id: rootStackView
         anchors.fill: parent
-        initialItem: CourseList{}
+        initialItem: CourseList {}
 
         pushEnter: Transition {
                PropertyAnimation {

@@ -95,7 +95,7 @@ QVariantMap Backend::getUserSettings()
     userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
     userSettings.insert("maxWateringItems", settings.value("maxWateringItems", 50).toInt());
     userSettings.insert("maxDifficultItems", settings.value("maxDifficultItems", 10).toInt());
-    userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", false).toBool());
+    userSettings.insert("autoRefreshCourses", settings.value("autoRefreshCourses", true).toBool());
     userSettings.insert("autoAcceptAnswer", settings.value("autoAcceptAnswer", true).toBool());
     userSettings.insert("enableTestPromptSwitch", settings.value("enableTestPromptSwitch", false).toBool());
     userSettings.insert("showAutoLearnOnTests", settings.value("showAutoLearnOnTests", false).toBool());
