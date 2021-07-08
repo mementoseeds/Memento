@@ -222,10 +222,15 @@ private:
     //Methods
     void correctAnswer(QString levelPath, QString itemId);
     void wrongAnswer(QString levelPath, QString itemId);
+
     String getWateringTime(int streak);
     QString parseTime(uint seconds, bool fullTime = false);
+
     const Json getRandom(const Json &json, bool returnKey);
+
     QString getReviewTime(QString date);
+
+    QString convertMarkdownToRichtext(QString markdownText);
 
     //globalBackend variables !!!DO NOT USE FROM OTHER QML OBJECTS BESIDES globalBackend!!!
     Json globalSeedbox;

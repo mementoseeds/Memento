@@ -1074,7 +1074,8 @@ void Backend::getAllMnemonics(QString itemId)
     {
         String mnemonicId = item.key();
         emit addMnemonic(QString::fromStdString(mnemonicId), QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["author"].get<String>()),
-            QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["text"].get<String>()), QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["image"].get<String>()));
+            convertMarkdownToRichtext(QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["text"].get<String>())),
+            QString::fromStdString(globalMnemonics[stdItemId][mnemonicId]["image"].get<String>()));
     }
 }
 
@@ -1124,7 +1125,7 @@ QVariantMap Backend::getMnemonic(QString levelPath, QString itemId)
         {
             {"mnemonicId", mnemonicId},
             {"mnemonicAuthor", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["author"].get<String>())},
-            {"mnemonicText", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["text"].get<String>())},
+            {"mnemonicText", convertMarkdownToRichtext(QString::fromStdString(globalMnemonics[id][stdMnemonicId]["text"].get<String>()))},
             {"mnemonicImagePath", QString::fromStdString(globalMnemonics[id][stdMnemonicId]["image"].get<String>())}
         };
 
@@ -1132,4 +1133,13 @@ QVariantMap Backend::getMnemonic(QString levelPath, QString itemId)
     }
     else
         return QVariantMap();
+}
+
+QString Backend::convertMarkdownToRichtext(QString markdownText)
+{
+    return markdownText.replace(QRegularExpression("<tt><br>[^<>].*?<br></tt>(*SKIP)(*F)|\\*\\*\\*(.*?)\\*\\*\\*(?=[^>]*(?:<|$))"), "<b><i>\\1</i></b>")
+        .replace(QRegularExpression("<tt><br>[^<>].*?<br></tt>(*SKIP)(*F)|\\*\\*(.*?)\\*\\*(?=[^>]*(?:<|$))"), "<b>\\1</b>")
+        .replace(QRegularExpression("<tt><br>[^<>].*?<br></tt>(*SKIP)(*F)|\\*(.*?)\\*(?=[^>]*(?:<|$))"), "<i>\\1</i>")
+        .replace(QRegularExpression("<tt><br>[^<>].*?<br></tt>(*SKIP)(*F)|__(.*?)__(?=[^>]*(?:<|$))"), "<u>\\1</u>")
+        .replace(QRegularExpression("<tt><br>[^<>].*?<br></tt>(*SKIP)(*F)|~~(.*?)~~(?=[^>]*(?:<|$))"), "<s>\\1</s>");
 }

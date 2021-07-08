@@ -54,6 +54,7 @@ Item {
             font.pointSize: 40
             fontSizeMode: Text.Fit
             minimumPointSize: 5
+            textFormat: Text.StyledText
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
             verticalAlignment: Text.AlignVCenter
