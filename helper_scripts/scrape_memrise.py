@@ -24,6 +24,7 @@ from MemriseCourse import MemriseCourse
 minLevel = 0
 maxLevel = 9999999
 destination = os.getcwd()
+cookie = ""
 skipAudio = False
 skipMnemonics = False
 
@@ -34,15 +35,17 @@ def showHelp():
     print("\t-f --from --> Set the level from which to start downloading")
     print("\t-t --to --> Set the level when to stop downloading")
     print("\t-d --destination --> Set the download destination")
+    print("\t-c --cookie --> Set your login cookie to download courses that have only one level")
     print("\t-n --no-audio --> Do not download any audio columns")
     print("\t-m --no-mnemonics --> Do not download any mnemonics")
     print("Examples:")
     print("\tScrape capitals up to level 3 --> python scrape_memrise.py -t 3 https://app.memrise.com/course/63061/capital-cities-2/")
     print("\tScrape capitals from level 3 to the end --> python scrape_memrise.py -f 3 https://app.memrise.com/course/63061/capital-cities-2/")
     print("\tScrape capitals only between levels 2 and 4 --> python scrape_memrise.py -f 2 -t 4 https://app.memrise.com/course/63061/capital-cities-2/")
+    print("\tScrape a single-level course like \"Nato Alphabet\" that requires you to be logged in --> python scrape_memrise.py -c 'your login cookie' https://app.memrise.com/course/31682/nato-alphabet-3/")
 
 try:
-    opts, args = getopt(sys.argv[1:], "f:t:d:nm", ["from=", "to=", "destination=", "no-audio", "no-mnemonics"])
+    opts, args = getopt(sys.argv[1:], "f:t:d:c:nm", ["from=", "to=", "destination=", "cookie=", "no-audio", "no-mnemonics"])
     for o, a in opts:
 
         if (o in ("-f", "--from")):
@@ -53,6 +56,9 @@ try:
 
         if (o in ("-d", "--destination")):
             destination = a
+
+        if (o in ("-c", "--cookie")):
+            cookie = a
 
         if (o in ("-n", "--no-audio")):
             skipAudio = True
@@ -71,11 +77,11 @@ if len(args) == 0:
 
 for a in args:
     try:
-        course = MemriseCourse(a, destination)
+        course = MemriseCourse(a, destination, cookie)
         course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
         print()
     except KeyboardInterrupt:
         exit("\n\nAborting")
     except Exception as e:
-        print("\n\nCaught exception\n", str(e), "\nContinuing to next course\n\n")
+        print("\n\nCaught exception\n", str(e), "\nContinuing\n\n")
         continue

@@ -28,15 +28,19 @@ class MemriseCourse():
     memriseImages = "https://static.memrise.com/"
     memriseUrl = "https://app.memrise.com"
 
+    headers = {}
+
     forbiddenFileCharacters = "[<>:\"\'|?*]"
 
     thingPattern = re.compile("thing \w+-\w+")
     testColumnTypePattern = re.compile("col_a col \w+")
     promptColumnTypePattern = re.compile("col_b col \w+")
 
-    def __init__(self, url, destination):
+    def __init__(self, url, destination, cookie):
         # Setup
         print("Gathering preliminary data")
+
+        MemriseCourse.headers["cookie"] = cookie
 
         self.itemPools = {}
         self.itemLearnables = {}
@@ -70,28 +74,34 @@ class MemriseCourse():
             print("No description found")
             self.description = ""
 
-        # Course total levels
-        print("Scraping level count")
-        lastLevelUrl = soup.find_all("a", class_ = "level")[-1]["href"]
-        self.levelAmount = int(lastLevelUrl.split("/")[-2 if lastLevelUrl.endswith("/") else -1])
-        del lastLevelUrl
+        try:
+            # Course total levels
+            print("Scraping level count")
+            lastLevelUrl = soup.find_all("a", class_ = "level")[-1]["href"]
+            self.levelAmount = int(lastLevelUrl.split("/")[-2 if lastLevelUrl.endswith("/") else -1])
+            del lastLevelUrl
 
-        # Level urls
-        print("Building level URLs")
-        self.levelUrls = [url + "/" + str(i) for i in range(1, self.levelAmount + 1)]
+            # Level urls
+            print("Building level URLs")
+            self.levelUrls = [url + "/" + str(i) for i in range(1, self.levelAmount + 1)]
+        except IndexError:
+            print("Detected course with single level")
+            self.levelAmount = 1
+            self.levelUrls = [url]
         
         # Pool ID
         print("Finding pool ID")
-            
+
         randomThingId = None
         for i in self.levelUrls:
-            soup = BeautifulSoup(requests.get(i).content, features="lxml")
+            soup = BeautifulSoup(requests.get(i + "/", headers = MemriseCourse.headers).content, features="lxml")
             thing = soup.find("div", class_ = MemriseCourse.thingPattern)
             if thing:
                 randomThingId = thing["data-thing-id"]
                 break
+
         if randomThingId == None:
-            exit("Is this a media only level?")
+            raise Exception("Course has no learning levels or course has only one level which cannot be downloaded without logging in")
 
         poolId = requests.get(MemriseCourse.memriseApi + "thing/get/?thing_id=" + randomThingId).json()["thing"]["pool_id"]
         self.pools = {}
@@ -114,10 +124,14 @@ class MemriseCourse():
         print()
 
         for i in range(max(0, start - 1), min(self.levelAmount, stop)):
-            soup = BeautifulSoup(requests.get(self.levelUrls[i]).content, features="lxml")
+            soup = BeautifulSoup(requests.get(self.levelUrls[i] + "/", headers = MemriseCourse.headers).content, features="lxml")
             levelContent = {}
 
-            levelContent["title"] = soup.find("h3", class_ = "progress-box-title").text.strip()
+            try:
+                levelContent["title"] = soup.find("h3", class_ = "progress-box-title").text.strip()
+            except AttributeError:
+                levelContent["title"] = self.title
+
             print("Scraping level", levelContent["title"])
 
             # Skip grammar levels in official Memrise courses
