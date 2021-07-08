@@ -3,20 +3,26 @@
 Memento is a cross-platform, offline, spaced-repetition learning application. It is made with the intent to be clean, simple to use and easily configurable to one's needs.
 
 # Video demonstration
-[Memento v0.5 PC](https://www.youtube.com/watch?v=YV9dPNs5yjI)
+[Memento v0.5 PC - https://www.youtube.com/watch?v=YV9dPNs5yjI](https://www.youtube.com/watch?v=YV9dPNs5yjI)
 
 # Downloading Memrise courses
 To download a Memrise course and convert it to a Mememto-compatible format, you must run the Python script in the folder `helper_scripts`. This works best through a PC.
 1. Install Python for your PC
-- Windows or OS X - https://www.python.org/downloads
+- Windows or Mac OS X - https://www.python.org/downloads
 - Linux - install it from your distro's package manager
 2. Install the Python dependencies `requests`, `lxml` and `beautifulsoup4` for example from pip.
-- How to get pip for Windows if you do not have it already - [https://phoenixnap.com/kb/install-pip-windows](https://phoenixnap.com/kb/install-pip-windows)
+- How to get pip for Windows if you do not have it already - https://phoenixnap.com/kb/install-pip-windows
 - Install dependencies like this
 ```bash
 python -m pip install requests lxml beautifulsoup4
 ```
-3. Download the two Python scripts in the `helper_scripts` folder, run the script called `scrape_memrise.py` and follow its instructions.
+3. Download the two Python scripts in the `helper_scripts` folder, run the script called `scrape_memrise.py` and follow its instructions. Execute it like this to get further instructions
+```bash
+python scrape_memrise.py
+```
+
+# Special notes
+- On Windows, some audio files might not play correctly even if they are not broken. To fix this, install the **Basic K-Lite Codec Pack** or a higher variant from https://www.codecguide.com/download_kl.htm
 
 # Build instructions:
 
@@ -31,7 +37,7 @@ qmake  ../memento.pro -spec linux-g++ CONFIG+=qtquickcompiler
 make install
 ```
 
-Memento, its icon and desktop file will now be placed in an `output` directory in the source code directory. You can now place these files wherever you wish.
+Memento, its icon and desktop file will now be placed in an `output` folder in the source code directory. You can now place these files wherever you wish.
 
 # Windows 10 64-bit:
 
@@ -113,7 +119,7 @@ ANDROID_SDK_ROOT=$HOME/Android/Sdk $HOME/Qt/5.15.2/android/bin/androiddeployqt -
 
 You can now find the finished APK file in the directory `output/build/outputs/apk/debug/output-debug.apk` and install it on an Android device.
 
-## Developer's note
-Unfortunately I do not have access to any devices running Mac OS X so I cannot build a Memento version for Mac or iOS. If anyone wishes to build it themselves, you can start from these instructions:
+# Mac OS X and iOS
+Unfortunately I do not have access to any devices running Mac OS X so I cannot build a Memento version for Mac OS X or iOS. If anyone wishes to build it themselves, you can start from these instructions:
 - https://doc.qt.io/qt-5/macos-deployment.html
 - https://doc.qt.io/qt-5/ios.html
