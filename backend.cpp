@@ -489,13 +489,19 @@ String Backend::getWateringTime(int streak)
 
 void Backend::saveLevel(QString levelPath)
 {
-    ulong completedSeeds = 0;
+    uint completedSeeds = 0;
+    uint ignoredSeeds = 0;
+    uint seedAmount = globalLevel["seeds"].size();
     for (auto &item : globalLevel["seeds"].items())
     {
         if (globalLevel["seeds"][item.key()]["planted"].get<bool>())
             completedSeeds++;
+
+        if (globalLevel["seeds"][item.key()]["ignored"].get<bool>())
+            ignoredSeeds++;
     }
-    globalLevel["completed"] = (completedSeeds == globalLevel["seeds"].size());
+
+    globalLevel["completed"] = ((completedSeeds + ignoredSeeds) == seedAmount);
 
     std::ofstream level(levelPath.toStdString());
     level << globalLevel.dump(jsonIndent) << std::endl;

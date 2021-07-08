@@ -26,7 +26,7 @@ ColumnLayout {
     property int levelHeaderNumber: 0
     property string levelHeaderIcon: ""
     property int levelHeaderItemAmount: 0
-    property int levelHeaderCompletedItemAmount: 0
+    property int levelHeaderFinishedItemAmount: 0
     property bool headerIsLearning: true
 
     function changeLevel(levelIndex, caller)
@@ -116,7 +116,7 @@ ColumnLayout {
                 id: levelProgressBar
                 from: 0
                 to: headerIsLearning ? levelHeaderItemAmount : 100
-                value: headerIsLearning ? levelHeaderCompletedItemAmount : 0
+                value: headerIsLearning ? levelHeaderFinishedItemAmount : 0
                 indeterminate:  false
                 Material.accent: typeof(levelCompleted) === "undefined" ? defaultToolbarColor : (levelCompleted ? globalBlue : globalGreen)
                 Layout.preferredWidth: parent.width

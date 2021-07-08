@@ -217,7 +217,7 @@ Item {
                     id: courseProgressBar
                     from: 0
                     to: items
-                    value: planted
+                    value: planted + ignored
                     indeterminate:  false
                     Material.accent: completed ? globalBlue : globalGreen
                     Layout.alignment: Qt.AlignCenter

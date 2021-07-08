@@ -36,6 +36,7 @@ Item {
     property string promptColumnType: ""
     property int itemAmount: 0
 
+    property int ignoredAmount: 0
     property bool levelCompleted: false
     property int plantedItems: countPlanted()
     property bool manualReview: false
@@ -219,7 +220,7 @@ Item {
                     levelHeaderNumber: levelNumber
                     levelHeaderIcon: levelCompleted ? "assets/icons/flower.svg" : "assets/icons/seeds.svg"
                     levelHeaderItemAmount: itemAmount
-                    levelHeaderCompletedItemAmount: plantedItems
+                    levelHeaderFinishedItemAmount: plantedItems + ignoredAmount
                 }
 
                 RowLayout {
@@ -313,7 +314,7 @@ Item {
 
                     Label {
                         id: ignoredAmountHeading
-                        text: "N Ignored"
+                        text: ignoredAmount + " ignored"
                         font.pointSize: userSettings["defaultFontSize"]
                         Layout.alignment: Qt.AlignRight
 
@@ -321,13 +322,11 @@ Item {
                             target: globalBackend
                             function onFinishedAddingLevel()
                             {
-                                var amountIgnored = 0
                                 for (var i = 0; i < levelEntryListModel.count; i++)
                                 {
                                     if (levelEntryListModel.get(i).ignored)
-                                        amountIgnored++
+                                        ignoredAmount++
                                 }
-                                ignoredAmountHeading.text = amountIgnored + " Ignored"
                             }
                         }
                     }
@@ -438,6 +437,8 @@ Item {
             globalBackend.ignoreLevel(levelPath)
             for (var i = 0; i < levelEntryListModel.count; i++)
                 levelEntryListModel.get(i).ignored = true
+
+            signalSource.refreshCourseLevels()
         }
     }
 
