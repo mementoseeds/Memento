@@ -168,8 +168,11 @@ Item {
         var levels = {}
         levels[levelPath] = items
 
-        rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory,
-            "testingContentOriginal": levels, "actionType": "water", "mockWater": true, "totalWateringItems": items.length})
+        if (items.length > 0)
+            rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": courseDirectory,
+                "testingContentOriginal": levels, "actionType": "water", "mockWater": true, "totalWateringItems": items.length})
+        else
+            showPassiveNotification("There are no items to mock water")
     }
 
     function reloadLevel()
@@ -223,7 +226,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Mock water", "Difficult", "Ignore", "Auto learn", "Reset"]
+                        model: ["Preview", "Plant", "Water", "Mock water", "Difficult", "Ignore", "Ignore all", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
@@ -255,6 +258,10 @@ Item {
 
                                 case "Ignore":
                                     signalSource.showIgnore()
+                                    break
+
+                                case "Ignore all":
+                                    confirmLevelIgnore.visible = true
                                     break
 
                                 case "Auto learn":
@@ -417,6 +424,20 @@ Item {
         function onReloadLearningLevel()
         {
             reloadLevel()
+        }
+    }
+
+    MessageDialog {
+        id: confirmLevelIgnore
+        icon: StandardIcon.Question
+        title: "Ignore level?"
+        text: "Are you sure you want to ignore all items in this level?"
+        standardButtons: StandardButton.Yes | StandardButton.No
+        onYes:
+        {
+            globalBackend.ignoreLevel(levelPath)
+            for (var i = 0; i < levelEntryListModel.count; i++)
+                levelEntryListModel.get(i).ignored = true
         }
     }
 

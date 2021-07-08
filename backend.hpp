@@ -147,6 +147,7 @@ public:
     Q_INVOKABLE QVariantList getRandomCharacters(QString itemId, QString column, int count);
 
     Q_INVOKABLE void ignoreItem(QString levelPath, QString itemId, bool ignored);
+    Q_INVOKABLE void ignoreLevel(QString levelPath);
 
     Q_INVOKABLE void autoLearnItem(QString levelPath, QString itemId, int streakCount);
 

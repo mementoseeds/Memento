@@ -722,6 +722,14 @@ void Backend::ignoreItem(QString levelPath, QString itemId, bool ignored)
     saveLevel(levelPath);
 }
 
+void Backend::ignoreLevel(QString levelPath)
+{
+    for (auto &item : globalLevel["seeds"].items())
+        globalLevel["seeds"][item.key()]["ignored"] = true;
+
+    saveLevel(levelPath);
+}
+
 void Backend::autoLearnItem(QString levelPath, QString itemId, int streakCount)
 {
     //Called from button during planting
