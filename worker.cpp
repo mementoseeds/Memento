@@ -71,9 +71,12 @@ void Worker::doCourseRefresh(QVariantList courses)
                     }
                 }
 
-                difficult += (int)level["seeds"][id]["difficult"].get<bool>();
+                bool itemIgnored = level["seeds"][id]["ignored"].get<bool>();
 
-                ignored += (int)level["seeds"][id]["ignored"].get<bool>();
+                if (!itemIgnored)
+                    difficult += (int)level["seeds"][id]["difficult"].get<bool>();
+
+                ignored += (int)itemIgnored;
             }
         }
 
