@@ -19,7 +19,7 @@ from os.path import join
 import re
 import json
 import requests
-from pprint import pprint
+import time
 from bs4 import BeautifulSoup
 
 class MemriseCourse():
@@ -114,11 +114,14 @@ class MemriseCourse():
             if self.pools[poolId]["pool"]["columns"][column]["show_after_tests"] or self.pools[poolId]["pool"]["columns"][column]["always_show"]:
                 self.showAfterTests.append(self.pools[poolId]["pool"]["columns"][column]["label"])
 
-        # Cancel if course dir already exists
+        # Find new name if dir already exists
         self.cleanedTitle = re.sub(MemriseCourse.forbiddenFileCharacters, "", self.title)
-        if os.path.isdir(join(destination, self.cleanedTitle)):
-            print("***ERROR*** directory for course", self.cleanedTitle, "already exists. Exiting...")
-            exit()
+        while True:
+            if os.path.isdir(join(destination, self.cleanedTitle)):
+                print("***ERROR*** directory for course", self.cleanedTitle, "already exists. Generating new name...")
+                self.cleanedTitle += "-" + str(time.time())
+            else:
+                break
 
     def scrapeLevels(self, start, stop):
         print()
