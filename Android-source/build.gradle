@@ -73,6 +73,6 @@ android {
         resConfig "en"
         minSdkVersion = qtMinSdkVersion
         targetSdkVersion = qtTargetSdkVersion
-        versionName "0.5"
+        versionName "0.5.1"
     }
 }
