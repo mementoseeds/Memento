@@ -149,9 +149,17 @@ class MemriseCourse():
                 pattern = re.compile("var level_multimedia = '(.*?)';$", re.MULTILINE)
                 rawMedia = soup.find("script", text = pattern).string.strip()
                 cleanMedia = re.sub("^var level_multimedia = '|';$", "", rawMedia)
+
+                # Remove link embeds
                 cleanMedia = re.sub("embed:", "", cleanMedia)
+
+                # Properly decode markdown text
+                cleanMedia = cleanMedia.encode("utf-8").decode('unicode-escape').encode('latin1').decode('utf-8')
+
+                # Convert img to embedded markdown image
+                cleanMedia = re.sub("img:([^\s\n]+)", "![\\1](\\1)", cleanMedia)
                 
-                levelContent["mediaContent"] = cleanMedia.encode("utf-8").decode('unicode-escape').encode('latin1').decode('utf-8')
+                levelContent["mediaContent"] = cleanMedia
                 self.level.append(levelContent)
 
                 continue
