@@ -62,7 +62,7 @@ Item {
 
     function manuallyChangeTest(test, variables)
     {
-        testStackView.replace(test, variables, testChangeTransition)
+        testStackView.replace(test, variables, StackView.Immediate)
     }
 
     function mistakenTest(levelPath, id)

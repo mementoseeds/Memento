@@ -34,13 +34,6 @@ Item {
     property int numberTappingButtons: Math.floor(Math.random() * 6) + 5
     property int hintIndex: 1
 
-
-    Component.onCompleted:
-    {
-        if (itemData[0] === "image" || itemData[0] === "audio")
-            manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "levelPath": levelPath, "testColumn": testColumn, "promptColumn": promptColumn})
-    }
-
     ScrollView {
         anchors.fill: parent
         contentWidth: root.width
@@ -211,6 +204,9 @@ Item {
         repeat: false
         onTriggered:
         {
+            if (itemData[0] === "image" || itemData[0] === "audio")
+                manuallyChangeTest("qrc:/MultipleChoice.qml", {"itemId": itemId, "levelPath": levelPath, "testColumn": testColumn, "promptColumn": promptColumn})
+
             if (!platformIsMobile || !tappingEnabled)
                 textfield.forceActiveFocus()
         }
