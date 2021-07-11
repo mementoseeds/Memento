@@ -32,6 +32,7 @@ def showHelp():
     print("This is a script to scrape Memrise courses and convert them to Mememto-compatible ones. It first gathers general information from the course's home page. Afterwards it visits each level to get its title and the items in it. Finally it will call the Memrise API to extract extra information about an item, such as its attributes or audio.")
     print("You must specify only the course url. E.g. --> python scrape_memrise.py https://app.memrise.com/course/63061/capital-cities-2/")
     print("Extra options:")
+    print("\t-h --help --> Show this help page")
     print("\t-f --from --> Set the level from which to start downloading")
     print("\t-t --to --> Set the level when to stop downloading")
     print("\t-d --destination --> Set the download destination")
@@ -45,8 +46,12 @@ def showHelp():
     print("\tScrape a single-level course like \"Nato Alphabet\" that requires you to be logged in --> python scrape_memrise.py -c 'your login cookie' https://app.memrise.com/course/31682/nato-alphabet-3/")
 
 try:
-    opts, args = getopt(sys.argv[1:], "f:t:d:c:nm", ["from=", "to=", "destination=", "cookie=", "no-audio", "no-mnemonics"])
+    opts, args = getopt(sys.argv[1:], "hf:t:d:c:nm", ["help", "from=", "to=", "destination=", "cookie=", "no-audio", "no-mnemonics"])
     for o, a in opts:
+
+        if (o in ("-h", "--help")):
+            showHelp()
+            exit()
 
         if (o in ("-f", "--from")):
             minLevel = int(a)
@@ -66,7 +71,7 @@ try:
         if (o in ("-m", "--no-mnemonics")):
             skipMnemonics = True
 
-except GetoptError as e:
+except (GetoptError, ValueError) as e:
     print(e)
     showHelp()
     exit()

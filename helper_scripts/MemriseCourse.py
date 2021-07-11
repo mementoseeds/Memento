@@ -273,12 +273,9 @@ class MemriseCourse():
 
                             try:
                                 self.seedbox[key]["attributes"][number]["label"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["label"]
-                            except KeyError:
-                                self.seedbox[key]["attributes"][number]["label"] = "Unnamed"
-
-                            try:
                                 self.seedbox[key]["attributes"][number]["showAtTests"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["show_at_tests"]
                             except KeyError:
+                                self.seedbox[key]["attributes"][number]["label"] = "Unnamed"
                                 self.seedbox[key]["attributes"][number]["showAtTests"] = False
 
                             self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
