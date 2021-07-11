@@ -197,7 +197,7 @@ class MemriseCourse():
         try:
             os.mkdir(self.courseDir)
             
-            print("mkdir", self.courseDir)
+            print("\nmkdir", self.courseDir, "\n")
 
             os.mkdir(join(self.courseDir, "levels"))
             os.mkdir(join(self.courseDir, "assets"))
@@ -270,8 +270,17 @@ class MemriseCourse():
                 try:
                     for number in itemInfo["thing"]["attributes"]:
                             self.seedbox[key]["attributes"][number] = {}
-                            self.seedbox[key]["attributes"][number]["label"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["label"]
-                            self.seedbox[key]["attributes"][number]["showAtTests"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["show_at_tests"]
+
+                            try:
+                                self.seedbox[key]["attributes"][number]["label"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["label"]
+                            except KeyError:
+                                self.seedbox[key]["attributes"][number]["label"] = "Unnamed"
+
+                            try:
+                                self.seedbox[key]["attributes"][number]["showAtTests"] = self.pools[itemInfo["thing"]["pool_id"]]["pool"]["attributes"][number]["show_at_tests"]
+                            except KeyError:
+                                self.seedbox[key]["attributes"][number]["showAtTests"] = False
+
                             self.seedbox[key]["attributes"][number]["value"] = itemInfo["thing"]["attributes"][number]["val"]
 
                     # Columns
@@ -312,7 +321,6 @@ class MemriseCourse():
 
                     # Mnemonics
                     if not skipMnemonics:
-                        print("Scraping mnemonics")
                         mnemonicsJson = requests.get(MemriseCourse.memriseApi + "mem/get_many_for_thing/?thing_id=" + key + "&learnable_id=" + self.itemLearnables[key]).json()
                         
                         self.mnemonics[key] = {}
