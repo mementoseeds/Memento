@@ -21,6 +21,11 @@ import sys
 from getopt import getopt, GetoptError
 from MemriseCourse import MemriseCourse
 
+try:
+    import beepy
+except ModuleNotFoundError:
+    print("Install pip module \"beepy\" to enable playing sounds\n")
+
 minLevel = 0
 maxLevel = 9999999
 destination = os.getcwd()
@@ -80,13 +85,35 @@ if len(args) == 0:
     showHelp()
     exit()
 
+print("Download audio -", not skipAudio)
+print("Download mnemonics -", not skipMnemonics)
+
+if not skipAudio:
+    print("\n***Warning*** downloading audio can affect download duration and course size\n")
+
+if not skipMnemonics:
+    print("\n***Warning*** downloading mnemonics can significantly affect download duration\n")
+
 for a in args:
     try:
         course = MemriseCourse(a, destination, cookie)
         course.autoScrape(destination, minLevel, maxLevel, skipAudio, skipMnemonics)
         print()
+
     except KeyboardInterrupt:
         exit("\n\nAborting")
+
     except Exception as e:
-        print("\n\nCaught exception\n", str(e), "\nContinuing\n\n")
+        print("\n\nCaught exception\n", e, "\nContinuing to next course\n\n")
+
+        try:
+            beepy.beep(sound = "error")
+        except NameError:
+            pass
+
         continue
+
+try:
+    beepy.beep(sound = "ready")
+except NameError:
+    pass

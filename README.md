@@ -20,6 +20,7 @@ python -m pip install requests lxml beautifulsoup4
 ```bash
 python scrape_memrise.py
 ```
+You may optionally install the pip module "beepy" as well to enable playing sounds when courses finish downloading or an error occurs.
 
 # Special notes
 - On Windows, some audio files might not play correctly even if they are not broken. To fix this, install the **Basic K-Lite Codec Pack** or a higher variant from https://www.codecguide.com/download_kl.htm

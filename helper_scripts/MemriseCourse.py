@@ -49,13 +49,13 @@ class MemriseCourse():
 
         url = url if not url.endswith("/") else url[0:-1]
         courseId = url.split("/")[-2]
-        soup = BeautifulSoup(requests.get(url).content, features="lxml")
+        soup = BeautifulSoup(requests.get(url).content, features = "lxml")
 
         # Course title and creator
         print("Scraping course title and creator")
         top = soup.head.title.string.strip().split(" - ")
         self.title = soup.find("h1", class_ = "course-name sel-course-name").text.strip().replace("/", "∕")
-        self.creator = re.sub("^by ", "", top[1].strip())
+        self.creator = re.sub("^by ", "", top[-2].strip())
         del top
 
         # Course category
@@ -94,7 +94,7 @@ class MemriseCourse():
 
         randomThingId = None
         for i in self.levelUrls:
-            soup = BeautifulSoup(requests.get(i + "/", headers = MemriseCourse.headers).content, features="lxml")
+            soup = BeautifulSoup(requests.get(i + "/", headers = MemriseCourse.headers).content, features = "lxml")
             thing = soup.find("div", class_ = MemriseCourse.thingPattern)
             if thing:
                 randomThingId = thing["data-thing-id"]
@@ -118,7 +118,7 @@ class MemriseCourse():
         self.cleanedTitle = re.sub(MemriseCourse.forbiddenFileCharacters, "", self.title)
         while True:
             if os.path.isdir(join(destination, self.cleanedTitle)):
-                print("***ERROR*** directory for course", self.cleanedTitle, "already exists. Generating new name...")
+                print("\n***ERROR*** directory for course", self.cleanedTitle, "already exists. Generating new name...")
                 self.cleanedTitle += "-" + str(time.time())
             else:
                 break
@@ -127,7 +127,7 @@ class MemriseCourse():
         print()
 
         for i in range(max(0, start - 1), min(self.levelAmount, stop)):
-            soup = BeautifulSoup(requests.get(self.levelUrls[i] + "/", headers = MemriseCourse.headers).content, features="lxml")
+            soup = BeautifulSoup(requests.get(self.levelUrls[i] + "/", headers = MemriseCourse.headers).content, features = "lxml")
             levelContent = {}
 
             try:
@@ -237,7 +237,7 @@ class MemriseCourse():
             "completed": False}
         
         # Write course info json
-        json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
+        json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w", encoding = "utf-8"), indent = 4, ensure_ascii = False)
 
     
     def buildSeedbox(self, skipAudio, skipMnemonics):
@@ -252,12 +252,12 @@ class MemriseCourse():
                     if not item in uniqueItems:
                         uniqueItems.append(item)
 
-        print("Finding item information from Memrise API")
+        print("Finding item information from Memrise API\n")
 
         counter = 1
         totalUniqueItems = len(uniqueItems)
         for item in uniqueItems:
-            print("Scraping item", counter, "of", totalUniqueItems)
+            print("Scraping item", counter, "of", totalUniqueItems, end = "\r", flush = True)
             counter += 1
 
             itemInfo = requests.get(MemriseCourse.memriseApi + "thing/get/?thing_id=" + item).json()
@@ -351,21 +351,21 @@ class MemriseCourse():
 
     def writeSeedbox(self):
         print("Writing seedbox.json and mnemonics.json")
-        json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
-        json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w", encoding="utf-8"), indent = 4, ensure_ascii = False)
+        json.dump(self.seedbox, open(join(self.courseDir, "seedbox.json"), "w", encoding = "utf-8"), indent = 4, ensure_ascii = False)
+        json.dump(self.mnemonics, open(join(self.courseDir, "mnemonics.json"), "w", encoding = "utf-8"), indent = 4, ensure_ascii = False)
 
     def createLevels(self):
         print("Creating level files")
         
         for i in range(0, len(self.level)):
             if self.level[i]["isMultimedia"]:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w", encoding="utf-8")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w", encoding = "utf-8")
                 levelFile.write("[comment]: <> (" + self.level[i]["title"] + ")\n")
                 levelFile.write(self.level[i]["mediaContent"])
                 levelFile.close()
             
             else:
-                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w", encoding="utf-8")
+                levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w", encoding = "utf-8")
                 levelInfo = {"title": self.level[i]["title"],
                     "completed": False,
                     "test": self.pools[self.itemPools[self.level[i]["items"][0]]]["pool"]["columns"][self.level[i]["testColumn"]]["label"],
@@ -390,16 +390,6 @@ class MemriseCourse():
                 levelFile.close()
 
     def autoScrape(self, destination, minLevel, maxLevel, skipAudio, skipMnemonics):
-        print()
-        print("Download audio -", not skipAudio)
-        print("Download mnemonics -", not skipMnemonics)
-        
-        if not skipAudio:
-            print("***Warning*** downloading audio can affect download duration and course size")
-
-        if not skipMnemonics:
-            print("***Warning*** downloading mnemonics can significantly affect download duration")
-
         self.scrapeLevels(minLevel, maxLevel)
         self.writeCourseInfo(destination)
         self.buildSeedbox(skipAudio, skipMnemonics)
