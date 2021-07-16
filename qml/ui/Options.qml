@@ -115,9 +115,9 @@ Item {
 
             SpinBox {
                 id: cooldownTimerSpinBox
-                from: 100
+                from: 50
                 to: 100000
-                stepSize: 100
+                stepSize: 50
                 editable: true
                 value: userSettings["cooldownTimer"]
                 Material.accent: globalGreen
