@@ -147,7 +147,13 @@ class MemriseCourse():
                 levelContent["isMultimedia"] = True
                 
                 pattern = re.compile("var level_multimedia = '(.*?)';$", re.MULTILINE)
-                rawMedia = soup.find("script", text = pattern).string.strip()
+
+                try:
+                    rawMedia = soup.find("script", text = pattern).string.strip()
+                except AttributeError:
+                    rawMedia = "This media level is empty."
+                    print(rawMedia)
+
                 cleanMedia = re.sub("^var level_multimedia = '|';$", "", rawMedia)
 
                 # Remove link embeds
