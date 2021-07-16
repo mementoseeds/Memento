@@ -20,6 +20,7 @@ import re
 import sys
 from getopt import getopt, GetoptError
 from MemriseCourse import MemriseCourse
+import traceback
 
 try:
     import beepy
@@ -104,7 +105,7 @@ for a in args:
         exit("\n\nAborting")
 
     except Exception as e:
-        print("\n\nCaught exception\n", e, "\nContinuing to next course\n\n")
+        print("\n\nCaught exception\n", traceback.format_exc(), "\nContinuing to next course\n\n")
 
         try:
             beepy.beep(sound = "error")
