@@ -49,14 +49,17 @@ class MemriseCourse():
 
         url = url if not url.endswith("/") else url[0:-1]
         courseId = url.split("/")[-2]
-        soup = BeautifulSoup(requests.get(url).content, features = "lxml")
+        soup = BeautifulSoup(requests.get(url + "/", headers = MemriseCourse.headers).content, features = "lxml")
 
-        # Course title and creator
-        print("Scraping course title and creator")
-        top = soup.head.title.string.strip().split(" - ")
+        # Course title and author
+        print("Scraping course title and author")
         self.title = soup.find("h1", class_ = "course-name sel-course-name").text.strip().replace("/", "∕")
-        self.creator = re.sub("^by ", "", top[-2].strip())
-        del top
+
+        __headTitle = soup.head.title.string.strip().split(" - ")[-2].strip()
+        if __headTitle.startswith("by "):
+            self.author = re.sub("^by ", "", __headTitle)
+        else:
+            self.author = "Memrise"
 
         # Course category
         print("Scraping course category")
@@ -77,15 +80,20 @@ class MemriseCourse():
         try:
             # Course total levels
             print("Scraping level count")
-            lastLevelUrl = soup.find_all("a", class_ = "level")[-1]["href"]
-            self.levelAmount = int(lastLevelUrl.split("/")[-2 if lastLevelUrl.endswith("/") else -1])
-            del lastLevelUrl
+            __lastLevelUrl = soup.find_all("a", class_ = "level")[-1]["href"]
+            self.levelAmount = int(__lastLevelUrl.split("/")[-2 if __lastLevelUrl.endswith("/") else -1])
 
             # Level urls
             print("Building level URLs")
             self.levelUrls = [url + "/" + str(i) for i in range(1, self.levelAmount + 1)]
         except IndexError:
             print("Detected course with single level")
+
+            try:
+                self.author = soup.find("span", itemprop = "additionalName").string.strip()
+            except AttributeError:
+                self.author = "Memrise"
+
             self.levelAmount = 1
             self.levelUrls = [url]
         
@@ -190,10 +198,9 @@ class MemriseCourse():
             self.itemCount += len(levelContent["items"])
 
             # Get level columns
-            columnData = soup.find("div", class_ = "things clearfix")
-            levelContent["testColumn"] = columnData["data-column-a"]
-            levelContent["promptColumn"] = columnData["data-column-b"]
-            del columnData
+            __columnData = soup.find("div", class_ = "things clearfix")
+            levelContent["testColumn"] = __columnData["data-column-a"]
+            levelContent["promptColumn"] = __columnData["data-column-b"]
 
             self.level.append(levelContent)
     
@@ -224,7 +231,7 @@ class MemriseCourse():
         print("Creating info.json")
 
         courseInfo = {"title": self.title,
-            "author": self.creator,
+            "author": self.author,
             "description": self.description,
             "category": self.category,
             "icon": "assets/images/icon.jpg",
