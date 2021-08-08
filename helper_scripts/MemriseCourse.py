@@ -311,13 +311,17 @@ class MemriseCourse():
 
                         # Image column
                         elif itemInfo["thing"]["columns"][column]["kind"] == "image":
-                            self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]] = {}
-                            self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "image"
+                            try:
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]] = {}
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["type"] = "image"
 
-                            imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
-                            open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get(MemriseCourse.memriseImages + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
+                                imageName = itemInfo["thing"]["columns"][column]["val"][0]["url"].split("/")[-1]
+                                open(join(self.courseDir, "assets", "images", imageName), "wb").write(requests.get(MemriseCourse.memriseImages + itemInfo["thing"]["columns"][column]["val"][0]["url"]).content)
 
-                            self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = "assets/images/" + imageName
+                            except IndexError:
+                                print("Item", itemInfo["thing"]["id"], "of type image in course", "\"" + self.title + "\"", "does not have an image URL.")
+                                self.seedbox[key][self.pools[itemInfo["thing"]["pool_id"]]["pool"]["columns"][column]["label"]]["primary"] = "assets/images/icon.jpg"
 
                         # Text column
                         elif itemInfo["thing"]["columns"][column]["kind"] == "text":
