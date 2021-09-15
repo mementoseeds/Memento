@@ -38,7 +38,7 @@ class MemriseCourse():
 
     def __init__(self, url, destination, cookie):
         # Setup
-        print("Gathering preliminary data")
+        #print("Gathering preliminary data")
 
         MemriseCourse.headers["cookie"] = cookie
 
@@ -52,8 +52,9 @@ class MemriseCourse():
         soup = BeautifulSoup(requests.get(url + "/", headers = MemriseCourse.headers).content, features = "lxml")
 
         # Course title and author
-        print("Scraping course title and author")
+        #print("Scraping course title and author")
         self.title = soup.find("h1", class_ = "course-name sel-course-name").text.strip().replace("/", "∕")
+        print("Scraping", self.title)
 
         __headTitle = soup.head.title.string.strip().split(" - ")[-2].strip()
         if __headTitle.startswith("by "):
@@ -96,7 +97,7 @@ class MemriseCourse():
 
             self.levelAmount = 1
             self.levelUrls = [url]
-        
+
         # Pool ID
         print("Finding pool ID")
 
@@ -143,17 +144,17 @@ class MemriseCourse():
             except AttributeError:
                 levelContent["title"] = self.title
 
-            print("Scraping level", levelContent["title"])
+            print("Reading level", levelContent["title"])
 
             # Skip grammar levels in official Memrise courses
             if soup.find("div", class_ = "grammar-not-available"):
                 print("Skipping grammar level", levelContent["title"])
                 continue
-            
+
             # Handle separately if the level is multimedia
             if soup.find("div", class_ = "multimedia-wrapper"):
                 levelContent["isMultimedia"] = True
-                
+
                 pattern = re.compile("var level_multimedia = '(.*?)';$", re.MULTILINE)
 
                 try:
@@ -172,12 +173,12 @@ class MemriseCourse():
 
                 # Convert img to embedded markdown image
                 cleanMedia = re.sub("img:([^\s\n]+)", "![\\1](\\1)", cleanMedia)
-                
+
                 levelContent["mediaContent"] = cleanMedia
                 self.level.append(levelContent)
 
                 continue
-                
+
             # Handle if it is a normal level
             levelContent["isMultimedia"] = False
 
@@ -203,13 +204,13 @@ class MemriseCourse():
             levelContent["promptColumn"] = __columnData["data-column-b"]
 
             self.level.append(levelContent)
-    
+
     def writeCourseInfo(self, destination):
         self.courseDir = join(destination, self.cleanedTitle)
-        
+
         try:
             os.mkdir(self.courseDir)
-            
+
             print("\nmkdir", self.courseDir, "\n")
 
             os.mkdir(join(self.courseDir, "levels"))
@@ -242,11 +243,11 @@ class MemriseCourse():
             "difficult": 0,
             "ignored": 0,
             "completed": False}
-        
+
         # Write course info json
         json.dump(courseInfo, open(join(self.courseDir, "info.json"), "w", encoding = "utf-8"), indent = 4, ensure_ascii = False)
 
-    
+
     def buildSeedbox(self, skipAudio, skipMnemonics):
         print("Finding unique items across all levels")
 
@@ -336,7 +337,7 @@ class MemriseCourse():
                     # Mnemonics
                     if not skipMnemonics:
                         mnemonicsJson = requests.get(MemriseCourse.memriseApi + "mem/get_many_for_thing/?thing_id=" + key + "&learnable_id=" + self.itemLearnables[key]).json()
-                        
+
                         self.mnemonics[key] = {}
                         for mem in mnemonicsJson["mems"]:
                             memId = str(mem["id"])
@@ -359,6 +360,10 @@ class MemriseCourse():
                     self.pools[newPoolId] = requests.get(MemriseCourse.memriseApi + "pool/get/?pool_id=" + str(newPoolId)).json()
                     restartLoop = True # Restart from the beginning of the while loop without skipping the current item where the exception occurred
 
+                except ConnectionResetError:
+                    print("Connection reset error. Retrying...")
+                    restartLoop = True
+
 
     def writeSeedbox(self):
         print("Writing seedbox.json and mnemonics.json")
@@ -367,14 +372,14 @@ class MemriseCourse():
 
     def createLevels(self):
         print("Creating level files")
-        
+
         for i in range(0, len(self.level)):
             if self.level[i]["isMultimedia"]:
                 levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".md"), "w", encoding = "utf-8")
                 levelFile.write("[comment]: <> (" + self.level[i]["title"] + ")\n")
                 levelFile.write(self.level[i]["mediaContent"])
                 levelFile.close()
-            
+
             else:
                 levelFile = open(join(self.courseDir, "levels", str(i + 1).zfill(5) + ".json"), "w", encoding = "utf-8")
                 levelInfo = {"title": self.level[i]["title"],
@@ -394,7 +399,7 @@ class MemriseCourse():
                     "failures": 0,
                     "streak": 0,
                     "mnemonic": ""}
-                
+
                 levelInfo["seeds"] = seeds
 
                 json.dump(levelInfo, levelFile, indent = 4, ensure_ascii = False)
