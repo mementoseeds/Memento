@@ -33,6 +33,8 @@ Item {
         for (var i = 0; i < courseListModel.count; i++)
             courses.push(courseListModel.get(i).directory)
 
+        //courseListModel.clear()
+
         globalBackend.refreshCourses(courses)
     }
 
@@ -75,6 +77,14 @@ Item {
         model: ListModel {id: courseListModel}
 
         delegate: CourseExterior {}
+
+        add: Transition {
+                NumberAnimation { properties: "y"; from: root.height; duration: 500 }
+            }
+
+        remove: Transition {
+                NumberAnimation { properties: "y"; to: -root.height; duration: 500 }
+            }
     }
 
     Connections {
@@ -101,6 +111,8 @@ Item {
         {
             if (courseListModel.count === 0)
                 courseListEmptyHeading.visible = true
+            else
+                courseListEmptyHeading.visible = false
         }
 
         function onFinishedRefreshingCourses()

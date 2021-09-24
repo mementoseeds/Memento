@@ -143,7 +143,6 @@ void Backend::getCourseList()
         infoFile >> courseInfo;
         infoFile.close();
 
-
         emit addCourse(
             directory,
             QString::fromStdString(courseInfo["title"].get<String>()),
