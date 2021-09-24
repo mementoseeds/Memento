@@ -29,7 +29,7 @@ public:
 
 public slots:
 
-    void doCourseRefresh(QVariantList courses);
+    void doCourseRefresh(QString coursesLocation);
 
     void doGetCourseDifficultItems(QString courseDirectory);
 

@@ -141,7 +141,7 @@ public:
 
     Q_INVOKABLE void autoLearn(QVariantMap levelAndItems);
 
-    Q_INVOKABLE void refreshCourses(QVariantList courses);
+    Q_INVOKABLE void refreshCourses();
 
     Q_INVOKABLE QVariantList getRandomValues(QString itemId, QString column, int count);
     Q_INVOKABLE QVariantList getRandomCharacters(QString itemId, QString column, int count);

@@ -23,10 +23,10 @@ Item {
 
     Component.onCompleted:
     {
-        globalBackend.getCourseList()
-
         if (userSettings["autoRefreshCourses"])
             signalSource.refreshAllCourses()
+        else
+            globalBackend.getCourseList()
     }
 
     Shortcut {
@@ -108,13 +108,13 @@ Item {
         target: signalSource
         function onRefreshAllCourses()
         {
-            var courses = []
-            for (var i = 0; i < courseListModel.count; i++)
-                courses.push(courseListModel.get(i).directory)
+//            var courses = []
+//            for (var i = 0; i < courseListModel.count; i++)
+//                courses.push(courseListModel.get(i).directory)
 
             courseListModel.clear()
 
-            globalBackend.refreshCourses(courses)
+            globalBackend.refreshCourses()
         }
     }
 }

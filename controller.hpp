@@ -58,7 +58,7 @@ public:
 public slots:
 
 signals:
-    void requestCourseRefresh(QVariantList courses);
+    void requestCourseRefresh(QString coursesLocation);
     void courseRefreshFinished();
 
     void requestGetCourseDifficultItems(QString courseDirectory);

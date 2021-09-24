@@ -18,11 +18,13 @@
 
 Worker::Worker(QObject *parent) : QObject(parent) {}
 
-void Worker::doCourseRefresh(QVariantList courses)
+void Worker::doCourseRefresh(QString coursesLocation)
 {
-    foreach (QVariant course, courses)
+    QDir coursesDir(coursesLocation);
+
+    foreach (QString course, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
     {
-        QString coursePath = course.toString();
+        QString coursePath = coursesLocation + "/" + course;
 
         QDir courseDir(coursePath + "/levels");
 

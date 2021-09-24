@@ -60,7 +60,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
 {
     this->userSettings = userSettings;
 
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MementoSeeds", "config");
     settings.setValue("coursesLocation", userSettings["coursesLocation"]);
     settings.setValue("countdownTimer", userSettings["countdownTimer"]);
     settings.setValue("cooldownTimer", userSettings["cooldownTimer"]);
@@ -89,7 +89,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
 
 QVariantMap Backend::getUserSettings()
 {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "Memento", "config");
+    QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MementoSeeds", "config");
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
     userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
@@ -636,12 +636,12 @@ void Backend::autoLearn(QVariantMap levelAndItems)
     saveLevel(levelPath);
 }
 
-void Backend::refreshCourses(QVariantList courses)
+void Backend::refreshCourses()
 {
     //Pass this operation to another thread
     Controller *threadController = new Controller;
     connect(threadController, &Controller::courseRefreshFinished, this, &Backend::finishedRefreshingCourses);
-    emit threadController->requestCourseRefresh(courses);
+    emit threadController->requestCourseRefresh(userSettings["coursesLocation"].toString());
 }
 
 QString Backend::getReviewTime(QString date)
