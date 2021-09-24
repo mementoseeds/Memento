@@ -66,7 +66,7 @@ Item {
             }
 
         remove: Transition {
-                NumberAnimation { properties: "y"; to: -root.height; duration: 500 }
+                NumberAnimation { properties: "y"; to: -root.height; duration: 200 }
             }
     }
 
@@ -100,7 +100,6 @@ Item {
 
         function onFinishedRefreshingCourses()
         {
-            courseListModel.clear()
             globalBackend.getCourseList()
         }
     }
@@ -113,7 +112,7 @@ Item {
             for (var i = 0; i < courseListModel.count; i++)
                 courses.push(courseListModel.get(i).directory)
 
-            //courseListModel.clear()
+            courseListModel.clear()
 
             globalBackend.refreshCourses(courses)
         }

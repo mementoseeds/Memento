@@ -101,7 +101,8 @@ Item {
             }
 
             Label {
-                text: Math.floor(courseProgressBar.value / courseProgressBar.to * 100) + "%"
+                property int completedPercentage: Math.floor(courseProgressBar.value / courseProgressBar.to * 100)
+                text: (completed ? "⭐ " : "") + completedPercentage + "%" + (completed ? " ⭐" : "")
                 font.pointSize: userSettings["defaultFontSize"]
                 Layout.alignment: Qt.AlignCenter
             }
@@ -110,18 +111,25 @@ Item {
                 Layout.alignment: Qt.AlignCenter
 
                 Button {
-                    text: completed ? "Water" : "Plant"
-                    icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
-                    Material.background: completed ? globalBlue : globalGreen
-                    onClicked: text === "Plant" ? plantAction() : waterAction()
+                    text: "Plant"
+                    icon.source: "assets/icons/plant.svg"
+                    Material.background: globalGreen
+                    onClicked: plantAction()
                 }
 
                 Button {
-                    text: "Refresh"
-                    Material.background: globalOrange
-                    icon.source: "assets/actions/refresh.svg"
-                    onClicked: globalBackend.refreshCourses([directory])
+                    text: "Water"
+                    icon.source: "assets/icons/water.svg"
+                    Material.background: globalBlue
+                    onClicked: waterAction()
                 }
+
+//                Button {
+//                    text: "Refresh"
+//                    Material.background: globalOrange
+//                    icon.source: "assets/actions/refresh.svg"
+//                    onClicked: globalBackend.refreshCourses([directory])
+//                }
             }
         }
     }
