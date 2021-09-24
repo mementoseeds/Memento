@@ -1024,6 +1024,7 @@ void Backend::getCourseDifficultItems(QString courseDirectory)
     //Pass this operation to another thread
     Controller *threadController = new Controller;
     connect(threadController, &Controller::controllerGetDifficultItemInfo, this, &Backend::getDifficultItemInfo);
+    connect(threadController, &Controller::finishedGetDifficultItemInfo, this, &Backend::finishedGetDifficultItemInfo);
     emit threadController->requestGetCourseDifficultItems(courseDirectory);
 }
 

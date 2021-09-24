@@ -41,6 +41,7 @@ public:
         //Get difficult items
         connect(this, &Controller::requestGetCourseDifficultItems, worker, &Worker::doGetCourseDifficultItems);
         connect(worker, &Worker::workerGetDifficultItemInfo, this, &Controller::controllerGetDifficultItemInfo);
+        connect(worker, &Worker::finishedGetDifficultItemInfo, this, &Controller::finishedGetDifficultItemInfo);
 
         workerThread.start();
     }
@@ -62,6 +63,7 @@ signals:
 
     void requestGetCourseDifficultItems(QString courseDirectory);
     void controllerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
+    void finishedGetDifficultItemInfo();
 };
 
 

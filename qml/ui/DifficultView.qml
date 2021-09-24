@@ -27,7 +27,6 @@ Item {
     property string courseDirectory: ""
     property string courseTitle: ""
     property int items: 0
-    property int difficult: 0
 
     Component.onCompleted: globalBackend.getCourseDifficultItems(courseDirectory)
 
@@ -89,10 +88,10 @@ Item {
                 }
 
                 ProgressBar {
-                    id: levelProgressBar
+                    id: difficultProgressBar
                     from: 0
                     to: items
-                    value: difficult
+                    value: 0
                     indeterminate:  false
                     Material.accent: globalAmber
                     Layout.fillWidth: true
@@ -100,7 +99,8 @@ Item {
                 }
 
                 Label {
-                    text: difficult + " of " + items
+                    id: difficultCountLabel
+                    text: "X" + " of " + items
                     font.pointSize: userSettings["defaultFontSize"]
                     Layout.alignment: Qt.AlignHCenter
                 }
@@ -144,6 +144,16 @@ Item {
                     Layout.bottomMargin: marginBase
                 }
             }
+
+            Connections {
+                target: globalBackend
+
+                function onFinishedGetDifficultItemInfo()
+                {
+                    difficultProgressBar.value = difficultListModel.count
+                    difficultCountLabel.text = difficultListModel.count + " of " + items
+                }
+            }
         }
 
         model: ListModel {id: difficultListModel}
@@ -164,6 +174,16 @@ Item {
                 "testColumnType": testColumnType,
                 "promptColumnType": promptColumnType,
                 "difficult": true})
+        }
+    }
+
+    Connections {
+        target: signalSource
+
+        function onReloadDifficultView()
+        {
+            difficultListModel.clear()
+            globalBackend.getCourseDifficultItems(courseDirectory)
         }
     }
 }

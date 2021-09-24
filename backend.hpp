@@ -210,6 +210,8 @@ signals:
 
     void addDifficultItem(QString levelPath, QString id, QString test, QString prompt, QString testColumnType, QString promptColumnType);
 
+    void finishedGetDifficultItemInfo();
+
     void addMnemonic(QString mnemonicId, QString author, QString text, QString imagePath);
 
 private slots:

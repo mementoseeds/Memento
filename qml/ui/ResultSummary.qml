@@ -42,6 +42,7 @@ Item {
     Component.onDestruction:
     {
         signalSource.reloadLearningLevel()
+        signalSource.reloadDifficultView()
         signalSource.refreshCourseLevels()
     }
 

@@ -21,23 +21,6 @@ import QtQuick.Controls 2.15
 Item {
     objectName: "CourseList.qml"
 
-    function reloadCourseList()
-    {
-        courseListModel.clear()
-        globalBackend.getCourseList()
-    }
-
-    function refreshCourses()
-    {
-        var courses = []
-        for (var i = 0; i < courseListModel.count; i++)
-            courses.push(courseListModel.get(i).directory)
-
-        //courseListModel.clear()
-
-        globalBackend.refreshCourses(courses)
-    }
-
     Component.onCompleted:
     {
         globalBackend.getCourseList()
@@ -117,7 +100,8 @@ Item {
 
         function onFinishedRefreshingCourses()
         {
-            reloadCourseList()
+            courseListModel.clear()
+            globalBackend.getCourseList()
         }
     }
 
@@ -125,7 +109,13 @@ Item {
         target: signalSource
         function onRefreshAllCourses()
         {
-            refreshCourses()
+            var courses = []
+            for (var i = 0; i < courseListModel.count; i++)
+                courses.push(courseListModel.get(i).directory)
+
+            //courseListModel.clear()
+
+            globalBackend.refreshCourses(courses)
         }
     }
 }

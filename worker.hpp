@@ -42,6 +42,7 @@ signals:
     void refreshFinished();
 
     void workerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
+    void finishedGetDifficultItemInfo();
 };
 
 #endif // WORKER_H

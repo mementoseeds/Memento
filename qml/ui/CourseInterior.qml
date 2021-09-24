@@ -168,7 +168,7 @@ Item {
                                     break
 
                                 case "Difficult":
-                                    rootStackView.push("qrc:/DifficultView.qml", {"courseDirectory": directory, "courseTitle": courseTitle, "items": items, "difficult": difficult})
+                                    rootStackView.push("qrc:/DifficultView.qml", {"courseDirectory": directory, "courseTitle": courseTitle, "items": items})
                                     break
 
                                 case "Auto learn":

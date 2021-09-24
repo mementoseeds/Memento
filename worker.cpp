@@ -130,4 +130,6 @@ void Worker::doGetCourseDifficultItems(QString courseDirectory)
                 emit workerGetDifficultItemInfo(levelPath, QString::fromStdString(id), QString::fromStdString(levelJson["test"].get<String>()), QString::fromStdString(levelJson["prompt"].get<String>()));
         }
     }
+
+    emit finishedGetDifficultItemInfo();
 }

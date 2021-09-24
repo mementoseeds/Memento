@@ -70,6 +70,7 @@ ApplicationWindow {
         id: signalSource
         visible: false
         signal reloadLearningLevel()
+        signal reloadDifficultView()
         signal refreshCourseLevels()
         signal refreshAllCourses()
         signal pauseTest()
