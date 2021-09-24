@@ -26,6 +26,9 @@ void Worker::doCourseRefresh(QString coursesLocation)
     {
         QString coursePath = coursesLocation + "/" + course;
 
+        if (!QFile::exists(coursePath + "/info.json"))
+            continue;
+
         try
         {
             QDir courseDir(coursePath + "/levels");
@@ -124,7 +127,7 @@ void Worker::doCourseRefresh(QString coursesLocation)
                 info["completed"].get<bool>()
                         );
         }
-        catch(Json::parse_error &e)
+        catch (Json::parse_error &e)
         {
             qCritical() << "Error reading course directory --> " + coursePath;
             continue;
