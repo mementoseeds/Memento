@@ -34,7 +34,6 @@ Item {
         userSettings["plantingItemTests"] = plantingItemTestsSpinBox.value
         userSettings["maxWateringItems"] = maxWateringItems.value
         userSettings["maxDifficultItems"] = maxDifficultItems.value
-        userSettings["autoRefreshCourses"] = autoRefreshCourses.checked
         userSettings["autoAcceptAnswer"] = autoAcceptAnswerCheckBox.checked
         userSettings["enableTestPromptSwitch"] = enableTestPromptSwitch.checked
         userSettings["showAutoLearnOnTests"] = showAutoLearnOnTests.checked
@@ -189,15 +188,6 @@ Item {
             }
 
             CheckBox {
-                id: autoRefreshCourses
-                text: "Auto refresh courses on startup"
-                font.pointSize: userSettings["defaultFontSize"]
-                checked: userSettings["autoRefreshCourses"]
-                Material.accent: globalGreen
-                Layout.alignment: Qt.AlignCenter
-            }
-
-            CheckBox {
                 id: autoAcceptAnswerCheckBox
                 text: "Auto accept answer on typing tests"
                 font.pointSize: userSettings["defaultFontSize"]
@@ -208,7 +198,7 @@ Item {
 
             CheckBox {
                 id: enableTestPromptSwitch
-                text: "Allow test prompt switch on multiple choices"
+                text: "Allow prompt reverse on multiple choice"
                 font.pointSize: userSettings["defaultFontSize"]
                 checked: userSettings["enableTestPromptSwitch"]
                 Material.accent: globalGreen

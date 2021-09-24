@@ -25,7 +25,7 @@ Item {
     objectName: "AboutPage.qml"
 
     property string aboutMemento: "## About Memento\n
-### Version 0.5.2 build 2021-09-24\n
+### Version 0.5.2 build 2021-09-25\n
 Memento is a cross-platform, offline, spaced-repetition learning application. It is made with the intent to be clean, simple to use and easily configurable to one's needs.\n
 Its source code is available at [https://github.com/mementoseeds/Memento](https://github.com/mementoseeds/Memento)\n
 It uses courses stored locally on the user's device. These courses are comprised of plaintext json or markdown files that are easy to edit or share.\n
