@@ -164,19 +164,42 @@ void Backend::getCourseLevels(QString directory)
     }
 }
 
-void Backend::loadSeedbox(QString courseDirectory)
+bool Backend::loadSeedbox(QString courseDirectory)
 {
+    bool seedboxPresent = true;
+
     //Open the seedbox
     globalSeedbox.clear();
-    std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
-    seedboxFile >> globalSeedbox;
-    seedboxFile.close();
+    try
+    {
+        std::ifstream seedboxFile(QString(courseDirectory + "/seedbox.json").toStdString());
+        seedboxFile >> globalSeedbox;
+        seedboxFile.close();
+    }
+    catch (Json::parse_error &e)
+    {
+        qCritical() << "Cannot read seedbox --> " + courseDirectory;
+        seedboxPresent = false;
+    }
 
     //Open mnemonics
     globalMnemonics.clear();
-    std::ifstream mnemonicsFile(QString(courseDirectory + "/mnemonics.json").toStdString());
-    mnemonicsFile >> globalMnemonics;
-    mnemonicsFile.close();
+    try
+    {
+        std::ifstream mnemonicsFile(QString(courseDirectory + "/mnemonics.json").toStdString());
+        mnemonicsFile >> globalMnemonics;
+        mnemonicsFile.close();
+    }
+    catch (Json::parse_error &e)
+    {
+        qWarning() << "No mnemonics file found. Creating an empty file for " + courseDirectory;
+        globalMnemonics = R"({})"_json;
+        std::ofstream mnemonicsFile(QString(courseDirectory + "/mnemonics.json").toStdString());
+        mnemonicsFile << globalMnemonics;
+        mnemonicsFile.close();
+    }
+
+    return seedboxPresent;
 }
 
 QString Backend::readMediaLevel(QString levelPath)

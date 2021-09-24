@@ -122,6 +122,12 @@ Item {
                     sourceSize.height: 200
                     sourceSize.width: 200
                     Layout.alignment: Qt.AlignHCenter
+                    onStatusChanged: {
+                        if (status === Image.Error)
+                        {
+                            source = "assets/icons/icon.svg"
+                        }
+                    }
                 }
 
                 Label {

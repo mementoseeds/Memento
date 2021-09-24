@@ -63,6 +63,12 @@ Item {
             Layout.maximumHeight: 120
             Layout.preferredWidth: height
             Layout.topMargin: marginBase
+            onStatusChanged: {
+                if (status === Image.Error)
+                {
+                    source = "assets/icons/icon.svg"
+                }
+            }
         }
 
         ColumnLayout {

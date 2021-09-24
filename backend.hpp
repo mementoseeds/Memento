@@ -108,7 +108,7 @@ public:
     Q_INVOKABLE QVariantMap getUserSettings();
 
     Q_INVOKABLE void getCourseLevels(QString directory);
-    Q_INVOKABLE void loadSeedbox(QString courseDirectory);
+    Q_INVOKABLE bool loadSeedbox(QString courseDirectory);
 
     Q_INVOKABLE QString readMediaLevel(QString levelPath);
 
