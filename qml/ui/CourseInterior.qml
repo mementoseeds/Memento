@@ -280,7 +280,7 @@ Item {
         onYes:
         {
             globalBackend.advancedAutoLevelAdjust(false, directory, 1, globalBackend.getCourseLevelAmount(directory), 1, false)
-            globalBackend.refreshCourses([directory])
+            signalSource.refreshAllCourses()
             rootStackView.pop(null)
         }
     }

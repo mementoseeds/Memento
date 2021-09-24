@@ -132,7 +132,7 @@ Item {
         onYes:
         {
             globalBackend.advancedAutoLevelAdjust(true, courseDirectory, Math.floor(levelRangeSlider.first.value), Math.floor(levelRangeSlider.second.value), streakCountSpinBox.value, waterNow.checked)
-            globalBackend.refreshCourses([courseDirectory])
+            signalSource.refreshAllCourses()
             rootStackView.pop(null)
         }
     }
