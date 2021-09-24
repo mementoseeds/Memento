@@ -39,7 +39,8 @@ private:
     const int jsonIndent = 4;
 
 signals:
-    void refreshFinished();
+    void workerAddCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
+    void workerCourseRefreshFinished();
 
     void workerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);
     void finishedGetDifficultItemInfo();

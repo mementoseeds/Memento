@@ -338,7 +338,7 @@ ApplicationWindow {
             showPassiveNotification(text, duration)
         }
 
-        function onFinishedRefreshingCourses()
+        function onCourseRefreshFinished()
         {
             passiveNotification.reduceTimer()
             _COURSES_REFRESHING_DO_NOT_CLOSE_ = false

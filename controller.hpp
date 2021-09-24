@@ -36,7 +36,8 @@ public:
 
         //Courses refresh
         connect(this, &Controller::requestCourseRefresh, worker, &Worker::doCourseRefresh);
-        connect(worker, &Worker::refreshFinished, this, &Controller::courseRefreshFinished);
+        connect(worker, &Worker::workerAddCourse, this, &Controller::controllerAddCourse);
+        connect(worker, &Worker::workerCourseRefreshFinished, this, &Controller::controllerCourseRefreshFinished);
 
         //Get difficult items
         connect(this, &Controller::requestGetCourseDifficultItems, worker, &Worker::doGetCourseDifficultItems);
@@ -59,7 +60,8 @@ public slots:
 
 signals:
     void requestCourseRefresh(QString coursesLocation);
-    void courseRefreshFinished();
+    void controllerAddCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
+    void controllerCourseRefreshFinished();
 
     void requestGetCourseDifficultItems(QString courseDirectory);
     void controllerGetDifficultItemInfo(QString levelPath, QString itemId, QString testColumn, QString promptColumn);

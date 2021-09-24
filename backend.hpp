@@ -107,7 +107,6 @@ public:
     Q_INVOKABLE void setUserSettings(QVariantMap userSettings);
     Q_INVOKABLE QVariantMap getUserSettings();
 
-    Q_INVOKABLE void getCourseList();
     Q_INVOKABLE void getCourseLevels(QString directory);
     Q_INVOKABLE void loadSeedbox(QString courseDirectory);
 
@@ -193,7 +192,6 @@ signals:
     #endif
 
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
-    void finishedAddingCourses();
 
     void addCourseLevel(QString levelPath, QString levelTitle, QString testColumn, QString promptColumn, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
     void addLevelItem(QString id, QString test, QString prompt, bool planted, QString progress, bool difficult, bool ignored);
@@ -206,7 +204,7 @@ signals:
 
     void addItemResults(QString testData, QString testDataType, QString promptData, QString promptDataType, int successes, int failures, int streak);
 
-    void finishedRefreshingCourses();
+    void courseRefreshFinished();
 
     void addDifficultItem(QString levelPath, QString id, QString test, QString prompt, QString testColumnType, QString promptColumnType);
 

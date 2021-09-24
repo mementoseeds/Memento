@@ -106,9 +106,24 @@ void Worker::doCourseRefresh(QString coursesLocation)
         std::ofstream infoFile(infoPath);
         infoFile << info.dump(jsonIndent) << std::endl;
         infoFile.close();
+
+        emit workerAddCourse(
+            coursePath,
+            QString::fromStdString(info["title"].get<String>()),
+            QString::fromStdString(info["author"].get<String>()),
+            QString::fromStdString(info["description"].get<String>()),
+            QString::fromStdString(info["category"].get<String>()),
+            coursePath + "/" + QString::fromStdString(info["icon"].get<String>()),
+            info["items"].get<int>(),
+            info["planted"].get<int>(),
+            info["water"].get<int>(),
+            info["difficult"].get<int>(),
+            info["ignored"].get<int>(),
+            info["completed"].get<bool>()
+                    );
     }
 
-    emit refreshFinished();
+    emit workerCourseRefreshFinished();
 }
 
 void Worker::doGetCourseDifficultItems(QString courseDirectory)

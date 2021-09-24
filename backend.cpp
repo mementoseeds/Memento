@@ -128,40 +128,6 @@ QVariantMap Backend::getUserSettings()
     return userSettings;
 }
 
-void Backend::getCourseList()
-{
-    QDir coursesDir(userSettings["coursesLocation"].toString());
-    foreach (QString dir, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
-    {
-        QString directory = coursesDir.absolutePath() + "/" + dir;
-        std::ifstream infoFile(QString(directory + "/info.json").toStdString());
-
-        if (infoFile.fail())
-            continue;
-
-        Json courseInfo;
-        infoFile >> courseInfo;
-        infoFile.close();
-
-        emit addCourse(
-            directory,
-            QString::fromStdString(courseInfo["title"].get<String>()),
-            QString::fromStdString(courseInfo["author"].get<String>()),
-            QString::fromStdString(courseInfo["description"].get<String>()),
-            QString::fromStdString(courseInfo["category"].get<String>()),
-            directory + "/" + QString::fromStdString(courseInfo["icon"].get<String>()),
-            courseInfo["items"].get<int>(),
-            courseInfo["planted"].get<int>(),
-            courseInfo["water"].get<int>(),
-            courseInfo["difficult"].get<int>(),
-            courseInfo["ignored"].get<int>(),
-            courseInfo["completed"].get<bool>()
-                    );
-    }
-
-    emit finishedAddingCourses();
-}
-
 void Backend::getCourseLevels(QString directory)
 {
     QDir levelsDir(directory + "/levels");
@@ -640,7 +606,8 @@ void Backend::refreshCourses()
 {
     //Pass this operation to another thread
     Controller *threadController = new Controller;
-    connect(threadController, &Controller::courseRefreshFinished, this, &Backend::finishedRefreshingCourses);
+    connect(threadController, &Controller::controllerCourseRefreshFinished, this, &Backend::courseRefreshFinished);
+    connect(threadController, &Controller::controllerAddCourse, this, &Backend::addCourse);
     emit threadController->requestCourseRefresh(userSettings["coursesLocation"].toString());
 }
 
