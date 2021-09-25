@@ -173,6 +173,10 @@ Item {
                         {
                             switch (currentText)
                             {
+                                case "Select":
+                                    showPassiveNotification("Select other options in the dropdown menu for more actions")
+                                    break
+
                                 case "Plant":
                                     plantAction()
                                     break
