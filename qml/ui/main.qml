@@ -257,7 +257,7 @@ ApplicationWindow {
                 text: "&Refresh courses"
                 icon.source: "assets/actions/refresh.svg"
                 shortcut: "Alt+r"
-                enabled: rootStackView.depth === 1
+                enabled: rootStackView.depth === 1 && !_COURSES_REFRESHING_DO_NOT_CLOSE_
                 onTriggered: signalSource.refreshAllCourses()
             }
 
