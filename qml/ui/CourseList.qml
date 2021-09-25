@@ -21,7 +21,9 @@ import QtQuick.Controls 2.15
 Item {
     objectName: "CourseList.qml"
 
-    Component.onCompleted: globalBackend.refreshCourses() //signalSource.refreshAllCourses()
+    property bool firstRun: true
+
+    Component.onCompleted: signalSource.refreshAllCourses()
 
     Shortcut {
         sequence: "Home"
@@ -105,8 +107,17 @@ Item {
         target: signalSource
         function onRefreshAllCourses()
         {
-            courseListModel.clear()
-            removeCoursesAnimTimer.start()
+            if (firstRun)
+            {
+                firstRun = false
+                globalBackend.refreshCourses()
+            }
+            else
+            {
+                courseListModel.clear()
+                removeCoursesAnimTimer.start()
+            }
+
         }
     }
 }
