@@ -122,6 +122,8 @@ Item {
 
         globalBackend.loadLevelJsons(Object.keys(testingContentOriginal))
 
+        root.showBackConfirm = true
+
         if (actionType === "preview")
         {
             for (var level in testingContentOriginal)
@@ -137,6 +139,8 @@ Item {
                     testingContent.push(levelItem)
                 }
             }
+
+            root.showBackConfirm = testingContent.length > 1
         }
         else if (actionType === "plant")
         {

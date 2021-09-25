@@ -42,6 +42,9 @@ ApplicationWindow {
     property bool platformIsMobile: Qt.platform.os === "android" || Qt.platform.os === "ios"
     property string fileUrlStart: Qt.platform.os === "windows" ? "file:///" : "file://"
 
+    //Control variables
+    property bool showBackConfirm: false
+
     //Colors
     property color defaultMaterialAccept: globalBlue
     property color globalBlue: Material.color(Material.Indigo)
@@ -211,7 +214,7 @@ ApplicationWindow {
                 display: AbstractButton.IconOnly
                 onClicked:
                 {
-                    if (rootStackView.currentItem.objectName === "StagingArea.qml")
+                    if (rootStackView.currentItem.objectName === "StagingArea.qml" && showBackConfirm)
                     {
                         confirmActionDialog.open()
                         return
