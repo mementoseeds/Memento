@@ -58,10 +58,6 @@ Item {
         add: Transition {
                 NumberAnimation { properties: "x"; from: root.width; duration: 500 }
             }
-
-        remove: Transition {
-                NumberAnimation { properties: "x"; to: -root.width; duration: 200 }
-            }
     }
 
     Connections {
