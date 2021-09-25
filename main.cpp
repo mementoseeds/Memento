@@ -22,14 +22,7 @@
 static void sendCoursePath(JNIEnv *env, jobject thiz, jstring path)
 {
     Q_UNUSED(thiz);
-
-    QString fakePath = env->GetStringUTFChars(path, nullptr);
-    QStringList paths = fakePath.split(":");
-    QString startLocation = paths[0].split("/").last();
-    if (startLocation.compare("primary") == 0)
-        emit Backend::getGlobalBackendInstance()->sendCoursePath("/storage/emulated/0/" + paths[1]);
-    else
-        emit Backend::getGlobalBackendInstance()->sendCoursePath("/storage/" + startLocation + "/" + paths[1]);
+    emit Backend::getGlobalBackendInstance()->sendCoursePath(env->GetStringUTFChars(path, nullptr));
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)

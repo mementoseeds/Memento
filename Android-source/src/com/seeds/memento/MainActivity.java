@@ -44,7 +44,7 @@ public class MainActivity extends QtActivity
             if (requestCode == 200)
             {
                 Uri uri = data.getData();
-                javaSendCoursePath(uri.getPath());
+                javaSendCoursePath(Backend.GetRealPath(uri.getPath()));
             }
         }
     }
