@@ -168,7 +168,7 @@ Item {
 
                     ComboBox {
                         enabled: !courseCorrupted
-                        model: ["Plant", "Water", "Difficult", "Auto learn", "Reset"]
+                        model: ["Select", "Plant", "Water", "Difficult", "Auto learn", "Reset"]
                         onActivated:
                         {
                             switch (currentText)

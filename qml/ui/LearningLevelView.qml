@@ -227,7 +227,7 @@ Item {
                     Layout.preferredWidth: parent.width
 
                     ComboBox {
-                        model: ["Preview", "Plant", "Water", "Mock water", "Difficult", "Ignore", "Ignore all", "Auto learn", "Reset"]
+                        model: ["Select", "Preview", "Plant", "Water", "Mock water", "Difficult", "Ignore", "Ignore all", "Auto learn", "Reset"]
                         Layout.alignment: Qt.AlignLeft
                         onActivated:
                         {
