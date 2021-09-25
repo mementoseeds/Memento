@@ -62,6 +62,10 @@ Item {
         spacing: 20
         ScrollBar.vertical: ScrollBar {width: 10}
 
+        add: Transition {
+                NumberAnimation { properties: "x"; from: root.width; duration: 500 }
+            }
+
         header: ColumnLayout {
             width: parent.width
 
