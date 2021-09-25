@@ -50,7 +50,7 @@ Item {
         }
     }
 
-    Component.onDestruction: mainToolbarTitle.text = root.title
+    Component.onDestruction: mainToolbarTitle.text = "Course list"
 
     function plantAction()
     {

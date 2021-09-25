@@ -30,6 +30,8 @@ Item {
     {
         if (globalBackend.loadSeedbox(directory))
         {
+            mainToolbarTitle.text = title
+
             var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
             if (Object.keys(levelVariables).length !== 0)
                 rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)

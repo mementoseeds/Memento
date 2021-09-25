@@ -47,7 +47,13 @@ Item {
     // array holds dictionary of level path + dictionary
     // second dictionary holds item ID + test ID
 
-    Component.onDestruction: restoreToolbar(globalBackend.readCourseTitle())
+    Component.onDestruction:
+    {
+        if (rootStackView.depth > 1)
+            restoreToolbar(globalBackend.readCourseTitle())
+        else
+            restoreToolbar("Course list")
+    }
 
     function getRandomTest()
     {

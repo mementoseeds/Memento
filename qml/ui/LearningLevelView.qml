@@ -50,6 +50,12 @@ Item {
         levelCompleted = globalBackend.getLevelCompleted()
     }
 
+    Component.onDestruction:
+    {
+        if (rootStackView.depth === 1)
+            mainToolbarTitle.text = "Course list"
+    }
+
     function countPlanted()
     {
         var planted = 0
