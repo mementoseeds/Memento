@@ -261,6 +261,7 @@ ApplicationWindow {
             Action {
                 text: "&Help"
                 icon.source: "assets/actions/help.svg"
+                enabled: rootStackView.currentItem.objectName !== "HelpPage.qml" && rootStackView.currentItem.objectName !== "AboutPage.qml"
                 onTriggered: rootStackView.push("qrc:/HelpPage.qml")
                 Component.onCompleted:
                 {
@@ -272,6 +273,7 @@ ApplicationWindow {
             Action {
                 text: "&About"
                 icon.source: "assets/actions/about.svg"
+                enabled: rootStackView.currentItem.objectName !== "HelpPage.qml" && rootStackView.currentItem.objectName !== "AboutPage.qml"
                 onTriggered: rootStackView.push("qrc:/AboutPage.qml")
                 Component.onCompleted:
                 {
