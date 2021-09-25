@@ -21,7 +21,7 @@ import QtQuick.Controls 2.15
 Item {
     objectName: "CourseList.qml"
 
-    Component.onCompleted: signalSource.refreshAllCourses()
+    Component.onCompleted: globalBackend.refreshCourses() //signalSource.refreshAllCourses()
 
     Shortcut {
         sequence: "Home"
@@ -58,6 +58,10 @@ Item {
         add: Transition {
                 NumberAnimation { properties: "x"; from: root.width; duration: 500 }
             }
+
+        remove: Transition {
+                NumberAnimation { properties: "x"; to: -root.width; duration: removeCoursesAnimTimer.interval }
+            }
     }
 
     Connections {
@@ -89,12 +93,20 @@ Item {
         }
     }
 
+    Timer {
+        id: removeCoursesAnimTimer
+        running: false
+        repeat: false
+        interval: 300
+        onTriggered: globalBackend.refreshCourses()
+    }
+
     Connections {
         target: signalSource
         function onRefreshAllCourses()
         {
             courseListModel.clear()
-            globalBackend.refreshCourses()
+            removeCoursesAnimTimer.start()
         }
     }
 }
