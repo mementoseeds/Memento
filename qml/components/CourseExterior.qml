@@ -28,25 +28,31 @@ Item {
 
     function plantAction()
     {
-        globalBackend.loadSeedbox(directory)
-
-        var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
-        if (Object.keys(levelVariables).length !== 0)
-            rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
+        if (globalBackend.loadSeedbox(directory))
+        {
+            var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
+            if (Object.keys(levelVariables).length !== 0)
+                rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
+            else
+                showPassiveNotification("This course is already completed")
+        }
         else
-            showPassiveNotification("This course is already completed")
+            showPassiveNotification("Error course corrupted")
     }
 
     function waterAction()
     {
-        globalBackend.loadSeedbox(directory)
-
-        var wateringData = globalBackend.getCourseWideWateringItems(directory, userSettings["maxWateringItems"])
-        if (Object.keys(wateringData).length !== 0)
-                rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
-                    "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
+        if (globalBackend.loadSeedbox(directory))
+        {
+            var wateringData = globalBackend.getCourseWideWateringItems(directory, userSettings["maxWateringItems"])
+            if (Object.keys(wateringData).length !== 0)
+                    rootStackView.push("qrc:/StagingArea.qml", {"courseDirectory": directory, "testingContentOriginal": wateringData["testingContentOriginal"],
+                        "actionType": "water", "manualReview": wateringData["manualReview"], "totalWateringItems": wateringData["totalItems"]})
+            else
+                showPassiveNotification("This course has no planted items")
+        }
         else
-            showPassiveNotification("This course has no planted items")
+             showPassiveNotification("Error course corrupted")
     }
 
     RowLayout {

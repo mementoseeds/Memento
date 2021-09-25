@@ -37,10 +37,17 @@ Item {
     property int ignored: 0
     property bool completed: false
 
+    property bool courseCorrupted: false
+
     Component.onCompleted:
     {
-        globalBackend.getCourseLevels(directory)
-        globalBackend.loadSeedbox(directory)
+        if (globalBackend.loadSeedbox(directory))
+            globalBackend.getCourseLevels(directory)
+        else
+        {
+            showPassiveNotification("Error course corrupted")
+            courseCorrupted = true
+        }
     }
 
     Component.onDestruction: mainToolbarTitle.text = root.title
@@ -160,6 +167,7 @@ Item {
                     Layout.bottomMargin: 20
 
                     ComboBox {
+                        enabled: !courseCorrupted
                         model: ["Plant", "Water", "Difficult", "Auto learn", "Reset"]
                         onActivated:
                         {
@@ -190,6 +198,7 @@ Item {
 
                     Button {
                         text: completed ? "Water" : "Plant"
+                        enabled: !courseCorrupted
                         icon.source: completed ? "assets/icons/water.svg" : "assets/icons/plant.svg"
                         Material.background: completed ? globalBlue : globalGreen
                         Layout.alignment: Qt.AlignRight
