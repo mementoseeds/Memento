@@ -20,16 +20,46 @@ Worker::Worker(QObject *parent) : QObject(parent) {}
 
 void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
 {
-    qDebug() << courseSorting;
-
     QDir coursesDir(coursesLocation);
+    QStringList allCourses = coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    QMultiMap<QString, QString> courseCategories;
+    QStringList courseSelection;
 
-    foreach (QString course, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))
+    foreach (QString course, allCourses)
     {
         QString coursePath = coursesLocation + "/" + course;
 
         if (!QFile::exists(coursePath + "/info.json"))
             continue;
+
+        std::ifstream infoFile(QString(coursePath + "/info.json").toStdString());
+        Json info;
+        infoFile >> info;
+        infoFile.close();
+
+        courseCategories.insert(QString::fromStdString(info["category"].get<String>()), course);
+    }
+
+    //Send list of categories to QML
+
+    if (courseSorting.compare("Category") == 0)
+    {
+        //Sort by category
+        foreach (QString category, courseCategories.uniqueKeys())
+        {
+            QList<QString> coursesByCategory = courseCategories.values(category);
+            std::reverse(coursesByCategory.begin(), coursesByCategory.end());
+            courseSelection.append(coursesByCategory);
+        }
+    }
+    else if (courseSorting.compare("Alphabetical") == 0)
+        courseSelection = allCourses;
+
+
+
+    foreach (QString course, courseSelection)
+    {
+        QString coursePath = coursesLocation + "/" + course;
 
         try
         {
