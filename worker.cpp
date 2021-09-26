@@ -54,7 +54,7 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
             courseSelection.append(coursesByCategory);
         }
     }
-    else if (courseSorting.compare("Alphabetical") == 0)
+    else if (courseSorting.compare("Name") == 0)
         courseSelection = allCourses;
     else
     {
