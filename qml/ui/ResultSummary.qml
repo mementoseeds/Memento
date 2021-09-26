@@ -44,6 +44,7 @@ Item {
         signalSource.reloadLearningLevel()
         signalSource.reloadDifficultView()
         signalSource.refreshCourseLevels()
+        globalBackend.updateLastLearned(courseDirectory)
     }
 
     ListView {

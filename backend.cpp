@@ -522,6 +522,24 @@ void Backend::saveLevels()
     }
 }
 
+void Backend::updateLastLearned(QString coursePath)
+{
+    Json info;
+    String infoPath = QString(coursePath + "/info.json").toStdString();
+
+    {
+        std::ifstream infoFile(infoPath);
+        infoFile >> info;
+        infoFile.close();
+    }
+
+    info["lastLearned"] = QDateTime::currentDateTime().toString().toStdString();
+
+    std::ofstream infoFile(infoPath);
+    infoFile << info.dump(jsonIndent) << std::endl;
+    infoFile.close();
+}
+
 const Json Backend::getRandom(const Json &json, bool returnKey)
 {
     auto it = json.cbegin();

@@ -130,6 +130,7 @@ public:
 
     Q_INVOKABLE void saveLevel(QString levelPath);
     Q_INVOKABLE void saveLevels();
+    Q_INVOKABLE void updateLastLearned(QString coursePath);
 
     Q_INVOKABLE void getSessionResults(QString levelPath, QVariantList itemArray);
 
