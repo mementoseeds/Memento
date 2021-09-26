@@ -39,7 +39,7 @@ Item {
 
     Label {
         id: courseListEmptyHeading
-        text: "Your course list is empty. Download some courses or set your courses directory from the settings"
+        text: "Your course list is empty. Download some courses, set your courses directory from the settings or change the sorting setting"
         anchors.fill: parent
         wrapMode: Text.WrapAtWordBoundaryOrAnywhere
         horizontalAlignment: Text.AlignHCenter
