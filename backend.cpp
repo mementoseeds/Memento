@@ -92,8 +92,8 @@ QVariantMap Backend::getUserSettings()
     QSettings settings(QSettings::IniFormat, QSettings::UserScope, "MementoSeeds", "config");
     userSettings.insert("coursesLocation", settings.value("coursesLocation").toString());
     userSettings.insert("courseSorting", settings.value("courseSorting").toString());
-    userSettings.insert("countdownTimer", settings.value("countdownTimer", 10).toInt());
-    userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 2000).toInt());
+    userSettings.insert("countdownTimer", settings.value("countdownTimer", 15).toInt());
+    userSettings.insert("cooldownTimer", settings.value("cooldownTimer", 1000).toInt());
     userSettings.insert("maxPlantingItems", settings.value("maxPlantingItems", 5).toInt());
     userSettings.insert("plantingItemTests", settings.value("plantingItemTests", 5).toInt());
     userSettings.insert("maxWateringItems", settings.value("maxWateringItems", 50).toInt());

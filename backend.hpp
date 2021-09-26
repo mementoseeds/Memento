@@ -267,8 +267,8 @@ private:
 
     #elif defined PLATFORM_IS_MOBILE
 
-    const int defaultFontSize = 16;
-    const int mediaFontSize = 16;
+    const int defaultFontSize = 14;
+    const int mediaFontSize = 13;
     const int testAttributesFontSize = 15;
 
     #endif
