@@ -629,8 +629,9 @@ void Backend::refreshCourses()
 {
     //Pass this operation to another thread
     Controller *threadController = new Controller;
-    connect(threadController, &Controller::controllerCourseRefreshFinished, this, &Backend::courseRefreshFinished);
+    connect(threadController, &Controller::controllerAddAllCourseCategories, this, &Backend::addAllCourseCategories);
     connect(threadController, &Controller::controllerAddCourse, this, &Backend::addCourse);
+    connect(threadController, &Controller::controllerCourseRefreshFinished, this, &Backend::courseRefreshFinished);
     emit threadController->requestCourseRefresh(userSettings["coursesLocation"].toString(), userSettings["courseSorting"].toString());
 }
 

@@ -36,6 +36,7 @@ public:
 
         //Courses refresh
         connect(this, &Controller::requestCourseRefresh, worker, &Worker::doCourseRefresh);
+        connect(worker, &Worker::workerAddAllCourseCategories, this, &Controller::controllerAddAllCourseCategories);
         connect(worker, &Worker::workerAddCourse, this, &Controller::controllerAddCourse);
         connect(worker, &Worker::workerCourseRefreshFinished, this, &Controller::controllerCourseRefreshFinished);
 
@@ -60,6 +61,7 @@ public slots:
 
 signals:
     void requestCourseRefresh(QString coursesLocation, QString courseSorting);
+    void controllerAddAllCourseCategories(QList<QString> categories);
     void controllerAddCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void controllerCourseRefreshFinished();
 

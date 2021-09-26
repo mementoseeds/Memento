@@ -39,6 +39,8 @@ private:
     const int jsonIndent = 4;
 
 signals:
+    void workerAddAllCourseCategories(QList<QString> categories);
+
     void workerAddCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void workerCourseRefreshFinished();
 

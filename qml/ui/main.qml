@@ -44,6 +44,8 @@ ApplicationWindow {
 
     //Control variables
     property bool showBackConfirm: false
+    //course categories are placed here because initially the options page is not loaded to receive the signal
+    property var allCourseCategories: []
 
     //Colors
     property color defaultMaterialAccept: globalBlue
@@ -347,6 +349,11 @@ ApplicationWindow {
         {
             passiveNotification.reduceTimer()
             _COURSES_REFRESHING_DO_NOT_CLOSE_ = false
+        }
+
+        function onAddAllCourseCategories(categories)
+        {
+            allCourseCategories = categories
         }
     }
 

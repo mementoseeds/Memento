@@ -41,11 +41,13 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
     }
 
     //Send list of categories to QML
+    QList<QString> categories = courseCategories.uniqueKeys();
+    emit workerAddAllCourseCategories(categories);
 
     if (courseSorting.compare("Category") == 0)
     {
         //Sort by category
-        foreach (QString category, courseCategories.uniqueKeys())
+        foreach (QString category, categories)
         {
             QList<QString> coursesByCategory = courseCategories.values(category);
             std::reverse(coursesByCategory.begin(), coursesByCategory.end());

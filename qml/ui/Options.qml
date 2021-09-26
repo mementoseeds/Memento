@@ -104,6 +104,8 @@ Item {
                 Layout.alignment: Qt.AlignCenter
                 Component.onCompleted:
                 {
+                    model = model.concat(allCourseCategories)
+
                     var choice = find(userSettings["courseSorting"])
                     if (choice >= 0)
                         currentIndex = find(userSettings["courseSorting"])
@@ -432,6 +434,7 @@ Item {
     Connections {
         target: globalBackend
         ignoreUnknownSignals: true
+
         function onSendCoursePath(path)
         {
             coursesLocationTextField.text = path

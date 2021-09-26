@@ -191,6 +191,8 @@ signals:
     void sendCoursePath(QString path);
     #endif
 
+    void addAllCourseCategories(QList<QString> categories);
+
     void addCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
 
     void addCourseLevel(QString levelPath, QString levelTitle, QString testColumn, QString promptColumn, QString testColumnType, QString promptColumnType, bool isLearning, int itemAmount, bool levelCompleted);
