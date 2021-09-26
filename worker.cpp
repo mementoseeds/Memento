@@ -18,8 +18,10 @@
 
 Worker::Worker(QObject *parent) : QObject(parent) {}
 
-void Worker::doCourseRefresh(QString coursesLocation)
+void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
 {
+    qDebug() << courseSorting;
+
     QDir coursesDir(coursesLocation);
 
     foreach (QString course, coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot))

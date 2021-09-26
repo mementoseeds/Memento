@@ -99,9 +99,17 @@ Item {
 
             ComboBox {
                 id: courseSortingComboBox
-                model: ["Alphabetical"]
+                model: ["Alphabetical", "Category"]
                 implicitWidth: Math.min(root.width / 3, root.width - marginBase)
                 Layout.alignment: Qt.AlignCenter
+                Component.onCompleted:
+                {
+                    var choice = find(userSettings["courseSorting"])
+                    if (choice >= 0)
+                        currentIndex = find(userSettings["courseSorting"])
+                    else
+                        currentIndex = 0
+                }
             }
 
             Label {

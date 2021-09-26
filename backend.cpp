@@ -631,7 +631,7 @@ void Backend::refreshCourses()
     Controller *threadController = new Controller;
     connect(threadController, &Controller::controllerCourseRefreshFinished, this, &Backend::courseRefreshFinished);
     connect(threadController, &Controller::controllerAddCourse, this, &Backend::addCourse);
-    emit threadController->requestCourseRefresh(userSettings["coursesLocation"].toString());
+    emit threadController->requestCourseRefresh(userSettings["coursesLocation"].toString(), userSettings["courseSorting"].toString());
 }
 
 QString Backend::getReviewTime(QString date)

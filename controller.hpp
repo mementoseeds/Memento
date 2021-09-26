@@ -59,7 +59,7 @@ public:
 public slots:
 
 signals:
-    void requestCourseRefresh(QString coursesLocation);
+    void requestCourseRefresh(QString coursesLocation, QString courseSorting);
     void controllerAddCourse(QString directory, QString title, QString author, QString description, QString category, QString icon, int items, int planted, int water, int difficult, int ignored, bool completed);
     void controllerCourseRefreshFinished();
 
