@@ -161,7 +161,9 @@ Item {
                 Layout.alignment: Qt.AlignCenter
 
                 Repeater {
+                    id: audioRepeater
                     model: content.split(":")
+                    property int randomAudioPlayIndex: Math.floor(Math.random() * model.length)
 
                     Label {
                         text: audioIcon
@@ -174,7 +176,7 @@ Item {
                         Audio {
                             id: audio
                             source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + modelData)
-                            autoPlay: index === 0
+                            autoPlay: index === audioRepeater.randomAudioPlayIndex
                             audioRole: Audio.GameRole
                         }
 

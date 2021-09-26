@@ -259,6 +259,7 @@ ColumnLayout {
                 Repeater {
                     id: audioRepeater
                     model: columnData[1].split(":")
+                    property int randomAudioPlayIndex: Math.floor(Math.random() * model.length)
 
                     Label {
                         text: audioIcon
@@ -272,7 +273,7 @@ ColumnLayout {
                         Audio {
                             id: audio
                             source: Qt.resolvedUrl(fileUrlStart + courseDirectory + "/" + modelData)
-                            autoPlay: index === 0
+                            autoPlay: index === audioRepeater.randomAudioPlayIndex
                             audioRole: Audio.GameRole
                         }
 
