@@ -30,11 +30,12 @@ Item {
     {
         if (globalBackend.loadSeedbox(directory))
         {
-            mainToolbarTitle.text = title
-
             var levelVariables = globalBackend.getFirstIncompleteLevel(directory)
             if (Object.keys(levelVariables).length !== 0)
+            {
+                mainToolbarTitle.text = title
                 rootStackView.push("qrc:/LearningLevelView.qml", levelVariables)
+            }
             else
                 showPassiveNotification("This course is already completed")
         }
