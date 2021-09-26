@@ -33,10 +33,18 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
         if (!QFile::exists(coursePath + "/info.json"))
             continue;
 
-        std::ifstream infoFile(QString(coursePath + "/info.json").toStdString());
         Json info;
-        infoFile >> info;
-        infoFile.close();
+        try
+        {
+            std::ifstream infoFile(QString(coursePath + "/info.json").toStdString());
+            infoFile >> info;
+            infoFile.close();
+        }
+        catch (Json::parse_error &e)
+        {
+            qCritical() << "Error reading info.json --> " + coursePath;
+            continue;
+        }
 
         courseCategories.insert(QString::fromStdString(info["category"].get<String>()), course);
 
