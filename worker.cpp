@@ -23,6 +23,7 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
     QDir coursesDir(coursesLocation);
     QStringList allCourses = coursesDir.entryList(QDir::Dirs | QDir::NoDotAndDotDot);
     QMultiMap<QString, QString> courseCategories;
+    QMultiMap<quint64, QString> courseTimes;
     QStringList courseSelection;
 
     foreach (QString course, allCourses)
@@ -38,13 +39,30 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
         infoFile.close();
 
         courseCategories.insert(QString::fromStdString(info["category"].get<String>()), course);
+
+        try
+        {
+            courseTimes.insert(QDateTime::fromString(QString::fromStdString(info["lastLearned"].get<String>())).toSecsSinceEpoch(), course);
+        }
+        catch (Json::type_error &e)
+        {
+            courseTimes.insert(0, course);
+        }
     }
 
     //Send list of categories to QML
     QList<QString> categories = courseCategories.uniqueKeys();
     emit workerAddAllCourseCategories(categories);
 
-    if (courseSorting.compare("Category") == 0)
+    if (courseSorting.compare("Recently learned") == 0)
+    {
+        //Sort by last learned time
+        foreach (quint64 time, courseTimes.uniqueKeys())
+            courseSelection.append(courseTimes.values(time));
+
+        std::reverse(courseSelection.begin(), courseSelection.end());
+    }
+    else if (courseSorting.compare("Category") == 0)
     {
         //Sort by category
         foreach (QString category, categories)
