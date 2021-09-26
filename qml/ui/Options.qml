@@ -100,7 +100,7 @@ Item {
             ComboBox {
                 id: courseSortingComboBox
                 model: ["Recently learned", "Category", "Name", "----------"]
-                implicitWidth: Math.min(root.width / 3, root.width - marginBase)
+                implicitWidth: platformIsMobile ? root.width - marginBase : root.width / 3
                 Layout.alignment: Qt.AlignCenter
                 Component.onCompleted:
                 {
