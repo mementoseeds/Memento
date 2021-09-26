@@ -28,6 +28,7 @@ Item {
     Component.onDestruction:
     {
         userSettings["coursesLocation"] = coursesLocationTextField.text
+        userSettings["courseSorting"] = courseSortingComboBox.currentText
         userSettings["countdownTimer"] = countdownTimerSpinBox.value
         userSettings["cooldownTimer"] = cooldownTimerSpinBox.value
         userSettings["maxPlantingItems"] = maxPlantingItems.value
@@ -88,6 +89,19 @@ Item {
                 font.pointSize: userSettings["defaultFontSize"]
                 Layout.fillWidth: true
                 Material.accent: globalGreen
+            }
+
+            Label {
+                text: "Sort courses by"
+                font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            ComboBox {
+                id: courseSortingComboBox
+                model: ["Alphabetical"]
+                implicitWidth: Math.min(root.width / 3, root.width - marginBase)
+                Layout.alignment: Qt.AlignCenter
             }
 
             Label {
