@@ -56,7 +56,12 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
     }
     else if (courseSorting.compare("Alphabetical") == 0)
         courseSelection = allCourses;
-
+    else
+    {
+        QList<QString> filteredCourses = courseCategories.values(courseSorting);
+        std::reverse(filteredCourses.begin(), filteredCourses.end());
+        courseSelection.append(filteredCourses);
+    }
 
 
     foreach (QString course, courseSelection)
