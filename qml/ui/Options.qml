@@ -99,7 +99,7 @@ Item {
 
             ComboBox {
                 id: courseSortingComboBox
-                model: ["Name", "Category"]
+                model: ["Category", "Name", "----------"]
                 implicitWidth: Math.min(root.width / 3, root.width - marginBase)
                 Layout.alignment: Qt.AlignCenter
                 Component.onCompleted:
