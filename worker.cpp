@@ -73,7 +73,10 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
         }
     }
     else if (courseSorting.compare("Name") == 0)
+    {
+        //Sort by course names
         courseSelection = allCourses;
+    }
     else
     {
         QList<QString> filteredCourses = courseCategories.values(courseSorting);
