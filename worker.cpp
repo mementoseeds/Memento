@@ -133,7 +133,11 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
 
                     planted += (int)itemPlanted;
 
-                    if (itemPlanted)
+                    bool itemIgnored = level["seeds"][id]["ignored"].get<bool>();
+
+                    ignored += (int)itemIgnored;
+
+                    if (itemPlanted && !itemIgnored)
                     {
                         QDateTime nextWatering = QDateTime::fromString(QString::fromStdString(level["seeds"][id]["nextWatering"].get<String>()));
 
@@ -146,12 +150,8 @@ void Worker::doCourseRefresh(QString coursesLocation, QString courseSorting)
                         }
                     }
 
-                    bool itemIgnored = level["seeds"][id]["ignored"].get<bool>();
-
                     if (!itemIgnored)
                         difficult += (int)level["seeds"][id]["difficult"].get<bool>();
-
-                    ignored += (int)itemIgnored;
                 }
             }
 
