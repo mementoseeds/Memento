@@ -26,8 +26,11 @@ QML_IMPORT_MAJOR_VERSION = 1
 # Set name
 TARGET = Memento
 
-# Set windows icon
+# Set Windows icon
 win32: RC_ICONS = assets/icons/winicon.ico
+
+# Set Mac OSX icon
+macx: ICON = assets/icons/macos_icon.icns
 
 android {
 

@@ -47,5 +47,6 @@
         <file alias="DifficultView.qml">qml/ui/DifficultView.qml</file>
         <file alias="DifficultEntry.qml">qml/components/DifficultEntry.qml</file>
         <file alias="MnemonicEntry.qml">qml/components/MnemonicEntry.qml</file>
+        <file>assets/icons/macos_icon.icns</file>
     </qresource>
 </RCC>
