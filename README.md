@@ -25,55 +25,12 @@ You may optionally install the pip module "beepy" as well to enable playing soun
 # Special notes
 - On Windows, some audio files might not play correctly even if they are not broken. To fix this, install the **Basic K-Lite Codec Pack** or a higher variant from https://www.codecguide.com/download_kl.htm
 
+# How to install
+The easiest way to install Memento is by downloading a prebuilt version from [the releases page](https://github.com/mementoseeds/Memento/releases). Go to this page, click on the `assets` dropdown menu and download a version that corresponds to your platform.
+
+**NOTE:** on iOS you may need a jailbroken device to install the application or follow the build instructions for iOS to install it without jailbreaking.
+
 # Build instructions:
-
-# Linux:
-1. Install the dependency `qt5-base` for your distribution
-2. Execute the following:
-```bash
-git clone "https://github.com/mementoseeds/Memento"
-cd Memento
-mkdir build-dir && cd build-dir
-qmake  ../memento.pro -spec linux-g++ CONFIG+=qtquickcompiler
-make install
-```
-
-Memento, its icon and desktop file will now be placed in an `output` folder in the source code directory. You can now place these files wherever you wish.
-
-# Windows 10 64-bit:
-
-1. Download the open source version of Qt from https://www.qt.io/download-qt-installer.
-2. Register a Qt account to log into the installer.
-3. Start the installer, when you need to select which components to install, open the subdirectory `Qt/Qt 5.15.2`. From there choose the components:
-- MinGW 8.1.0 64-bit
-4. Continue with the installation and finish it. You should now have Qt and Qt Creator installed on your computer and the main Qt SDK folder should be located in `C:\Qt`.
-5. Git clone the source code to a directory. In this example I'll use `C:\Users\YOUR_USER_NAME\Desktop\src`.
-6. For this example I'll show how to build the application in two folders on your desktop. Create the folder `C:\Users\YOUR_USER_NAME\Desktop\Build`.
-7. Execute the following PowerShell script **after** replacing all instances of `YOUR_USER_NAME` with your Windows username:
-```bash
-$BUILDDIR = "C:\Users\YOUR_USER_NAME\Desktop\Build"
-$SRCDIR = "C:\Users\YOUR_USER_NAME\Desktop\src"
-
-$Env:Path = "C:\Qt\Tools\mingw810_64\bin;C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\YOUR_USER_NAME\AppData\Local\Microsoft\WindowsApps;"
-
-echo "Compiling"
-rm -Recurse -Force "$BUILDDIR\*"
-cd "$BUILDDIR"
-C:\Qt\5.15.2\mingw81_64\bin\qmake.exe "$SRCDIR\memento.pro" -spec win32-g++ "CONFIG+=qtquickcompiler"
-C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -f "$BUILDDIR/Makefile" qmake_all
-C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -j8
-
-echo "Deploying"
-mv "$BUILDDIR\release\Memento.exe" "C:\Users\YOUR_USER_NAME\Desktop"
-rm -Recurse -Force "$BUILDDIR\*"
-mv "C:\Users\YOUR_USER_NAME\Desktop\Memento.exe" "$BUILDDIR"
-C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe --no-translations --qmldir "$SRCDIR" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libgcc_s_seh-1.dll" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libstdc++-6.dll" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libwinpthread-1.dll" "$BUILDDIR"
-```
-
-You will now have a portable version of Memento in the directory `C:\Users\YOUR_USER_NAME\Desktop\Build`.
 
 # Android:
 The Android built steps are executed on a Linux host operating system, but they should be the same on Windows too. This will produce a multi-ABI APK for the architectures `armeabi-v7a` and `arm64-v8a`.
@@ -120,7 +77,72 @@ ANDROID_SDK_ROOT=$HOME/Android/Sdk $HOME/Qt/5.15.2/android/bin/androiddeployqt -
 
 You can now find the finished APK file in the directory `output/build/outputs/apk/debug/output-debug.apk` and install it on an Android device.
 
-# Mac OS X and iOS
-Unfortunately I do not have access to any devices running Mac OS X so I cannot build a Memento version for Mac OS X or iOS. If anyone wishes to build it themselves, you can start from these instructions:
-- https://doc.qt.io/qt-5/macos-deployment.html
-- https://doc.qt.io/qt-5/ios.html
+# iOS
+**TBA**
+
+# Linux:
+1. Install the dependency `qt5-base` for your distribution
+2. Execute the following:
+```bash
+git clone "https://github.com/mementoseeds/Memento"
+cd Memento
+mkdir build-dir && cd build-dir
+qmake  ../memento.pro -spec linux-g++ CONFIG+=qtquickcompiler
+make install
+```
+
+Memento, its icon and desktop file will now be placed in an `output` folder in the source code directory. You can now place these files wherever you wish.
+
+# Mac OS X
+1. Install Xcode through the App Store.
+2. Download the open source version of Qt from https://www.qt.io/download-qt-installer.
+3. Register a Qt account to log into the installer.
+4. Start the installer and accept the request to install the commandline developer tools. When you need to select which components to install, open the subdirectory `Qt/Qt 5.15.2`. From there choose the components:
+- macOS
+- iOS
+5. Finish the installation. The Qt tools should now be placed in the directory `/Users/$USER/Qt`.
+6. Execute the following commands from a terminal
+```zsh
+git clone "https://github.com/mementoseeds/Memento"
+mkdir builddir && cd builddir
+/Users/$USER/Qt/5.15.2/clang_64/bin/qmake -config release ../Memento/memento.pro -spec macx-clang CONFIG+=qtquickcompiler && make qmake_all
+make -j$(sysctl -n hw.ncpu)
+/Users/$USER/Qt/5.15.2/clang_64/bin/macdeployqt memento.app -qmldir=../Memento -dmg
+```
+
+You will now find a disk image file called `memento.dmg`. You can mount the image and install the application by dragging the file inside into the `Applications` folder in Finder.
+
+# Windows 10 64-bit:
+
+1. Download the open source version of Qt from https://www.qt.io/download-qt-installer.
+2. Register a Qt account to log into the installer.
+3. Start the installer, when you need to select which components to install, open the subdirectory `Qt/Qt 5.15.2`. From there choose the components:
+- MinGW 8.1.0 64-bit
+4. Continue with the installation and finish it. You should now have Qt and Qt Creator installed on your computer and the main Qt SDK folder should be located in `C:\Qt`.
+5. Git clone the source code to a directory. In this example I'll use `C:\Users\YOUR_USER_NAME\Desktop\src`.
+6. For this example I'll show how to build the application in two folders on your desktop. Create the folder `C:\Users\YOUR_USER_NAME\Desktop\Build`.
+7. Execute the following PowerShell script **after** replacing all instances of `YOUR_USER_NAME` with your Windows username:
+```bash
+$BUILDDIR = "C:\Users\YOUR_USER_NAME\Desktop\Build"
+$SRCDIR = "C:\Users\YOUR_USER_NAME\Desktop\src"
+
+$Env:Path = "C:\Qt\Tools\mingw810_64\bin;C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\YOUR_USER_NAME\AppData\Local\Microsoft\WindowsApps;"
+
+echo "Compiling"
+rm -Recurse -Force "$BUILDDIR\*"
+cd "$BUILDDIR"
+C:\Qt\5.15.2\mingw81_64\bin\qmake.exe "$SRCDIR\memento.pro" -spec win32-g++ "CONFIG+=qtquickcompiler"
+C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -f "$BUILDDIR/Makefile" qmake_all
+C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -j8
+
+echo "Deploying"
+mv "$BUILDDIR\release\Memento.exe" "C:\Users\YOUR_USER_NAME\Desktop"
+rm -Recurse -Force "$BUILDDIR\*"
+mv "C:\Users\YOUR_USER_NAME\Desktop\Memento.exe" "$BUILDDIR"
+C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe --no-translations --qmldir "$SRCDIR" "$BUILDDIR"
+cp "C:\Qt\5.15.2\mingw81_64\bin\libgcc_s_seh-1.dll" "$BUILDDIR"
+cp "C:\Qt\5.15.2\mingw81_64\bin\libstdc++-6.dll" "$BUILDDIR"
+cp "C:\Qt\5.15.2\mingw81_64\bin\libwinpthread-1.dll" "$BUILDDIR"
+```
+
+You will now have a portable version of Memento in the directory `C:\Users\YOUR_USER_NAME\Desktop\Build`.
