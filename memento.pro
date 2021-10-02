@@ -32,6 +32,7 @@ win32: RC_ICONS = assets/icons/winicon.ico
 # Set Mac OSX icon
 macx: ICON = assets/icons/macos_icon.icns
 
+# Android specifics
 android {
 
     QT += androidextras
@@ -52,6 +53,15 @@ android {
     Android-source/res/values/libs.xml \
     Android-source/src/com/seeds/memento/Backend.java \
     Android-source/src/com/seeds/memento/MainActivity.java
+}
+
+# iOS specifics
+ios {
+
+    QMAKE_INFO_PLIST = $$PWD/iOS-source/Info.plist
+
+    ios_icon.files = $$files($$PWD/iOS-source/Icon/*.png)
+    QMAKE_BUNDLE_DATA += ios_icon
 }
 
 # Default rules for deployment.
