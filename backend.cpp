@@ -18,9 +18,9 @@
 #include "controller.hpp"
 #include <iostream>
 
-//For iOS file dialog
+//For Objective C interface for iOS
 #ifdef Q_OS_IOS
-#include "iOS-source/src/Backend.h"
+#include "Objective_C_Interface.h"
 #endif
 
 Backend *Backend::m_instance = nullptr;
@@ -64,7 +64,7 @@ void Backend::androidOpenFileDialog()
 #ifdef Q_OS_IOS
 void Backend::iosOpenFileDialog()
 {
-
+    callFromCpp();
 }
 #endif
 

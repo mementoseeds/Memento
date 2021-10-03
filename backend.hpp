@@ -80,8 +80,6 @@ using String = std::string;
 //For setting app icon
 #include <QIcon>
 
-
-
 class Backend : public QObject
 {
     Q_OBJECT

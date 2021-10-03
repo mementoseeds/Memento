@@ -1,0 +1,6 @@
+#ifndef OBJECTIVE_C_INTERFACE_H
+#define OBJECTIVE_C_INTERFACE_H
+
+void callFromCpp();
+
+#endif // OBJECTIVE_C_INTERFACE_H

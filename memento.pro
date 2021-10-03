@@ -12,6 +12,7 @@ SOURCES += \
         worker.cpp
 
 HEADERS += \
+    Objective_C_Interface.h \
     backend.hpp \
     3rdparty/nlohmann/json.hpp \
     controller.hpp \
