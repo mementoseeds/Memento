@@ -58,6 +58,9 @@ android {
 # iOS specifics
 ios {
 
+    OBJECTIVE_HEADERS += iOS-source/src/Backend.h
+    OBJECTIVE_SOURCES += iOS-source/src/Backend.mm
+
     QMAKE_INFO_PLIST = $$PWD/iOS-source/Info.plist
 
     ios_icon.files = $$files($$PWD/iOS-source/Icon/*.png)

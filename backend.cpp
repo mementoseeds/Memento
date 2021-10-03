@@ -18,6 +18,11 @@
 #include "controller.hpp"
 #include <iostream>
 
+//For iOS file dialog
+#ifdef Q_OS_IOS
+#include "iOS-source/src/Backend.h"
+#endif
+
 Backend *Backend::m_instance = nullptr;
 
 Backend::Backend(QObject *parent) : QObject(parent) {}
@@ -53,6 +58,13 @@ void Backend::androidOpenFileDialog()
         else
             emit showPassiveNotification("You must allow storage permission to set a course directory");
     }
+}
+#endif
+
+#ifdef Q_OS_IOS
+void Backend::iosOpenFileDialog()
+{
+
 }
 #endif
 

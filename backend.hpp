@@ -80,6 +80,8 @@ using String = std::string;
 //For setting app icon
 #include <QIcon>
 
+
+
 class Backend : public QObject
 {
     Q_OBJECT
@@ -102,6 +104,10 @@ public:
 
     #ifdef Q_OS_ANDROID
     Q_INVOKABLE void androidOpenFileDialog();
+    #endif
+
+    #ifdef Q_OS_IOS
+    Q_INVOKABLE void iosOpenFileDialog();
     #endif
 
     Q_INVOKABLE void setUserSettings(QVariantMap userSettings);

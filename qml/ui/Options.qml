@@ -77,6 +77,8 @@ Item {
                     {
                         if (Qt.platform.os === "android")
                             globalBackend.androidOpenFileDialog()
+                        else if (Qt.platform.os === "ios")
+                            globalBackend.iosOpenFileDialog()
                         else
                             fileDialog.open()
                     }
