@@ -88,6 +88,7 @@ void Backend::setUserSettings(QVariantMap userSettings)
     settings.setValue("enableTestChangeAnimation", userSettings["enableTestChangeAnimation"]);
     settings.setValue("enabledTests", userSettings["enabledTests"]);
 
+    settings.setValue("boldTextPrompt", userSettings["boldTextPrompt"]);
     settings.setValue("defaultFontSize", userSettings["defaultFontSize"]);
     settings.setValue("mediaFontSize", userSettings["mediaFontSize"]);
     settings.setValue("levelColumnFontSize", userSettings["levelColumnFontSize"]);
@@ -119,6 +120,7 @@ QVariantMap Backend::getUserSettings()
 
     userSettings.insert("enabledTests", settings.value("enabledTests").toMap());
 
+    userSettings.insert("boldTextPrompt", settings.value("boldTextPrompt", true).toBool());
     userSettings.insert("defaultFontSize", settings.value("defaultFontSize", defaultFontSize).toInt());
     userSettings.insert("mediaFontSize", settings.value("mediaFontSize", mediaFontSize).toInt());
     userSettings.insert("levelColumnFontSize", settings.value("levelColumnFontSize", levelColumnFontSize).toInt());
