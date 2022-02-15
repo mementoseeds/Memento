@@ -42,6 +42,7 @@ Item {
         userSettings["enableTestChangeAnimation"] = enableTestChangeAnimation.checked
         userSettings["enabledTests"] = {"enabledMultipleChoice": enabledMultipleChoice.checked, "enabledTyping": enabledTyping.checked, "enabledTapping": enabledTapping.checked}
 
+        userSettings["boldTextPrompt"] = boldTextPrompt.checked
         userSettings["defaultFontSize"] = defaultFontSizeSpinBox.value
         userSettings["mediaFontSize"] = mediaFontSizeSpinBox.value
         userSettings["levelColumnFontSize"] = levelColumnFontSizeSpinBox.value
@@ -320,6 +321,15 @@ Item {
             Label {
                 text: "Sizes"
                 font.pointSize: userSettings["defaultFontSize"]
+                Layout.alignment: Qt.AlignCenter
+            }
+
+            CheckBox {
+                id: boldTextPrompt
+                text: "Enable bold text prompt"
+                font.pointSize: userSettings["defaultFontSize"]
+                checked: userSettings["boldTextPrompt"]
+                Material.accent: globalGreen
                 Layout.alignment: Qt.AlignCenter
             }
 

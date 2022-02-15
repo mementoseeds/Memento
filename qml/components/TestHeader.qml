@@ -226,7 +226,7 @@ ColumnLayout {
         Label {
             text: columnData[1]
             font.pointSize: textSize
-            font.bold: true
+            font.bold: userSettings["boldTextPrompt"]
             wrapMode: Text.WrapAtWordBoundaryOrAnywhere
             horizontalAlignment: Text.AlignHCenter
 

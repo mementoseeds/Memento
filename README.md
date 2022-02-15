@@ -28,8 +28,6 @@ You may optionally install the pip module "beepy" as well to enable playing soun
 # How to install
 The easiest way to install Memento is by downloading a prebuilt version from [the releases page](https://github.com/mementoseeds/Memento/releases). Go to this page, click on the `assets` dropdown menu and download a version that corresponds to your platform.
 
-**NOTE:** on iOS you may need a jailbroken device to install the application or follow the build instructions for iOS to install it without jailbreaking.
-
 # Build instructions:
 
 # Android:
@@ -76,9 +74,6 @@ ANDROID_SDK_ROOT=$HOME/Android/Sdk $HOME/Qt/5.15.2/android/bin/androiddeployqt -
 ```
 
 You can now find the finished APK file in the directory `output/build/outputs/apk/debug/output-debug.apk` and install it on an Android device.
-
-# iOS
-**TBA**
 
 # Linux:
 1. Install the dependency `qt5-base` for your distribution
