@@ -94,7 +94,6 @@ Memento, its icon and desktop file will now be placed in an `output` folder in t
 3. Register a Qt account to log into the installer.
 4. Start the installer and accept the request to install the commandline developer tools. When you need to select which components to install, open the subdirectory `Qt/Qt 5.15.2`. From there choose the components:
 - macOS
-- iOS
 5. Finish the installation. The Qt tools should now be placed in the directory `/Users/$USER/Qt`.
 6. Execute the following commands from a terminal
 ```zsh
@@ -114,30 +113,28 @@ You will now find a disk image file called `memento.dmg`. You can mount the imag
 3. Start the installer, when you need to select which components to install, open the subdirectory `Qt/Qt 5.15.2`. From there choose the components:
 - MinGW 8.1.0 64-bit
 4. Continue with the installation and finish it. You should now have Qt and Qt Creator installed on your computer and the main Qt SDK folder should be located in `C:\Qt`.
-5. Git clone the source code to a directory. In this example I'll use `C:\Users\YOUR_USER_NAME\Desktop\src`.
-6. For this example I'll show how to build the application in two folders on your desktop. Create the folder `C:\Users\YOUR_USER_NAME\Desktop\Build`.
-7. Execute the following PowerShell script **after** replacing all instances of `YOUR_USER_NAME` with your Windows username:
+5. Execute the following PowerShell script:
 ```bash
-$BUILDDIR = "C:\Users\YOUR_USER_NAME\Desktop\Build"
-$SRCDIR = "C:\Users\YOUR_USER_NAME\Desktop\src"
+$ErrorActionPreference = "Stop"
+echo "If the download fails, try running the script again."
 
-$Env:Path = "C:\Qt\Tools\mingw810_64\bin;C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\ProgramData\chocolatey\bin;C:\Users\YOUR_USER_NAME\AppData\Local\Microsoft\WindowsApps;"
-
-echo "Compiling"
-rm -Recurse -Force "$BUILDDIR\*"
-cd "$BUILDDIR"
-C:\Qt\5.15.2\mingw81_64\bin\qmake.exe "$SRCDIR\memento.pro" -spec win32-g++ "CONFIG+=qtquickcompiler"
-C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -f "$BUILDDIR/Makefile" qmake_all
-C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -j8
-
-echo "Deploying"
-mv "$BUILDDIR\release\Memento.exe" "C:\Users\YOUR_USER_NAME\Desktop"
-rm -Recurse -Force "$BUILDDIR\*"
-mv "C:\Users\YOUR_USER_NAME\Desktop\Memento.exe" "$BUILDDIR"
-C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe --no-translations --qmldir "$SRCDIR" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libgcc_s_seh-1.dll" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libstdc++-6.dll" "$BUILDDIR"
-cp "C:\Qt\5.15.2\mingw81_64\bin\libwinpthread-1.dll" "$BUILDDIR"
+cd C:\Users\$env:UserName\Desktop
+Start-BitsTransfer -Source https://github.com/mementoseeds/Memento/archive/refs/heads/master.zip -Destination .
+Expand-Archive -Path .\master.zip -DestinationPath .
+cd Memento-master
+mkdir build-dir
+cd build-dir
+$Env:Path = "C:\Qt\Tools\mingw810_64\bin;C:\Qt\5.15.2\mingw81_64\bin;C:\Qt\Tools\mingw810_64\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Users\$env:UserName\AppData\Local\Microsoft\WindowsApps;"
+C:\Qt\5.15.2\mingw81_64\bin\qmake.exe ../memento.pro -spec win32-g++ "CONFIG+=qtquickcompiler"
+C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe qmake_all
+C:\Qt\Tools\mingw810_64\bin\mingw32-make.exe -j $((Get-CimInstance Win32_ComputerSystem).NumberOfLogicalProcessors)
+mv release\Memento.exe ..
+rm -Recurse *
+mv ..\Memento.exe .
+C:\Qt\5.15.2\mingw81_64\bin\windeployqt.exe --no-translations --qmldir .. .
+cp "C:\Qt\5.15.2\mingw81_64\bin\libgcc_s_seh-1.dll" .
+cp "C:\Qt\5.15.2\mingw81_64\bin\libstdc++-6.dll" .
+cp "C:\Qt\5.15.2\mingw81_64\bin\libwinpthread-1.dll" .
 ```
 
-You will now have a portable version of Memento in the directory `C:\Users\YOUR_USER_NAME\Desktop\Build`.
+You will now have a portable version of Memento in the directory `C:\Users\YOUR_USER_NAME\Desktop\Memento-master\build-dir`.
